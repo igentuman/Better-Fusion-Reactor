@@ -1,0 +1,20 @@
+[
+  {
+    "modid": "bfr",
+    "name": "Better Fusion Reactor for Mekanism",
+    "description": "Better Fusion Reactor for Mekanism Generators",
+    "version": "${version}",
+    "mcversion": "${mc_version}",
+    "authorList": [
+      "igentuman"
+    ],
+    "credits": "Thanks pupnewfster for a great mod",
+    "useDependencyInformation": true,
+    "dependencies": [
+      "mekanismgenerators@[${version}]"
+    ],
+    "requiredMods": [
+      "mekanismgenerators@[${version}]"
+    ]
+  }
+]

@@ -1,0 +1,28 @@
+{
+    "ctm":{
+        "ctm_version": 1,
+        "type":"CTM",
+        "layer":"TRANSLUCENT",
+        "textures":[
+            "bfr:blocks/reactor_glass-ctm"
+        ],
+        "extra": {
+            "connect_to": [
+                {
+                    "block": "bfr:reactorglass",
+                    "predicate":
+                    {
+                        "type": "reactor_glass"
+                    }
+                },
+                {
+                    "block": "bfr:reactorglass",
+                    "predicate":
+                    {
+                        "type": "laser_focus_matrix"
+                    }
+                }
+            ]
+        }
+    }
+}
