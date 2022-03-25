@@ -88,6 +88,7 @@ public class BFRCommonProxy implements IGuiProvider {
             case 11:
             case 12:
             case 13:
+            case 69:
             case 15:
                 return new ContainerNull(player, (TileEntityContainerBlock) tileEntity);
         }

@@ -2,6 +2,7 @@ package igentuman.bfr.common;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import mekanism.generators.common.item.ItemHohlraum;
@@ -55,17 +56,18 @@ public class BetterFusionReactor {
     //Last values of temperature
     public double lastPlasmaTemperature;
     public double lastCaseTemperature;
-    public double currentReactivity = 0;
-    public double targetReactivity = 0;
-    public double shutDownChances = 0;
-    public double adjustment = 0;
+    public float currentReactivity = 0;
+    public float targetReactivity = 0;
+    public float shutDownChances = 0;
+    public float adjustment = 0;
     public double heatToAbsorb = 0;
     public int injectionRate = 0;
     public boolean burning = false;
     public boolean activelyCooled = true;
-
+    public int reactivityUpdateTicks = 200;
+    public int currentReactivityTick = 0;
     public boolean updatedThisTick;
-
+    public int adjustmentTicks = 100;
     public boolean formed = false;
 
     public BetterFusionReactor(TileEntityReactorController c) {
@@ -76,35 +78,79 @@ public class BetterFusionReactor {
         plasmaTemperature += energyAdded / plasmaHeatCapacity * (isBurning() ? 1 : 10);
     }
 
-    public double getTargetReactivity()
+    //Target reactivity update rate depends on temperature
+    public float getTargetReactivity()
     {
         return targetReactivity;
     }
 
-    public double getCurrentReactivity()
+    /** value in range 0..100 **/
+    public float getEfficiency()
+    {
+        return (float) Math.min(100, Math.max(0, 1/(Math.abs(targetReactivity - currentReactivity)/100 + 0.2)*22)-10);
+    }
+
+    public float getCurrentReactivity()
     {
         return currentReactivity;
     }
 
-    public void setTargetReactivity(double val)
+    public void setTargetReactivity(float val)
     {
-        targetReactivity = val;
+        targetReactivity = Math.abs(val);
     }
 
-    public void setCurrentReactivity(double val)
+    public void setCurrentReactivity(float val)
     {
-        currentReactivity = val;
+        currentReactivity = Math.abs(val);
     }
 
-    public double getShutDownChances()
+    public float getShutDownChances()
     {
         return shutDownChances;
     }
 
-    public boolean adjustReactivity(double rate)
+    public void setShutDownChances(float val)
     {
-        adjustment = rate;
+        shutDownChances = val;
+    }
+
+    /** values range 0 .. 5.16 **/
+    public float getKt()
+    {
+        float tDevide = 20;
+        if(activelyCooled) {
+            tDevide = 30;
+        }
+        return (float) Math.pow((float)(Math.abs(Math.sqrt((float)getPlasmaTemp()/1000000) - 40))/tDevide, 2);
+    }
+
+    // if efficiency bigger than 80% we reducing chances
+    public void updateShutdownChances()
+    {
+        shutDownChances += ((80-getEfficiency()) * (getKt()/5))*0.0001;
+        if(shutDownChances > 100) {
+            shutDownChances = 0;
+            //stop reaction
+        }
+    }
+
+    public boolean adjustReactivity(float rate)
+    {
+        if(adjustment > 0) return false;
+        adjustment = rate/(float)adjustmentTicks;
         return true;
+    }
+
+    public void updateAdjustment()
+    {
+        if(adjustment == 0) return;
+        currentReactivity += adjustment;
+        adjustmentTicks--;
+        if(adjustmentTicks < 1) {
+            adjustmentTicks = 100;
+            adjustment = 0;
+        }
     }
 
     public boolean hasHohlraum() {
@@ -116,6 +162,25 @@ public class BetterFusionReactor {
             }
         }
         return false;
+    }
+
+    public int reactivityUpdateTicksScaled()
+    {
+        return (int) (getKt() * reactivityUpdateTicks);
+    }
+
+    public void updateReactivity()
+    {
+        float low = 0f;
+        float high = 100f;
+        if(currentReactivity <= 0) {
+            setCurrentReactivity(low + new Random().nextFloat() * (high - low));
+        }
+        currentReactivityTick++;
+        if(reactivityUpdateTicksScaled() < currentReactivityTick) {
+            currentReactivityTick = 0;
+            setTargetReactivity(low + new Random().nextFloat() * (high - low));
+        }
     }
 
     public void simulate() {
@@ -132,10 +197,17 @@ public class BetterFusionReactor {
             //If we're not burning yet we need a hohlraum to ignite
             if (!burning && hasHohlraum()) {
                 vaporiseHohlraum();
+                float low = 0F;
+                float high = 100F;
+                setCurrentReactivity(low + new Random().nextFloat() * (high - low));
             }
 
             //Only inject fuel if we're burning
             if (burning) {
+                activelyCooled = getWaterTank().getFluidAmount() > 0;
+                updateShutdownChances();
+                updateReactivity();
+                updateAdjustment();
                 injectFuel();
                 int fuelBurned = burnFuel();
                 if (fuelBurned == 0) {
@@ -143,6 +215,10 @@ public class BetterFusionReactor {
                 }
             }
         } else {
+            shutDownChances = 0;
+            currentReactivity = 0;
+            targetReactivity = 0;
+            adjustment = 0;
             burning = false;
         }
 
@@ -178,7 +254,7 @@ public class BetterFusionReactor {
     }
 
     public int burnFuel() {
-        int fuelBurned = (int) Math.min(getFuelTank().getStored(), Math.max(0, lastPlasmaTemperature - burnTemperature) * burnRatio);
+        int fuelBurned = (int) Math.max(injectionRate, Math.min(getFuelTank().getStored(), Math.max(0, lastPlasmaTemperature - burnTemperature) * burnRatio));
         getFuelTank().draw(fuelBurned, true);
         plasmaTemperature += MekanismConfig.current().generators.energyPerFusionFuel.val() * fuelBurned / plasmaHeatCapacity;
         return fuelBurned;

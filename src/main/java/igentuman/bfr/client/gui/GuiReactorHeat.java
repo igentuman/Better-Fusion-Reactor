@@ -102,6 +102,7 @@ public class GuiReactorHeat extends GuiReactorInfo {
         addGuiElement(new GuiEnergyGauge(() -> tileEntity, Type.SMALL, this, resource, 115, 46));
         addGuiElement(new GuiReactorTab(this, tileEntity, GuiReactorTab.ReactorTab.FUEL, resource));
         addGuiElement(new GuiReactorTab(this, tileEntity, GuiReactorTab.ReactorTab.STAT, resource));
+        addGuiElement(new GuiReactorTab(this, tileEntity, GuiReactorTab.ReactorTab.EFFICIENCY, resource));
     }
 
     @Override

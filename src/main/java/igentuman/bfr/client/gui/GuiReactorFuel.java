@@ -55,6 +55,7 @@ public class GuiReactorFuel extends GuiReactorInfo {
         }, ProgressBar.SMALL_LEFT, this, resource, 99, 75));
         addGuiElement(new GuiReactorTab(this, tileEntity, GuiReactorTab.ReactorTab.HEAT, resource));
         addGuiElement(new GuiReactorTab(this, tileEntity, GuiReactorTab.ReactorTab.STAT, resource));
+        addGuiElement(new GuiReactorTab(this, tileEntity, GuiReactorTab.ReactorTab.EFFICIENCY, resource));
     }
 
     @Override

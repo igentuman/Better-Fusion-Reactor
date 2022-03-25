@@ -1,15 +1,11 @@
 package igentuman.bfr.client;
 
+import igentuman.bfr.client.gui.*;
 import igentuman.bfr.client.render.RenderReactor;
 import igentuman.bfr.common.block.states.BlockStateReactor;
 import igentuman.bfr.common.tile.reactor.TileEntityReactorController;
 import igentuman.bfr.common.tile.reactor.TileEntityReactorLogicAdapter;
 import mekanism.client.render.MekanismRenderer;
-import igentuman.bfr.client.gui.GuiReactorController;
-import igentuman.bfr.client.gui.GuiReactorFuel;
-import igentuman.bfr.client.gui.GuiReactorHeat;
-import igentuman.bfr.client.gui.GuiReactorLogicAdapter;
-import igentuman.bfr.client.gui.GuiReactorStats;
 import igentuman.bfr.common.BFRBlocks;
 import igentuman.bfr.common.BFRCommonProxy;
 import igentuman.bfr.common.BFR;
@@ -75,6 +71,8 @@ public class BFRClientProxy extends BFRCommonProxy {
                 return new GuiReactorFuel(player.inventory, (TileEntityReactorController) tileEntity);
             case 13:
                 return new GuiReactorStats(player.inventory, (TileEntityReactorController) tileEntity);
+            case 69:
+                return new GuiReactorEfficiency(player.inventory, (TileEntityReactorController) tileEntity);
             case 15:
                 return new GuiReactorLogicAdapter(player.inventory, (TileEntityReactorLogicAdapter) tileEntity);
         }

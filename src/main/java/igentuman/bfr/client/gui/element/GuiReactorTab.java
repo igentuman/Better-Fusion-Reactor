@@ -26,7 +26,8 @@ public class GuiReactorTab extends GuiTabElementType<TileEntityReactorController
     public enum ReactorTab implements TabType {
         HEAT("GuiHeatTab.png", 11, "gui.heat", 6),
         FUEL("GuiFuelTab.png", 12, "gui.fuel", 34),
-        STAT("GuiStatsTab.png", 13, "gui.stats", 62);
+        STAT("GuiStatsTab.png", 13, "gui.stats", 62),
+        EFFICIENCY("GuiConfigurationTab.png", 69, "gui.efficiency", 90);
 
         private final String description;
         private final String path;
@@ -42,7 +43,7 @@ public class GuiReactorTab extends GuiTabElementType<TileEntityReactorController
 
         @Override
         public ResourceLocation getResource() {
-            return MekanismUtils.getResource(ResourceType.GUI_ELEMENT, path);
+            return new ResourceLocation("mekanism", ResourceType.GUI_ELEMENT.getPrefix() + path);
         }
 
         @Override

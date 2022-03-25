@@ -169,15 +169,17 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             tag.setDouble("plasmaTemp", getReactor().getPlasmaTemp());
             tag.setDouble("caseTemp", getReactor().getCaseTemp());
             tag.setInteger("injectionRate", getReactor().getInjectionRate());
-            tag.setDouble("targetReactivity", getReactor().getTargetReactivity());
-            tag.setDouble("currentReactivity", getReactor().getCurrentReactivity());
+            tag.setFloat("targetReactivity", getReactor().getTargetReactivity());
+            tag.setFloat("currentReactivity", getReactor().getCurrentReactivity());
+            tag.setFloat("shutdownChances", getReactor().getShutDownChances());
             tag.setBoolean("burning", getReactor().isBurning());
         } else {
             tag.setDouble("plasmaTemp", 0);
             tag.setDouble("caseTemp", 0);
             tag.setInteger("injectionRate", 0);
-            tag.setDouble("targetReactivity", 0);
-            tag.setDouble("currentReactivity", 0);
+            tag.setFloat("targetReactivity", 0);
+            tag.setFloat("currentReactivity", 0);
+            tag.setFloat("shutdownChances", 0);
             tag.setBoolean("burning", false);
         }
         tag.setTag("fuelTank", fuelTank.write(new NBTTagCompound()));
@@ -197,8 +199,9 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             getReactor().setPlasmaTemp(tag.getDouble("plasmaTemp"));
             getReactor().setCaseTemp(tag.getDouble("caseTemp"));
             getReactor().setInjectionRate(tag.getInteger("injectionRate"));
-            getReactor().setTargetReactivity(tag.getDouble("targetReactivity"));
-            getReactor().setCurrentReactivity(tag.getDouble("currentReactivity"));
+            getReactor().setTargetReactivity(tag.getFloat("targetReactivity"));
+            getReactor().setCurrentReactivity(tag.getFloat("currentReactivity"));
+            getReactor().setShutDownChances(tag.getFloat("shutdownChances"));
             getReactor().setBurning(tag.getBoolean("burning"));
             getReactor().updateTemperatures();
         }
@@ -218,6 +221,9 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             data.add(getReactor().getCaseTemp());
             data.add(getReactor().getInjectionRate());
             data.add(getReactor().isBurning());
+            data.add(getReactor().getTargetReactivity());
+            data.add(getReactor().getCurrentReactivity());
+            data.add(getReactor().getShutDownChances());
             data.add(fuelTank.getStored());
             data.add(deuteriumTank.getStored());
             data.add(tritiumTank.getStored());
@@ -258,6 +264,9 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
                 getReactor().setCaseTemp(dataStream.readDouble());
                 getReactor().setInjectionRate(dataStream.readInt());
                 getReactor().setBurning(dataStream.readBoolean());
+                getReactor().setTargetReactivity(dataStream.readFloat());
+                getReactor().setCurrentReactivity(dataStream.readFloat());
+                getReactor().setShutDownChances(dataStream.readFloat());
                 fuelTank.setGas(new GasStack(MekanismFluids.FusionFuel, dataStream.readInt()));
                 deuteriumTank.setGas(new GasStack(MekanismFluids.Deuterium, dataStream.readInt()));
                 tritiumTank.setGas(new GasStack(MekanismFluids.Tritium, dataStream.readInt()));

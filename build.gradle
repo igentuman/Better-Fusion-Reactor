@@ -65,10 +65,6 @@ repositories {
         url 'https://maven.thiakil.com'
     }
     maven {
-        name 'hwyla'
-        url 'https://maven.tehnut.info'
-    }
-    maven {
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
     }
@@ -100,8 +96,6 @@ dependencies {
     compileOnly "net.darkhax.tesla:Tesla-${minecraft_version}:${tesla_version}"
     compileOnly "inventory-tweaks:InventoryTweaks:${invtweak_version}:api"
     deobfCompile "li.cil.oc:OpenComputers:MC${minecraft_version}-${opencomputers_version}:api"
-    // Not updated yet
-    compileOnly "mcp.mobius.waila:Hwyla:${hwyla_version}:api"
 
     compileOnly "com.mod-buildcraft:buildcraft-api:${buildcraft_version}"
     compileOnly "team.chisel.ctm:CTM:MC${minecraft_version}-${ctm_version}:api"

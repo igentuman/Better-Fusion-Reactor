@@ -33,6 +33,7 @@ public class GuiReactorController extends GuiMekanismTile<TileEntityReactorContr
             addGuiElement(new GuiReactorTab(this, tileEntity, GuiReactorTab.ReactorTab.HEAT, resource));
             addGuiElement(new GuiReactorTab(this, tileEntity, GuiReactorTab.ReactorTab.FUEL, resource));
             addGuiElement(new GuiReactorTab(this, tileEntity, GuiReactorTab.ReactorTab.STAT, resource));
+            addGuiElement(new GuiReactorTab(this, tileEntity, GuiReactorTab.ReactorTab.EFFICIENCY, resource));
         }
     }
 
