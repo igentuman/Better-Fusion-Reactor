@@ -172,6 +172,7 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             tag.setFloat("targetReactivity", getReactor().getTargetReactivity());
             tag.setFloat("currentReactivity", getReactor().getCurrentReactivity());
             tag.setFloat("shutdownChances", getReactor().getShutDownChances());
+            tag.setFloat("adjustment", getReactor().getAdjustment());
             tag.setBoolean("burning", getReactor().isBurning());
         } else {
             tag.setDouble("plasmaTemp", 0);
@@ -180,6 +181,7 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             tag.setFloat("targetReactivity", 0);
             tag.setFloat("currentReactivity", 0);
             tag.setFloat("shutdownChances", 0);
+            tag.setFloat("adjustment", 0);
             tag.setBoolean("burning", false);
         }
         tag.setTag("fuelTank", fuelTank.write(new NBTTagCompound()));
@@ -202,6 +204,7 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             getReactor().setTargetReactivity(tag.getFloat("targetReactivity"));
             getReactor().setCurrentReactivity(tag.getFloat("currentReactivity"));
             getReactor().setShutDownChances(tag.getFloat("shutdownChances"));
+            getReactor().setAdjustment(tag.getFloat("shutdownChances"));
             getReactor().setBurning(tag.getBoolean("burning"));
             getReactor().updateTemperatures();
         }
@@ -224,6 +227,7 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             data.add(getReactor().getTargetReactivity());
             data.add(getReactor().getCurrentReactivity());
             data.add(getReactor().getShutDownChances());
+            data.add(getReactor().getAdjustment());
             data.add(fuelTank.getStored());
             data.add(deuteriumTank.getStored());
             data.add(tritiumTank.getStored());
@@ -237,10 +241,16 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
     public void handlePacketData(ByteBuf dataStream) {
         if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
             int type = dataStream.readInt();
-            if (type == 0) {
-                if (getReactor() != null) {
+            if(getReactor() == null) return;
+            switch(type) {
+                case 0:
                     getReactor().setInjectionRate(dataStream.readInt());
-                }
+                    break;
+                case 1:
+                    getReactor().adjustReactivity(5);
+                    break;
+                case 2:
+                    getReactor().adjustReactivity(-5);
             }
             return;
         }
@@ -267,6 +277,7 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
                 getReactor().setTargetReactivity(dataStream.readFloat());
                 getReactor().setCurrentReactivity(dataStream.readFloat());
                 getReactor().setShutDownChances(dataStream.readFloat());
+                getReactor().setAdjustment(dataStream.readFloat());
                 fuelTank.setGas(new GasStack(MekanismFluids.FusionFuel, dataStream.readInt()));
                 deuteriumTank.setGas(new GasStack(MekanismFluids.Deuterium, dataStream.readInt()));
                 tritiumTank.setGas(new GasStack(MekanismFluids.Tritium, dataStream.readInt()));

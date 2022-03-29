@@ -1,0 +1,8 @@
+gui.reactor.shutdown_chances=Shutdown Chances
+gui.reactor.efficiency=Reaction Efficiency
+gui.reactor.target_reactivity=Target Reactivity
+gui.reactor.current_reactivity=Current Reactivity
+gui.reactor.manage_reactivity=Manage Current Reactivity
+gui.reactor.plus_5_reactivity=+5 Reactivity
+gui.reactor.minus_5_reactivity=-5 Reactivity
+gui.reactor.heatMultiplier=Heat Multiplier

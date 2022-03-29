@@ -64,7 +64,7 @@ public class BetterFusionReactor {
     public int injectionRate = 0;
     public boolean burning = false;
     public boolean activelyCooled = true;
-    public int reactivityUpdateTicks = 200;
+    public int reactivityUpdateTicks = 2000;
     public int currentReactivityTick = 0;
     public boolean updatedThisTick;
     public int adjustmentTicks = 100;
@@ -88,6 +88,15 @@ public class BetterFusionReactor {
     public float getEfficiency()
     {
         return (float) Math.min(100, Math.max(0, 1/(Math.abs(targetReactivity - currentReactivity)/100 + 0.2)*22)-10);
+    }
+
+    public void setAdjustment(float val)
+    {
+        adjustment = val;
+    }
+
+    public float getAdjustment() {
+        return adjustment;
     }
 
     public float getCurrentReactivity()
@@ -128,16 +137,19 @@ public class BetterFusionReactor {
     // if efficiency bigger than 80% we reducing chances
     public void updateShutdownChances()
     {
-        shutDownChances += ((80-getEfficiency()) * (getKt()/5))*0.0001;
+        shutDownChances += ((80-getEfficiency()) * (getKt()/5))*0.001;
         if(shutDownChances > 100) {
             shutDownChances = 0;
-            //stop reaction
+            currentReactivity = 0;
+            targetReactivity = 0;
+            adjustment = 0;
+            burning = false;
         }
     }
 
     public boolean adjustReactivity(float rate)
     {
-        if(adjustment > 0) return false;
+        if(adjustment != 0) return false;
         adjustment = rate/(float)adjustmentTicks;
         return true;
     }
@@ -146,6 +158,7 @@ public class BetterFusionReactor {
     {
         if(adjustment == 0) return;
         currentReactivity += adjustment;
+        currentReactivity = Math.min(100, Math.max(0, currentReactivity));
         adjustmentTicks--;
         if(adjustmentTicks < 1) {
             adjustmentTicks = 100;
@@ -166,7 +179,7 @@ public class BetterFusionReactor {
 
     public int reactivityUpdateTicksScaled()
     {
-        return (int) (getKt() * reactivityUpdateTicks);
+        return (int) ( reactivityUpdateTicks / (getKt() + 0.005));
     }
 
     public void updateReactivity()

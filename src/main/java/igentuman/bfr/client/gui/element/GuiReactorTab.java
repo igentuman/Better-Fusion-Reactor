@@ -27,7 +27,7 @@ public class GuiReactorTab extends GuiTabElementType<TileEntityReactorController
         HEAT("GuiHeatTab.png", 11, "gui.heat", 6),
         FUEL("GuiFuelTab.png", 12, "gui.fuel", 34),
         STAT("GuiStatsTab.png", 13, "gui.stats", 62),
-        EFFICIENCY("GuiConfigurationTab.png", 69, "gui.efficiency", 90);
+        EFFICIENCY("GuiVisualsTab.png", 69, "gui.reactor.efficiency", 90);
 
         private final String description;
         private final String path;
