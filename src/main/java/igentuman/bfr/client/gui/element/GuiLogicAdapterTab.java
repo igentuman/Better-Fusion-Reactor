@@ -1,39 +1,37 @@
 package igentuman.bfr.client.gui.element;
 
+import igentuman.bfr.common.tile.reactor.TileEntityReactorLogicAdapter;
 import mekanism.api.Coord4D;
 import mekanism.client.gui.IGuiWrapper;
-import mekanism.client.gui.element.tab.GuiTabElementType;
 import mekanism.client.gui.element.tab.TabType;
 import mekanism.common.Mekanism;
 import mekanism.common.network.PacketSimpleGui.SimpleGuiMessage;
 import mekanism.common.util.LangUtils;
 import mekanism.common.util.MekanismUtils.ResourceType;
-import igentuman.bfr.client.gui.element.GuiReactorTab.ReactorTab;
-import igentuman.bfr.common.tile.reactor.TileEntityReactorController;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import mekanism.client.gui.element.tab.GuiTabElementType;
 
 @SideOnly(Side.CLIENT)
-public class GuiReactorTab extends GuiTabElementType<TileEntityReactorController, ReactorTab> {
+public class GuiLogicAdapterTab extends GuiTabElementType<TileEntityReactorLogicAdapter, GuiLogicAdapterTab.LogicAdapterTab> {
 
-    public GuiReactorTab(IGuiWrapper gui, TileEntityReactorController tile, ReactorTab type, ResourceLocation def) {
+    public GuiLogicAdapterTab(IGuiWrapper gui, TileEntityReactorLogicAdapter tile, LogicAdapterTab type, ResourceLocation def) {
         super(gui, tile, type, def);
     }
 
-    public enum ReactorTab implements TabType {
-        HEAT("GuiHeatTab.png", 11, "gui.heat", 6),
-        FUEL("GuiFuelTab.png", 12, "gui.fuel", 34),
-        STAT("GuiStatsTab.png", 13, "gui.stats", 62),
-        EFFICIENCY("GuiVisualsTab.png", 69, "gui.reactor.efficiency", 90);
+    public enum LogicAdapterTab implements TabType {
+        SETTINGS("GuiConfigurationTab.png", 15, "gui.logic_port.settings", 6),
+        INPUT("GuiInputTab.png", 70, "gui.logic_port.input", 34),
+        OUTPUT("GuiOutputTab.png", 71, "gui.logic_port.output", 62);
 
         private final String description;
         private final String path;
         private final int guiId;
         private final int yPos;
 
-        ReactorTab(String path, int id, String desc, int y) {
+        LogicAdapterTab(String path, int id, String desc, int y) {
             this.path = path;
             guiId = id;
             description = desc;
@@ -42,7 +40,7 @@ public class GuiReactorTab extends GuiTabElementType<TileEntityReactorController
 
         @Override
         public ResourceLocation getResource() {
-            return new ResourceLocation("mekanism", ResourceType.GUI_ELEMENT.getPrefix() + path);
+            return new ResourceLocation("bfr", ResourceType.GUI_ELEMENT.getPrefix() + path);
         }
 
         @Override

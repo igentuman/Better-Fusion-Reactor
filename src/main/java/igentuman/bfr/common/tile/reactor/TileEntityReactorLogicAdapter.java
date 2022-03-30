@@ -5,9 +5,14 @@ import javax.annotation.Nonnull;
 import mekanism.api.TileNetworkList;
 import mekanism.common.integration.computer.IComputerIntegration;
 import mekanism.common.util.LangUtils;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class TileEntityReactorLogicAdapter extends TileEntityReactorBlock implements IComputerIntegration {
@@ -15,26 +20,49 @@ public class TileEntityReactorLogicAdapter extends TileEntityReactorBlock implem
     private static final String[] methods = new String[]{
             "isIgnited", "canIgnite", "getPlasmaHeat", "getMaxPlasmaHeat", "getCaseHeat", "getMaxCaseHeat",
             "getInjectionRate", "setInjectionRate", "hasFuel", "getProducing", "getIgnitionTemp", "getEnergy",
-            "getMaxEnergy", "getWater", "getSteam", "getFuel", "getDeuterium", "getTritium","getCurrentReactivity",
-            "getShutDownProbability","adjustReactivity"};
-    public ReactorLogic logicType = ReactorLogic.DISABLED;
+            "getMaxEnergy", "getWater", "getSteam", "getFuel", "getDeuterium", "getTritium", "getEfficiency",
+            "getErrorLevel","adjustReactivity"};
+    public ReactorLogic logicType = ReactorLogic.READY;
     public boolean activeCooled;
-    public boolean prevOutputting;
+    public int prevRedstoneLevel;
 
     public TileEntityReactorLogicAdapter() {
         super();
         fullName = "ReactorLogicAdapter";
     }
+    int prevInputRedstone = 0;
 
     @Override
     public void onUpdate() {
         super.onUpdate();
         if (!world.isRemote) {
-            boolean outputting = checkMode();
-            if (outputting != prevOutputting) {
+            int outputting = getRedstoneLevel();
+            if (outputting != prevRedstoneLevel) {
                 world.notifyNeighborsOfStateChange(getPos(), getBlockType(), true);
             }
-            prevOutputting = outputting;
+            prevRedstoneLevel = outputting;
+            int redstone = world.getRedstonePowerFromNeighbors(getPos());
+            if(prevInputRedstone > 0) {
+                prevInputRedstone = redstone;
+                return;
+            }
+            prevInputRedstone = redstone;
+            if (getReactor() != null && redstone > 0) {
+                switch (logicType) {
+                    case INJECTION_UP:
+                        getReactor().setInjectionRate(getReactor().getInjectionRate() + 2);
+                        break;
+                    case INJECTION_DOWN:
+                        getReactor().setInjectionRate(getReactor().getInjectionRate() - 2);
+                        break;
+                    case REACTIVITY_UP:
+                        getReactor().adjustReactivity(5);
+                        break;
+                    case REACTIVITY_DOWN:
+                        getReactor().adjustReactivity(-5);
+                        break;
+                }
+            }
         }
     }
 
@@ -43,25 +71,28 @@ public class TileEntityReactorLogicAdapter extends TileEntityReactorBlock implem
         return false;
     }
 
-    public boolean checkMode() {
+    public int getRedstoneLevel()
+    {
         if (world.isRemote) {
-            return prevOutputting;
+            return prevRedstoneLevel;
         }
         if (getReactor() == null || !getReactor().isFormed()) {
-            return false;
+            return 0;
         }
         switch (logicType) {
-            case DISABLED:
-                return false;
             case READY:
-                return getReactor().getPlasmaTemp() >= getReactor().getIgnitionTemperature(activeCooled);
+                return getReactor().getPlasmaTemp() >= getReactor().getIgnitionTemperature(activeCooled)  ? 15 : 0;
             case CAPACITY:
-                return getReactor().getPlasmaTemp() >= getReactor().getMaxPlasmaTemperature(activeCooled);
+                return getReactor().getPlasmaTemp() >= getReactor().getMaxPlasmaTemperature(activeCooled) ? 15 : 0;
+            case ERROR_LEVEL:
+                return (int)(getReactor().getErrorLevel() / (100 / 15));
+            case EFFICIENCY:
+                return (int)(getReactor().getEfficiency() / (100 / 15));
             case DEPLETED:
                 return (getReactor().getDeuteriumTank().getStored() < getReactor().getInjectionRate() / 2) ||
-                       (getReactor().getTritiumTank().getStored() < getReactor().getInjectionRate() / 2);
+                        (getReactor().getTritiumTank().getStored() < getReactor().getInjectionRate() / 2) ? 15 : 0;
             default:
-                return false;
+                return 0;
         }
     }
 
@@ -98,7 +129,7 @@ public class TileEntityReactorLogicAdapter extends TileEntityReactorBlock implem
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             logicType = ReactorLogic.values()[dataStream.readInt()];
             activeCooled = dataStream.readBoolean();
-            prevOutputting = dataStream.readBoolean();
+            prevRedstoneLevel = dataStream.readInt();
         }
     }
 
@@ -107,7 +138,7 @@ public class TileEntityReactorLogicAdapter extends TileEntityReactorBlock implem
         super.getNetworkedData(data);
         data.add(logicType.ordinal());
         data.add(activeCooled);
-        data.add(prevOutputting);
+        data.add(prevRedstoneLevel);
         return data;
     }
 
@@ -164,9 +195,9 @@ public class TileEntityReactorLogicAdapter extends TileEntityReactorBlock implem
             case 17:
                 return new Object[]{getReactor().getTritiumTank().getStored()};
             case 18:
-                return new Object[]{getReactor().getCurrentReactivity()};
+                return new Object[]{getReactor().getEfficiency()};
             case 19:
-                return new Object[]{getReactor().getShutDownChances()};
+                return new Object[]{getReactor().getErrorLevel()};
             case 20:
                 return new Object[]{getReactor().adjustReactivity(((Double) arguments[0]).floatValue())};
             default:
@@ -175,23 +206,33 @@ public class TileEntityReactorLogicAdapter extends TileEntityReactorBlock implem
     }
 
     public enum ReactorLogic {
-        DISABLED("disabled", new ItemStack(Items.GUNPOWDER)),
-        READY("ready", new ItemStack(Items.REDSTONE)),
-        CAPACITY("capacity", new ItemStack(Items.REDSTONE)),
-        DEPLETED("depleted", new ItemStack(Items.REDSTONE)),
-        SHUTDOWNCHANCE("shutdown_chance", new ItemStack(Items.REDSTONE)),
-        EFFICIENCY("efficiency", new ItemStack(Items.REDSTONE));
+        READY("ready", new ItemStack(Items.REDSTONE),"out"),
+        CAPACITY("capacity", new ItemStack(Items.REDSTONE), "out"),
+        DEPLETED("depleted", new ItemStack(Items.REDSTONE), "out"),
+        ERROR_LEVEL("error_level", new ItemStack(Items.REDSTONE), "out"),
+        EFFICIENCY("efficiency", new ItemStack(Items.REDSTONE), "out"),
+        REACTIVITY_UP("reactivity_up", new ItemStack(Items.REDSTONE), "in"),
+        REACTIVITY_DOWN("reactivity_down", new ItemStack(Items.REDSTONE), "in"),
+        INJECTION_UP("injection_up", new ItemStack(Items.REDSTONE), "in"),
+        INJECTION_DOWN("injection_down", new ItemStack(Items.REDSTONE), "in");
+
 
         private String name;
         private ItemStack renderStack;
+        private String direction;
 
-        ReactorLogic(String s, ItemStack stack) {
+        ReactorLogic(String s, ItemStack stack, String dir) {
             name = s;
             renderStack = stack;
+            direction = dir;
         }
 
         public ItemStack getRenderStack() {
             return renderStack;
+        }
+
+        public String getDirection() {
+            return direction;
         }
 
         public String getLocalizedName() {

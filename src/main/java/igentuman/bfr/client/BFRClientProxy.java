@@ -71,10 +71,14 @@ public class BFRClientProxy extends BFRCommonProxy {
                 return new GuiReactorFuel(player.inventory, (TileEntityReactorController) tileEntity);
             case 13:
                 return new GuiReactorStats(player.inventory, (TileEntityReactorController) tileEntity);
-            case 69:
-                return new GuiReactorEfficiency(player.inventory, (TileEntityReactorController) tileEntity);
             case 15:
                 return new GuiReactorLogicAdapter(player.inventory, (TileEntityReactorLogicAdapter) tileEntity);
+            case 69:
+                return new GuiReactorEfficiency(player.inventory, (TileEntityReactorController) tileEntity);
+            case 70:
+                return new GuiReactorLogicAdapterInput(player.inventory, (TileEntityReactorLogicAdapter) tileEntity);
+            case 71:
+                return new GuiReactorLogicAdapterOutput(player.inventory, (TileEntityReactorLogicAdapter) tileEntity);
         }
 
         return null;

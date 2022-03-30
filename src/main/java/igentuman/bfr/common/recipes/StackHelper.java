@@ -1,4 +1,3 @@
-
 package igentuman.bfr.common.recipes;
 
 import java.util.Iterator;

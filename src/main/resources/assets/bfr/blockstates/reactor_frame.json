@@ -3,7 +3,7 @@
   "defaults": {
     "model": "mekanism:basic_cube",
     "textures": {
-      "all": "bfr:blocks/reactor_frame"
+      "all": "mekanismgenerators:blocks/reactor_frame"
     }
   },
   "variants": {

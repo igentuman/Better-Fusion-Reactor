@@ -4,12 +4,12 @@ import igentuman.bfr.common.BetterFusionReactor;
 import mekanism.api.Coord4D;
 import mekanism.common.tile.prefab.TileEntityElectricBlock;
 import mekanism.common.util.InventoryUtils;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
-
 import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;

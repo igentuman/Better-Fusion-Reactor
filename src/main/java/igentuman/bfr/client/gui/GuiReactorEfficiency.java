@@ -2,45 +2,25 @@ package igentuman.bfr.client.gui;
 
 import igentuman.bfr.client.gui.element.GuiReactorTab;
 import igentuman.bfr.common.tile.reactor.TileEntityReactorController;
-import mekanism.api.Coord4D;
 import mekanism.api.TileNetworkList;
-import mekanism.client.gui.button.GuiButtonDisableableImage;
 import mekanism.client.gui.element.*;
-import mekanism.client.gui.element.GuiProgress.IProgressInfoHandler;
-import mekanism.client.gui.element.GuiProgress.ProgressBar;
-import mekanism.client.gui.element.gauge.GuiGasGauge;
-import mekanism.client.gui.element.gauge.GuiGauge.Type;
-import mekanism.client.gui.element.gauge.GuiNumberGauge;
-import mekanism.client.gui.element.tab.GuiVisualsTab;
-import mekanism.client.render.MekanismRenderer;
 import mekanism.common.Mekanism;
-import mekanism.common.content.miner.ThreadMinerSearch;
 import mekanism.common.inventory.container.ContainerNull;
-import mekanism.common.network.PacketDigitalMinerGui;
 import mekanism.common.network.PacketTileEntity.TileEntityMessage;
-import mekanism.common.tile.TileEntityDigitalMiner;
-import mekanism.common.tile.TileEntityLaserAmplifier;
 import mekanism.common.util.LangUtils;
 import mekanism.common.util.MekanismUtils;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
-
 import java.io.IOException;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 @SideOnly(Side.CLIENT)
 public class GuiReactorEfficiency extends GuiReactorInfo {
 
-    private GuiTextField injectionRateField;
-    private static final NumberFormat nf = NumberFormat.getIntegerInstance();
     private GuiButton plusButton;
     private GuiButton minusButton;
 
@@ -87,14 +67,18 @@ public class GuiReactorEfficiency extends GuiReactorInfo {
         addGuiElement(new GuiPowerBar(this, new GuiPowerBar.IPowerInfoHandler() {
             @Override
             public String getTooltip() {
-                return LangUtils.localize("gui.reactor.shutdown_chances") + ": " + String.format("%.2f",tileEntity.getReactor().getShutDownChances()) + "%";
+                return LangUtils.localize("gui.reactor.error_level") + ": " + String.format("%.2f",tileEntity.getReactor().getErrorLevel()) + "%";
             }
 
             @Override
             public double getLevel() {
-                return tileEntity.getReactor().getShutDownChances() / 100;
+                return tileEntity.getReactor().getErrorLevel() / 100;
             }
         }, resource, 142, 55));
+        addGuiElement(new GuiEnergyInfo(() -> tileEntity.isFormed() ? Arrays.asList(
+                LangUtils.localize("gui.storing") + ": " + MekanismUtils.getEnergyDisplay(tileEntity.getEnergy(), tileEntity.getMaxEnergy()),
+                LangUtils.localize("gui.producing") + ": " + MekanismUtils.getEnergyDisplay(tileEntity.getReactor().getPassiveGeneration(false, true)) + "/t")
+                : new ArrayList<>(), this, resource));
 
         addGuiElement(new GuiReactorTab(this, tileEntity, GuiReactorTab.ReactorTab.HEAT, resource));
         addGuiElement(new GuiReactorTab(this, tileEntity, GuiReactorTab.ReactorTab.FUEL, resource));
@@ -108,9 +92,8 @@ public class GuiReactorEfficiency extends GuiReactorInfo {
         fontRenderer.drawString("CR", 30, 35, 0x404040);
         fontRenderer.drawString("TR", 64, 35, 0x404040);
         fontRenderer.drawString("EF", 102, 35, 0x404040);
-        fontRenderer.drawString("SC", 142, 35, 0x404040);
+        fontRenderer.drawString("ER", 142, 35, 0x404040);
         fontRenderer.drawString(LangUtils.localize("gui.reactor.heatMultiplier") + ": " +  String.format("%.2f", tileEntity.getReactor().getKt()), 8, 120, 0x404040);
-        fontRenderer.drawString(LangUtils.localize("gui.reactor.injectionRate") + ": " +  tileEntity.getReactor().getInjectionRate(), 8, 130, 0x404040);
         int xAxis = mouseX - this.guiLeft;
         int yAxis = mouseY - this.guiTop;
         if (this.plusButton.isMouseOver()) {

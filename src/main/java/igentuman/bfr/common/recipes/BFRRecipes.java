@@ -2,7 +2,6 @@ package igentuman.bfr.common.recipes;
 
 import com.google.common.collect.Lists;
 import igentuman.bfr.common.BFR;
-import igentuman.bfr.common.BFRBlocks;
 import mekanism.generators.common.GeneratorsBlocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -61,12 +60,14 @@ public class BFRRecipes
 	{
 		registerRecipe(ShapedOreRecipe.class, out, inputs);
 	}
+
 	private static final Map<String, Integer> RECIPE_COUNT_MAP = new HashMap<String, Integer>();
 
 	public static <T> T newInstance(Class<T> clazz, Object... args) throws Exception {
 		Constructor<T> constructor = clazz.getConstructor(getClasses(args));
 		return constructor.newInstance(args);
 	}
+
 	public static Class<?>[] getClasses(Object... objects) {
 		Class<?>[] classes = new Class[objects.length];
 
@@ -76,6 +77,7 @@ public class BFRRecipes
 
 		return classes;
 	}
+
 	public static void registerRecipe(Class<? extends IRecipe> clazz, Object out, Object... inputs)
 	{
 		if (out == null || Lists.newArrayList(inputs).contains(null))
@@ -105,5 +107,4 @@ public class BFRRecipes
 			}
 		}
 	}
-
 }

@@ -2,7 +2,6 @@ package igentuman.bfr.client.gui;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import igentuman.bfr.common.BFR;
 import mekanism.common.Mekanism;
 import mekanism.common.util.LangUtils;
@@ -17,14 +16,11 @@ import net.minecraftforge.fml.client.config.IConfigElement;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Created by ben on 27/06/14.
- */
 @SideOnly(Side.CLIENT)
 public class GuiGeneratorsConfig extends GuiConfig {
 
     public GuiGeneratorsConfig(GuiScreen parent) {
-        super(parent, getConfigElements(), BFR.MODID, false, false, "MekanismGenerators");
+        super(parent, getConfigElements(), BFR.MODID, false, false, "bfr");
     }
 
     private static List<IConfigElement> getConfigElements() {

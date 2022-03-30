@@ -53,7 +53,6 @@ public class BFR implements IModule {
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
         // Register items and itemBlocks
-        BFRItems.registerItems(event.getRegistry());
         BFRBlocks.registerItemBlocks(event.getRegistry());
     }
 
@@ -71,26 +70,15 @@ public class BFR implements IModule {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        //Add this module to the core list
         Mekanism.modulesLoaded.add(this);
-
-        //Register this module's GUI handler in the simple packet protocol
         PacketSimpleGui.handlers.add(1, proxy);
-
-        //Set up the GUI handler
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new BFRGuiHandler());
         MinecraftForge.EVENT_BUS.register(this);
-
-        //Load the proxy
         proxy.registerTileEntities();
         proxy.registerTESRs();
-
         CompoundDataFixer fixer = FMLCommonHandler.instance().getDataFixer();
         ModFixs fixes = fixer.init(MODID, DATA_VERSION);
-        //Fix old tile entity names
         fixes.registerFix(FixTypes.BLOCK_ENTITY, new GeneratorTEFixer(MekFixers.TILE_ENTITIES));
-
-        //Finalization
         Mekanism.logger.info("Loaded BFR module.");
     }
 
@@ -106,18 +94,13 @@ public class BFR implements IModule {
 
     @Override
     public void writeConfig(ByteBuf byteBuf, MekanismConfig mekanismConfig) {
-
     }
 
     @Override
     public void readConfig(ByteBuf byteBuf, MekanismConfig mekanismConfig) {
-
     }
 
     @Override
     public void resetClient() {
-
     }
-
-
 }

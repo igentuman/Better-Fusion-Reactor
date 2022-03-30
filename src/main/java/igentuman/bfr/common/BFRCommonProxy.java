@@ -22,11 +22,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-/**
- * Common proxy for the Mekanism Generators module.
- *
- * @author AidanBrady
- */
 @Mod.EventBusSubscriber(modid = BFR.MODID)
 public class BFRCommonProxy implements IGuiProvider {
 
@@ -89,6 +84,8 @@ public class BFRCommonProxy implements IGuiProvider {
             case 12:
             case 13:
             case 69:
+            case 70:
+            case 71:
             case 15:
                 return new ContainerNull(player, (TileEntityContainerBlock) tileEntity);
         }

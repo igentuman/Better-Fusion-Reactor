@@ -118,14 +118,10 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
 
     @SideOnly(Side.CLIENT)
     private void updateSound() {
-        // If machine sounds are disabled, noop
         if (!MekanismConfig.current().client.enableMachineSounds.val()) {
             return;
         }
         if (isBurning() && !isInvalid()) {
-            // If sounds are being muted, we can attempt to start them on every tick, only to have them
-            // denied by the event bus, so use a cooldown period that ensures we're only trying once every
-            // second or so to start a sound.
             if (--playSoundCooldown > 0) {
                 return;
             }
@@ -171,7 +167,7 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             tag.setInteger("injectionRate", getReactor().getInjectionRate());
             tag.setFloat("targetReactivity", getReactor().getTargetReactivity());
             tag.setFloat("currentReactivity", getReactor().getCurrentReactivity());
-            tag.setFloat("shutdownChances", getReactor().getShutDownChances());
+            tag.setFloat("errorLevel", getReactor().getErrorLevel());
             tag.setFloat("adjustment", getReactor().getAdjustment());
             tag.setBoolean("burning", getReactor().isBurning());
         } else {
@@ -180,7 +176,7 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             tag.setInteger("injectionRate", 0);
             tag.setFloat("targetReactivity", 0);
             tag.setFloat("currentReactivity", 0);
-            tag.setFloat("shutdownChances", 0);
+            tag.setFloat("errorLevel", 0);
             tag.setFloat("adjustment", 0);
             tag.setBoolean("burning", false);
         }
@@ -203,8 +199,8 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             getReactor().setInjectionRate(tag.getInteger("injectionRate"));
             getReactor().setTargetReactivity(tag.getFloat("targetReactivity"));
             getReactor().setCurrentReactivity(tag.getFloat("currentReactivity"));
-            getReactor().setShutDownChances(tag.getFloat("shutdownChances"));
-            getReactor().setAdjustment(tag.getFloat("shutdownChances"));
+            getReactor().setErrorLevel(tag.getFloat("errorLevel"));
+            getReactor().setAdjustment(tag.getFloat("errorLevel"));
             getReactor().setBurning(tag.getBoolean("burning"));
             getReactor().updateTemperatures();
         }
@@ -226,7 +222,7 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             data.add(getReactor().isBurning());
             data.add(getReactor().getTargetReactivity());
             data.add(getReactor().getCurrentReactivity());
-            data.add(getReactor().getShutDownChances());
+            data.add(getReactor().getErrorLevel());
             data.add(getReactor().getAdjustment());
             data.add(fuelTank.getStored());
             data.add(deuteriumTank.getStored());
@@ -276,7 +272,7 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
                 getReactor().setBurning(dataStream.readBoolean());
                 getReactor().setTargetReactivity(dataStream.readFloat());
                 getReactor().setCurrentReactivity(dataStream.readFloat());
-                getReactor().setShutDownChances(dataStream.readFloat());
+                getReactor().setErrorLevel(dataStream.readFloat());
                 getReactor().setAdjustment(dataStream.readFloat());
                 fuelTank.setGas(new GasStack(MekanismFluids.FusionFuel, dataStream.readInt()));
                 deuteriumTank.setGas(new GasStack(MekanismFluids.Deuterium, dataStream.readInt()));
@@ -344,7 +340,6 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
     @Override
     public boolean isCapabilityDisabled(@Nonnull Capability<?> capability, EnumFacing side) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            //Allow inserting
             return false;
         }
         return super.isCapabilityDisabled(capability, side);
