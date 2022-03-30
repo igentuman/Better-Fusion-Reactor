@@ -58,13 +58,13 @@ public class BetterFusionReactor {
     public double lastCaseTemperature;
     public float currentReactivity = 0;
     public float targetReactivity = 0;
-    public float shutDownChances = 0;
+    public float errorLevel = 0;
     public float adjustment = 0;
     public double heatToAbsorb = 0;
     public int injectionRate = 0;
     public boolean burning = false;
     public boolean activelyCooled = true;
-    public int reactivityUpdateTicks = 2000;
+    public int reactivityUpdateTicks = 10000;
     public int currentReactivityTick = 0;
     public boolean updatedThisTick;
     public int adjustmentTicks = 100;
@@ -87,6 +87,7 @@ public class BetterFusionReactor {
     /** value in range 0..100 **/
     public float getEfficiency()
     {
+        if(!isBurning()) return 0;
         return (float) Math.min(100, Math.max(0, 1/(Math.abs(targetReactivity - currentReactivity)/100 + 0.2)*22)-10);
     }
 
@@ -114,17 +115,17 @@ public class BetterFusionReactor {
         currentReactivity = Math.abs(val);
     }
 
-    public float getShutDownChances()
+    public float getErrorLevel()
     {
-        return shutDownChances;
+        return errorLevel;
     }
 
-    public void setShutDownChances(float val)
+    public void setErrorLevel(float val)
     {
-        shutDownChances = val;
+        errorLevel = val;
     }
 
-    /** values range 0 .. 5.16 **/
+    /** values range 0 .. 5.16 or even bigger **/
     public float getKt()
     {
         float tDevide = 20;
@@ -135,11 +136,15 @@ public class BetterFusionReactor {
     }
 
     // if efficiency bigger than 80% we reducing chances
-    public void updateShutdownChances()
+    public void updateErrorLevel()
     {
-        shutDownChances += ((80-getEfficiency()) * (getKt()/5))*0.001;
-        if(shutDownChances > 100) {
-            shutDownChances = 0;
+        if(isBurning()) {
+            errorLevel += ((80 - getEfficiency()) * (getKt() + 1) / 2) * 0.0005;
+        } else {
+            errorLevel -= 0.1;
+        }
+        errorLevel = Math.min(100, Math.max(0, errorLevel));
+        if(errorLevel >= 100) {
             currentReactivity = 0;
             targetReactivity = 0;
             adjustment = 0;
@@ -179,16 +184,13 @@ public class BetterFusionReactor {
 
     public int reactivityUpdateTicksScaled()
     {
-        return (int) ( reactivityUpdateTicks / (getKt() + 0.005));
+        return (int) ( reactivityUpdateTicks / (getKt() + 0.25));
     }
 
     public void updateReactivity()
     {
         float low = 0f;
         float high = 100f;
-        if(currentReactivity <= 0) {
-            setCurrentReactivity(low + new Random().nextFloat() * (high - low));
-        }
         currentReactivityTick++;
         if(reactivityUpdateTicksScaled() < currentReactivityTick) {
             currentReactivityTick = 0;
@@ -213,12 +215,12 @@ public class BetterFusionReactor {
                 float low = 0F;
                 float high = 100F;
                 setCurrentReactivity(low + new Random().nextFloat() * (high - low));
+                setTargetReactivity(low + new Random().nextFloat() * (high - low));
             }
-
+            updateErrorLevel();
             //Only inject fuel if we're burning
             if (burning) {
                 activelyCooled = getWaterTank().getFluidAmount() > 0;
-                updateShutdownChances();
                 updateReactivity();
                 updateAdjustment();
                 injectFuel();
@@ -228,7 +230,6 @@ public class BetterFusionReactor {
                 }
             }
         } else {
-            shutDownChances = 0;
             currentReactivity = 0;
             targetReactivity = 0;
             adjustment = 0;
@@ -521,12 +522,12 @@ public class BetterFusionReactor {
 
     public double getPassiveGeneration(boolean active, boolean current) {
         double temperature = current ? caseTemperature : getMaxCasingTemperature(active);
-        return thermocoupleEfficiency * caseAirConductivity * temperature;
+        return thermocoupleEfficiency * caseAirConductivity * temperature * ((getEfficiency()/100+2)/3);
     }
 
     public int getSteamPerTick(boolean current) {
         double temperature = current ? caseTemperature : getMaxCasingTemperature(true);
-        return (int) (steamTransferEfficiency * caseWaterConductivity * temperature / enthalpyOfVaporization);
+        return (int) ((steamTransferEfficiency * caseWaterConductivity * temperature / enthalpyOfVaporization) * ((getEfficiency()/100+2)/3));
     }
 
     public double getTemp() {

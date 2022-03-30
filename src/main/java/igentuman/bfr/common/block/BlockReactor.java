@@ -103,6 +103,9 @@ public abstract class BlockReactor extends Block implements ITileEntityProvider 
             if (tileEntity instanceof TileEntityBasicBlock) {
                 ((TileEntityBasicBlock) tileEntity).onNeighborChange(neighborBlock);
             }
+            if (tileEntity instanceof TileEntityReactorLogicAdapter) {
+                ((TileEntityBasicBlock) tileEntity).onNeighborChange(neighborBlock);
+            }
         }
     }
 
@@ -216,7 +219,7 @@ public abstract class BlockReactor extends Block implements ITileEntityProvider 
     public int getWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         TileEntity tile = MekanismUtils.getTileEntitySafe(world, pos);
         if (tile instanceof TileEntityReactorLogicAdapter) {
-            return ((TileEntityReactorLogicAdapter) tile).checkMode() ? 15 : 0;
+            return ((TileEntityReactorLogicAdapter) tile).getRedstoneLevel();
         }
         return 0;
     }
