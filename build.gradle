@@ -71,8 +71,8 @@ repositories {
 }
 
 group = "igentuman"
-version = "${minecraft_version}-${mod_version}." + "390"
-archivesBaseName = "BFRALL"
+version = "${minecraft_version}-${mod_version}"
+archivesBaseName = "BetterFusionReactor"
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
 def explodedVersion = mod_version.split("\\.")

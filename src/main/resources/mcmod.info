@@ -8,13 +8,13 @@
     "authorList": [
       "igentuman"
     ],
-    "credits": "Thanks pupnewfster for a great mod",
+    "credits": "Thanks pupnewfster, aidancbrady, thommy101, thiakil and dizzyd for a Mekanism Generators mod",
     "useDependencyInformation": true,
     "dependencies": [
-      "mekanismgenerators@[${version}]"
+      "mekanismgenerators@[1.12.2-9.8.3.390]"
     ],
     "requiredMods": [
-      "mekanismgenerators@[${version}]"
+      "mekanismgenerators@[1.12.2-9.8.3.390]"
     ]
   }
 ]
