@@ -3,7 +3,7 @@
   "defaults": {
     "model": "mekanism:basic_cube",
     "textures": {
-      "all": "mekanismgenerators:blocks/reactor_port"
+      "all": "bfr:blocks/reactor_port"
     }
   },
   "variants": {
@@ -13,7 +13,7 @@
       "false": {},
       "true": {
         "textures": {
-          "all": "mekanismgenerators:blocks/reactor_port_output"
+          "all": "bfr:blocks/reactor_port_output"
         }
       }
     }
