@@ -169,6 +169,7 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             tag.setFloat("currentReactivity", getReactor().getCurrentReactivity());
             tag.setFloat("errorLevel", getReactor().getErrorLevel());
             tag.setFloat("adjustment", getReactor().getAdjustment());
+            tag.setFloat("laserShootCountdown", getReactor().getLaserShootCountdown());
             tag.setBoolean("burning", getReactor().isBurning());
         } else {
             tag.setDouble("plasmaTemp", 0);
@@ -178,6 +179,7 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             tag.setFloat("currentReactivity", 0);
             tag.setFloat("errorLevel", 0);
             tag.setFloat("adjustment", 0);
+            tag.setInteger("laserShootCountdown", 0);
             tag.setBoolean("burning", false);
         }
         tag.setTag("fuelTank", fuelTank.write(new NBTTagCompound()));
@@ -200,7 +202,8 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             getReactor().setTargetReactivity(tag.getFloat("targetReactivity"));
             getReactor().setCurrentReactivity(tag.getFloat("currentReactivity"));
             getReactor().setErrorLevel(tag.getFloat("errorLevel"));
-            getReactor().setAdjustment(tag.getFloat("errorLevel"));
+            getReactor().setAdjustment(tag.getFloat("adjustment"));
+            getReactor().setLaserShootCountdown(tag.getInteger("laserShootCountdown"));
             getReactor().setBurning(tag.getBoolean("burning"));
             getReactor().updateTemperatures();
         }
@@ -224,6 +227,7 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             data.add(getReactor().getCurrentReactivity());
             data.add(getReactor().getErrorLevel());
             data.add(getReactor().getAdjustment());
+            data.add(getReactor().getLaserShootCountdown());
             data.add(fuelTank.getStored());
             data.add(deuteriumTank.getStored());
             data.add(tritiumTank.getStored());
@@ -274,6 +278,7 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
                 getReactor().setCurrentReactivity(dataStream.readFloat());
                 getReactor().setErrorLevel(dataStream.readFloat());
                 getReactor().setAdjustment(dataStream.readFloat());
+                getReactor().setLaserShootCountdown(dataStream.readInt());
                 fuelTank.setGas(new GasStack(MekanismFluids.FusionFuel, dataStream.readInt()));
                 deuteriumTank.setGas(new GasStack(MekanismFluids.Deuterium, dataStream.readInt()));
                 tritiumTank.setGas(new GasStack(MekanismFluids.Tritium, dataStream.readInt()));

@@ -69,6 +69,9 @@ public class BetterFusionReactor {
     public boolean updatedThisTick;
     public int adjustmentTicks = 100;
     public boolean formed = false;
+    public int laserShootCountdown = 0;
+    public int laserShootEnergyDuration = 6000;
+    public double laserShootMinEnergy = 6000D;
 
     public BetterFusionReactor(TileEntityReactorController c) {
         controller = c;
@@ -76,6 +79,7 @@ public class BetterFusionReactor {
 
     public void addTemperatureFromEnergyInput(double energyAdded) {
         plasmaTemperature += energyAdded / plasmaHeatCapacity * (isBurning() ? 1 : 10);
+        processLaserShoot(energyAdded);
     }
 
     //Target reactivity update rate depends on temperature
@@ -125,9 +129,37 @@ public class BetterFusionReactor {
         errorLevel = val;
     }
 
+    public int getLaserShootCountdown()
+    {
+        return laserShootCountdown;
+    }
+
+    public void setLaserShootCountdown(int val)
+    {
+        laserShootCountdown = val;
+    }
+
+    public void processLaserShoot(double laserEnergy)
+    {
+        if(laserEnergy >= laserShootMinEnergy && laserShootCountdown == 0) {
+            laserShootCountdown = laserShootEnergyDuration;
+        }
+    }
+
+    public void laserShootCount()
+    {
+        if(laserShootCountdown > 0) {
+            laserShootCountdown--;
+        }
+    }
+
     /** values range 0 .. 5.16 or even bigger **/
     public float getKt()
     {
+        //so laser helps us to prevent negative effect behind Kt > 0
+        if(getLaserShootCountdown() < laserShootEnergyDuration / 3) {
+            return 0;
+        }
         float tDevide = 20;
         if(activelyCooled) {
             tDevide = 30;
@@ -220,6 +252,7 @@ public class BetterFusionReactor {
             updateErrorLevel();
             //Only inject fuel if we're burning
             if (burning) {
+                laserShootCount();
                 activelyCooled = getWaterTank().getFluidAmount() > 0;
                 updateReactivity();
                 updateAdjustment();
