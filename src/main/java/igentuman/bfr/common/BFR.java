@@ -1,6 +1,7 @@
 package igentuman.bfr.common;
 
 import igentuman.bfr.common.fixers.GeneratorTEFixer;
+import igentuman.bfr.common.integration.nuclearcraft.BfrRadSources;
 import io.netty.buffer.ByteBuf;
 import mekanism.common.Mekanism;
 import mekanism.common.Version;
@@ -17,6 +18,7 @@ import net.minecraftforge.common.util.CompoundDataFixer;
 import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -79,6 +81,9 @@ public class BFR implements IModule {
         CompoundDataFixer fixer = FMLCommonHandler.instance().getDataFixer();
         ModFixs fixes = fixer.init(MODID, DATA_VERSION);
         fixes.registerFix(FixTypes.BLOCK_ENTITY, new GeneratorTEFixer(MekFixers.TILE_ENTITIES));
+        if(Loader.isModLoaded("nuclearcraft")) {
+            BfrRadSources.init();
+        }
         Mekanism.logger.info("Loaded BFR module.");
     }
 

@@ -2,6 +2,8 @@ package igentuman.bfr.common.tile.reactor;
 
 import io.netty.buffer.ByteBuf;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import mekanism.api.TileNetworkList;
 import mekanism.api.gas.GasStack;
 import mekanism.api.gas.GasTank;
@@ -30,6 +32,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -55,10 +58,29 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
     @SideOnly(Side.CLIENT)
     private ISound activeSound;
     private int playSoundCooldown = 0;
+    public Object radiation;
 
     public TileEntityReactorController() {
         super("ReactorController", 1000000000);
         inventory = NonNullList.withSize(1, ItemStack.EMPTY);
+        if(Loader.isModLoaded("nuclearcraft")) {
+            radiation = new nc.capability.radiation.source.RadiationSource(0D);
+        } else {
+            radiation = new Object();
+        }
+    }
+
+    public void simulateRadiation()
+    {
+        if(!Loader.isModLoaded("nuclearcraft")) {
+            return;
+        }
+        if(isBurning()) {
+            ((nc.capability.radiation.source.RadiationSource) radiation).setRadiationLevel(0.001);
+        } else {
+            ((nc.capability.radiation.source.RadiationSource) radiation).setRadiationLevel(0);
+
+        }
     }
 
     @Override
@@ -100,6 +122,20 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
         return getReactor().getCaseTemp();
     }
 
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing side) {
+        if (Loader.isModLoaded("nuclearcraft") && capability == nc.capability.radiation.source.IRadiationSource.CAPABILITY_RADIATION_SOURCE) {
+            return radiation != null;
+        }
+        return super.hasCapability(capability, side);
+    }
+
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing side) {
+        if (Loader.isModLoaded("nuclearcraft") && capability == nc.capability.radiation.source.IRadiationSource.CAPABILITY_RADIATION_SOURCE) {
+            return (T) radiation;
+        }
+        return super.getCapability(capability, side);
+    }
+
     @Override
     public void onUpdate() {
         super.onUpdate();
@@ -108,6 +144,7 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
         }
         if (isFormed()) {
             getReactor().simulate();
+            simulateRadiation();
             if (!world.isRemote && (getReactor().isBurning() != clientBurning || Math.abs(getReactor().getPlasmaTemp() - clientTemp) > 1000000)) {
                 Mekanism.packetHandler.sendUpdatePacket(this);
                 clientBurning = getReactor().isBurning();
@@ -171,6 +208,9 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             tag.setFloat("adjustment", getReactor().getAdjustment());
             tag.setFloat("laserShootCountdown", getReactor().getLaserShootCountdown());
             tag.setBoolean("burning", getReactor().isBurning());
+            if(Loader.isModLoaded("nuclearcraft")) {
+                tag.setDouble("radiationLevel", ((nc.capability.radiation.source.RadiationSource) radiation).getRadiationLevel());
+            }
         } else {
             tag.setDouble("plasmaTemp", 0);
             tag.setDouble("caseTemp", 0);
@@ -181,12 +221,16 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             tag.setFloat("adjustment", 0);
             tag.setInteger("laserShootCountdown", 0);
             tag.setBoolean("burning", false);
+            if(Loader.isModLoaded("nuclearcraft")) {
+                tag.setDouble("radiationLevel", 0);
+            }
         }
         tag.setTag("fuelTank", fuelTank.write(new NBTTagCompound()));
         tag.setTag("deuteriumTank", deuteriumTank.write(new NBTTagCompound()));
         tag.setTag("tritiumTank", tritiumTank.write(new NBTTagCompound()));
         tag.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
         tag.setTag("steamTank", steamTank.writeToNBT(new NBTTagCompound()));
+
         return tag;
     }
 
@@ -205,6 +249,9 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             getReactor().setAdjustment(tag.getFloat("adjustment"));
             getReactor().setLaserShootCountdown(tag.getInteger("laserShootCountdown"));
             getReactor().setBurning(tag.getBoolean("burning"));
+            if(Loader.isModLoaded("nuclearcraft")) {
+              ((nc.capability.radiation.source.RadiationSource) radiation).setRadiationLevel(tag.getDouble("radiationLevel"));
+            }
             getReactor().updateTemperatures();
         }
         fuelTank.read(tag.getCompoundTag("fuelTank"));
@@ -228,6 +275,9 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
             data.add(getReactor().getErrorLevel());
             data.add(getReactor().getAdjustment());
             data.add(getReactor().getLaserShootCountdown());
+            if(Loader.isModLoaded("nuclearcraft")) {
+                data.add(((nc.capability.radiation.source.RadiationSource) radiation).getRadiationLevel());
+            }
             data.add(fuelTank.getStored());
             data.add(deuteriumTank.getStored());
             data.add(tritiumTank.getStored());
@@ -279,6 +329,9 @@ public class TileEntityReactorController extends TileEntityReactorBlock implemen
                 getReactor().setErrorLevel(dataStream.readFloat());
                 getReactor().setAdjustment(dataStream.readFloat());
                 getReactor().setLaserShootCountdown(dataStream.readInt());
+                if(Loader.isModLoaded("nuclearcraft")) {
+                    ((nc.capability.radiation.source.RadiationSource) radiation).setRadiationLevel(dataStream.readDouble());
+                }
                 fuelTank.setGas(new GasStack(MekanismFluids.FusionFuel, dataStream.readInt()));
                 deuteriumTank.setGas(new GasStack(MekanismFluids.Deuterium, dataStream.readInt()));
                 tritiumTank.setGas(new GasStack(MekanismFluids.Tritium, dataStream.readInt()));
