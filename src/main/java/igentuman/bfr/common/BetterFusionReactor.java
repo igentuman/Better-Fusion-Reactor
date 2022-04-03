@@ -158,7 +158,7 @@ public class BetterFusionReactor {
     {
         //so laser gives you 1 minute of independence from Kt
         if(laserShootEnergyDuration - getLaserShootCountdown() < 1200) {
-            return 0;
+            return -0.5f;
         }
         float tDevide = 20;
         if(activelyCooled) {
@@ -171,7 +171,7 @@ public class BetterFusionReactor {
     public void updateErrorLevel()
     {
         if(isBurning()) {
-            errorLevel += ((80 - getEfficiency()) * (getKt() + 1) / 2) * 0.0005;
+            errorLevel += ((80 - getEfficiency()) * ((getKt() + 1) / 2)) * 0.0005;
         } else {
             errorLevel -= 0.1;
         }
