@@ -2,6 +2,7 @@ package igentuman.bfr.client.gui;
 
 import igentuman.bfr.client.gui.element.GuiReactorTab;
 import igentuman.bfr.common.tile.reactor.TileEntityReactorController;
+import mekanism.api.EnumColor;
 import mekanism.api.TileNetworkList;
 import mekanism.client.gui.element.*;
 import mekanism.common.Mekanism;
@@ -95,8 +96,8 @@ public class GuiReactorEfficiency extends GuiReactorInfo {
         fontRenderer.drawString("ER", 142, 35, 0x404040);
         fontRenderer.drawString(LangUtils.localize("gui.reactor.heatMultiplier") + ": " +  String.format("%.2f", tileEntity.getReactor().getKt()), 8, 120, 0x404040);
         if(tileEntity.getReactor().getLaserShootCountdown() == 0) {
-            renderScaledText(LangUtils.localize("gui.reactor.laserMinEnergy") + ": " + MekanismUtils.getEnergyDisplay(tileEntity.getReactor().laserShootMinEnergy), 8, 130, 0x404040,142);
-            renderScaledText(LangUtils.localize("gui.reactor.laserMinEnergy.desc"), 8, 140, 0x404040, 142);
+            renderScaledText(EnumColor.RED + LangUtils.localize("gui.reactor.laserMinEnergy") + ": " + MekanismUtils.getEnergyDisplay(tileEntity.getReactor().laserShootMinEnergy), 8, 130, 0x404040,142);
+            renderScaledText(EnumColor.RED + LangUtils.localize("gui.reactor.laserMinEnergy.desc"), 8, 140, 0x404040, 142);
         }
         int xAxis = mouseX - this.guiLeft;
         int yAxis = mouseY - this.guiTop;
