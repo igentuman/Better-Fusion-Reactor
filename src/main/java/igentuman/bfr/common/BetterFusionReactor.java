@@ -70,8 +70,8 @@ public class BetterFusionReactor {
     public int adjustmentTicks = 100;
     public boolean formed = false;
     public int laserShootCountdown = 0;
-    public int laserShootEnergyDuration = 6000;
-    public double laserShootMinEnergy = 6000D;
+    public int laserShootEnergyDuration = 12000;
+    public double laserShootMinEnergy = 500000000;
 
     public BetterFusionReactor(TileEntityReactorController c) {
         controller = c;
@@ -156,8 +156,8 @@ public class BetterFusionReactor {
     /** values range 0 .. 5.16 or even bigger **/
     public float getKt()
     {
-        //so laser helps us to prevent negative effect behind Kt > 0
-        if(getLaserShootCountdown() < laserShootEnergyDuration / 3) {
+        //so laser gives you 1 minute of independence from Kt
+        if(laserShootEnergyDuration - getLaserShootCountdown() < 1200) {
             return 0;
         }
         float tDevide = 20;

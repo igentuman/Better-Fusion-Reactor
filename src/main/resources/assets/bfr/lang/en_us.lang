@@ -23,3 +23,5 @@ reactor.injection_down=-2 injection rate
 reactor.injection_down.desc=One redstone impulse decreases injection rate by 2
 gui.reactor_logic.input_tab=Input Signals
 gui.reactor_logic.output_tab=Output Signals
+gui.reactor.laserMinEnergy=Laser Impulse min energy
+gui.reactor.laserMinEnergy.desc=Avoid negative effects of Hm (1 minute)

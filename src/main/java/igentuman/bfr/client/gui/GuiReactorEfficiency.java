@@ -94,6 +94,10 @@ public class GuiReactorEfficiency extends GuiReactorInfo {
         fontRenderer.drawString("EF", 102, 35, 0x404040);
         fontRenderer.drawString("ER", 142, 35, 0x404040);
         fontRenderer.drawString(LangUtils.localize("gui.reactor.heatMultiplier") + ": " +  String.format("%.2f", tileEntity.getReactor().getKt()), 8, 120, 0x404040);
+        if(tileEntity.getReactor().getLaserShootCountdown() == 0) {
+            renderScaledText(LangUtils.localize("gui.reactor.laserMinEnergy") + ": " + MekanismUtils.getEnergyDisplay(tileEntity.getReactor().laserShootMinEnergy), 8, 130, 0x404040,142);
+            renderScaledText(LangUtils.localize("gui.reactor.laserMinEnergy.desc"), 8, 140, 0x404040, 142);
+        }
         int xAxis = mouseX - this.guiLeft;
         int yAxis = mouseY - this.guiTop;
         if (this.plusButton.isMouseOver()) {
