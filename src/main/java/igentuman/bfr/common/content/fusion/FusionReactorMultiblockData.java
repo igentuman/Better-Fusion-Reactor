@@ -36,13 +36,14 @@ import mekanism.common.util.HeatUtils;
 import mekanism.common.util.MekanismUtils;
 import mekanism.common.util.NBTUtils;
 import mekanism.common.util.WorldUtils;
-import igentuman.bfr.common.GeneratorTags;
 import igentuman.bfr.common.config.BetterFusionReactorConfig;
-import igentuman.bfr.common.item.ItemHohlraum;
 import igentuman.bfr.common.registries.BfrGases;
 import igentuman.bfr.common.slot.ReactorInventorySlot;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorBlock;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorPort;
+import mekanism.generators.common.GeneratorTags;
+import mekanism.generators.common.config.MekanismGeneratorsConfig;
+import mekanism.generators.common.item.ItemHohlraum;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -273,7 +274,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
     private long burnFuel() {
         long fuelBurned = (long) Math.min(fuelTank.getStored(), Math.max(0, lastPlasmaTemperature - burnTemperature) * burnRatio);
         MekanismUtils.logMismatchedStackSize(fuelTank.shrinkStack(fuelBurned, Action.EXECUTE), fuelBurned);
-        setPlasmaTemp(getPlasmaTemp() + BetterFusionReactorConfig.generators.energyPerFusionFuel.get().multiply(fuelBurned).divide(plasmaHeatCapacity).doubleValue());
+        setPlasmaTemp(getPlasmaTemp() + MekanismGeneratorsConfig.generators.energyPerFusionFuel.get().multiply(fuelBurned).divide(plasmaHeatCapacity).doubleValue());
         return fuelBurned;
     }
 
@@ -284,7 +285,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
         heatCapacitor.handleHeat(plasmaCaseHeat);
 
         //Transfer from casing to water if necessary
-        double caseWaterHeat = BetterFusionReactorConfig.generators.fusionWaterHeatingRatio.get() * (lastCaseTemperature - biomeAmbientTemp);
+        double caseWaterHeat = MekanismGeneratorsConfig.generators.fusionWaterHeatingRatio.get() * (lastCaseTemperature - biomeAmbientTemp);
         int waterToVaporize = (int) (HeatUtils.getSteamEnergyEfficiency() * caseWaterHeat / HeatUtils.getWaterThermalEnthalpy());
         waterToVaporize = Math.min(waterToVaporize, Math.min(waterTank.getFluidAmount(), MathUtils.clampToInt(steamTank.getNeeded())));
         if (waterToVaporize > 0) {
@@ -299,9 +300,9 @@ public class FusionReactorMultiblockData extends MultiblockData {
         }
 
         //Passive energy generation
-        double caseAirHeat = BetterFusionReactorConfig.generators.fusionCasingThermalConductivity.get() * (lastCaseTemperature - biomeAmbientTemp);
+        double caseAirHeat = MekanismGeneratorsConfig.generators.fusionCasingThermalConductivity.get() * (lastCaseTemperature - biomeAmbientTemp);
         heatCapacitor.handleHeat(-caseAirHeat);
-        energyContainer.insert(FloatingLong.create(caseAirHeat * BetterFusionReactorConfig.generators.fusionThermocoupleEfficiency.get()), Action.EXECUTE, AutomationType.INTERNAL);
+        energyContainer.insert(FloatingLong.create(caseAirHeat * MekanismGeneratorsConfig.generators.fusionThermocoupleEfficiency.get()), Action.EXECUTE, AutomationType.INTERNAL);
     }
 
     public void setLastPlasmaTemp(double temp) {
@@ -377,51 +378,51 @@ public class FusionReactorMultiblockData extends MultiblockData {
 
     @ComputerMethod
     public int getMinInjectionRate(boolean active) {
-        double k = active ? BetterFusionReactorConfig.generators.fusionWaterHeatingRatio.get() : 0;
-        double caseAirConductivity = BetterFusionReactorConfig.generators.fusionCasingThermalConductivity.get();
+        double k = active ? MekanismGeneratorsConfig.generators.fusionWaterHeatingRatio.get() : 0;
+        double caseAirConductivity = MekanismGeneratorsConfig.generators.fusionCasingThermalConductivity.get();
         double aMin = burnTemperature * burnRatio * plasmaCaseConductivity * (k + caseAirConductivity) /
-                      (BetterFusionReactorConfig.generators.energyPerFusionFuel.get().doubleValue() * burnRatio * (plasmaCaseConductivity + k + caseAirConductivity) -
+                      (MekanismGeneratorsConfig.generators.energyPerFusionFuel.get().doubleValue() * burnRatio * (plasmaCaseConductivity + k + caseAirConductivity) -
                        plasmaCaseConductivity * (k + caseAirConductivity));
         return (int) (2 * Math.ceil(aMin / 2D));
     }
 
     @ComputerMethod
     public double getMaxPlasmaTemperature(boolean active) {
-        double k = active ? BetterFusionReactorConfig.generators.fusionWaterHeatingRatio.get() : 0;
-        double caseAirConductivity = BetterFusionReactorConfig.generators.fusionCasingThermalConductivity.get();
-        return injectionRate * BetterFusionReactorConfig.generators.energyPerFusionFuel.get().doubleValue() / plasmaCaseConductivity *
+        double k = active ? MekanismGeneratorsConfig.generators.fusionWaterHeatingRatio.get() : 0;
+        double caseAirConductivity = MekanismGeneratorsConfig.generators.fusionCasingThermalConductivity.get();
+        return injectionRate * MekanismGeneratorsConfig.generators.energyPerFusionFuel.get().doubleValue() / plasmaCaseConductivity *
                (plasmaCaseConductivity + k + caseAirConductivity) / (k + caseAirConductivity);
     }
 
     @ComputerMethod
     public double getMaxCasingTemperature(boolean active) {
-        double k = active ? BetterFusionReactorConfig.generators.fusionWaterHeatingRatio.get() : 0;
-        return BetterFusionReactorConfig.generators.energyPerFusionFuel.get().multiply(injectionRate)
-              .divide(k + BetterFusionReactorConfig.generators.fusionCasingThermalConductivity.get()).doubleValue();
+        double k = active ? MekanismGeneratorsConfig.generators.fusionWaterHeatingRatio.get() : 0;
+        return MekanismGeneratorsConfig.generators.energyPerFusionFuel.get().multiply(injectionRate)
+              .divide(k + MekanismGeneratorsConfig.generators.fusionCasingThermalConductivity.get()).doubleValue();
     }
 
     @ComputerMethod
     public double getIgnitionTemperature(boolean active) {
-        double k = active ? BetterFusionReactorConfig.generators.fusionWaterHeatingRatio.get() : 0;
-        double caseAirConductivity = BetterFusionReactorConfig.generators.fusionCasingThermalConductivity.get();
-        double energyPerFusionFuel = BetterFusionReactorConfig.generators.energyPerFusionFuel.get().doubleValue();
+        double k = active ? MekanismGeneratorsConfig.generators.fusionWaterHeatingRatio.get() : 0;
+        double caseAirConductivity = MekanismGeneratorsConfig.generators.fusionCasingThermalConductivity.get();
+        double energyPerFusionFuel = MekanismGeneratorsConfig.generators.energyPerFusionFuel.get().doubleValue();
         return burnTemperature * energyPerFusionFuel * burnRatio * (plasmaCaseConductivity + k + caseAirConductivity) /
                (energyPerFusionFuel * burnRatio * (plasmaCaseConductivity + k + caseAirConductivity) - plasmaCaseConductivity * (k + caseAirConductivity));
     }
 
     public FloatingLong getPassiveGeneration(boolean active, boolean current) {
         double temperature = current ? getLastCaseTemp() : getMaxCasingTemperature(active);
-        return FloatingLong.create(BetterFusionReactorConfig.generators.fusionThermocoupleEfficiency.get() *
-                                   BetterFusionReactorConfig.generators.fusionCasingThermalConductivity.get() * temperature);
+        return FloatingLong.create(MekanismGeneratorsConfig.generators.fusionThermocoupleEfficiency.get() *
+                MekanismGeneratorsConfig.generators.fusionCasingThermalConductivity.get() * temperature);
     }
 
     public long getSteamPerTick(boolean current) {
         double temperature = current ? getLastCaseTemp() : getMaxCasingTemperature(true);
-        return MathUtils.clampToLong(HeatUtils.getSteamEnergyEfficiency() * BetterFusionReactorConfig.generators.fusionWaterHeatingRatio.get() * temperature / HeatUtils.getWaterThermalEnthalpy());
+        return MathUtils.clampToLong(HeatUtils.getSteamEnergyEfficiency() * MekanismGeneratorsConfig.generators.fusionWaterHeatingRatio.get() * temperature / HeatUtils.getWaterThermalEnthalpy());
     }
 
     private static double getInverseConductionCoefficient() {
-        return 1 / BetterFusionReactorConfig.generators.fusionCasingThermalConductivity.get();
+        return 1 / MekanismGeneratorsConfig.generators.fusionCasingThermalConductivity.get();
     }
 
     //Computer related methods

@@ -8,6 +8,7 @@ import mekanism.common.tile.prefab.TileEntityMultiblock;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.registries.BfrBlocks;
+import net.minecraft.world.World;
 
 public class TileEntityFusionReactorBlock extends TileEntityMultiblock<FusionReactorMultiblockData> {
 
@@ -48,5 +49,8 @@ public class TileEntityFusionReactorBlock extends TileEntityMultiblock<FusionRea
 
     public void addHeatTabContainerTrackers(MekanismContainer container) {
         SyncMapper.INSTANCE.setup(container, FusionReactorMultiblockData.class, this::getMultiblock, "heat");
+    }
+
+    public void tick() {
     }
 }

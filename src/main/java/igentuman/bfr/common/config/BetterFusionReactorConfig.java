@@ -9,12 +9,10 @@ public class BetterFusionReactorConfig {
     private BetterFusionReactorConfig() {
     }
 
-    public static final BfrConfig generators = new BfrConfig();
-    public static final GeneratorsGearConfig gear = new GeneratorsGearConfig();
+    public static final BfrConfig bfr = new BfrConfig();
 
     public static void registerConfigs(ModLoadingContext modLoadingContext) {
         ModContainer modContainer = modLoadingContext.getActiveContainer();
-        MekanismConfigHelper.registerConfig(modContainer, generators);
-        MekanismConfigHelper.registerConfig(modContainer, gear);
+        MekanismConfigHelper.registerConfig(modContainer, bfr);
     }
 }

@@ -1,7 +1,6 @@
 package igentuman.bfr.common;
 
 import mekanism.api.MekanismIMC;
-import mekanism.api.chemical.gas.attribute.GasAttributes.Fuel;
 import mekanism.common.Mekanism;
 import mekanism.common.base.IModModule;
 import mekanism.common.command.builders.BuildCommand;
@@ -72,17 +71,6 @@ public class BetterFusionReactor implements IModModule {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-        //1mB hydrogen + 2*bioFuel/tick*200ticks/100mB * 20x efficiency bonus
-        MekanismGases.ETHENE.get().addAttribute(new Fuel(MekanismConfig.general.ETHENE_BURN_TIME,
-              () -> MekanismConfig.general.FROM_H2.get().add(BetterFusionReactorConfig.generators.bioGeneration.get()
-                    .multiply(2L * MekanismConfig.general.ETHENE_BURN_TIME.get()))));
-
-        event.enqueueWork(() -> {
-            //Ensure our tags are all initialized
-            GeneratorTags.init();
-            //Register dispenser behaviors
-            BfrFluids.FLUIDS.registerBucketDispenserBehavior();
-        });
 
         BuildCommand.register("fusion", BfrLang.FUSION_REACTOR, new FusionReactorBuilder());
 
@@ -103,12 +91,12 @@ public class BetterFusionReactor implements IModModule {
 
     @Override
     public String getName() {
-        return "Generators";
+        return "Better Fusion Reactor";
     }
 
     @Override
     public void resetClient() {
-        TurbineMultiblockData.clientRotationMap.clear();
+
     }
 
     private void onConfigLoad(ModConfig.ModConfigEvent configEvent) {
