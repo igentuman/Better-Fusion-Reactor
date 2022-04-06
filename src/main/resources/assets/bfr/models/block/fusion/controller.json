@@ -1,0 +1,8 @@
+{
+  "parent": "mekanism:block/machine",
+  "textures": {
+    "sides": "bfr:block/reactor_frame",
+    "front": "bfr:block/reactor_frame",
+    "up": "bfr:block/reactor_controller"
+  }
+}

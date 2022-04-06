@@ -1,0 +1,6 @@
+{
+  "parent": "bfr:block/fusion/port",
+  "textures": {
+    "all": "bfr:block/reactor_port_output"
+  }
+}

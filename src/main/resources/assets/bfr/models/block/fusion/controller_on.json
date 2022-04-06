@@ -1,0 +1,6 @@
+{
+  "parent": "bfr:block/fusion/controller",
+  "textures": {
+    "up": "bfr:block/reactor_controller_on"
+  }
+}

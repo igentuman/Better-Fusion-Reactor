@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "bfr:block/fusion/controller"
+    },
+    "active=true": {
+      "model": "bfr:block/fusion/controller_on"
+    }
+  }
+}

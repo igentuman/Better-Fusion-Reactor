@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "bfr:block/fusion/port"
+    },
+    "active=true": {
+      "model": "bfr:block/fusion/port_output"
+    }
+  }
+}
