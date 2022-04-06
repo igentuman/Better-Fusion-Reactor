@@ -1,0 +1,20 @@
+modLoader="javafml"
+loaderVersion="${loader_version}"
+issueTrackerURL="https://github.com/igentuman/BetterFusionReactor/issues"
+license="MIT"
+
+[[mods]]
+    modId="bfr"
+    version="${version}"
+    displayName="Better Fusion Reactor for Mekanism"
+    displayURL="https://itman.website/"
+    authors="igentuman"
+    credits="Aidancbrady, Thommy101, Thiakil, pupnewfster, dizzyd"
+    logoFile="logo.png"
+    description='''Updated Fusion Reactor for Mekanism'''
+
+[[dependencies.bfr]]
+    modId="mekanismgenerators"
+    mandatory=true
+    versionRange="10.1.2.457"
+    side="BOTH"
