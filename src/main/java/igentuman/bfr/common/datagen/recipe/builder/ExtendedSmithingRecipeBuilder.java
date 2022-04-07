@@ -49,27 +49,5 @@ public class ExtendedSmithingRecipeBuilder extends BaseRecipeBuilder<ExtendedSmi
             json.add(DataGenJsonConstants.BASE, ingredient.toJson());
             json.add(DataGenJsonConstants.ADDITION, upgradeIngredient.toJson());
         }
-
-        @Override
-        public ResourceLocation getId() {
-            return null;
-        }
-
-        @Override
-        public IRecipeSerializer<?> getType() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public JsonObject serializeAdvancement() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public ResourceLocation getAdvancementId() {
-            return null;
-        }
     }
 }

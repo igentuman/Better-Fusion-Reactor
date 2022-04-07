@@ -24,10 +24,6 @@ public class GuiFusionReactorController extends GuiMekanismTile<TileEntityFusion
         titleLabelY = 5;
     }
 
-    protected void renderBg(MatrixStack pMatrixStack, float pPartialTicks, int pX, int pY) {
-
-    }
-
     @Override
     protected void addGuiElements() {
         super.addGuiElements();

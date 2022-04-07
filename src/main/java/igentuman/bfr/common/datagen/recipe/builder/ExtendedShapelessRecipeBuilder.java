@@ -89,26 +89,5 @@ public class ExtendedShapelessRecipeBuilder extends BaseRecipeBuilder<ExtendedSh
             json.add(DataGenJsonConstants.INGREDIENTS, jsonIngredients);
         }
 
-        @Override
-        public ResourceLocation getId() {
-            return null;
-        }
-
-        @Override
-        public IRecipeSerializer<?> getType() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public JsonObject serializeAdvancement() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public ResourceLocation getAdvancementId() {
-            return null;
-        }
     }
 }

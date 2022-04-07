@@ -36,7 +36,6 @@ import mekanism.common.util.HeatUtils;
 import mekanism.common.util.MekanismUtils;
 import mekanism.common.util.NBTUtils;
 import mekanism.common.util.WorldUtils;
-import igentuman.bfr.common.config.BetterFusionReactorConfig;
 import igentuman.bfr.common.slot.ReactorInventorySlot;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorBlock;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorPort;

@@ -15,7 +15,4 @@ public class TileEntityReactorGlass extends TileEntityStructuralMultiblock {
         return true;
     }
 
-    public void tick() {
-
-    }
 }

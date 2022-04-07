@@ -180,11 +180,8 @@ dependencies {
 
     implementation fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${minecraft_version}:${crafttweaker_version}")
 
-    compileOnly "mekanism:Mekanism:${mekanism_version}:api"
-    compileOnly "mekanism:Mekanism:${mekanism_version}"
-    compileOnly "mekanism:Mekanism:${mekanism_version}:generators"
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
+    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
 
     //Mods we have dependencies on but don't bother loading into the dev environment
     compileOnly fg.deobf("curse.maven:flux-networks-248020:${flux_networks_id}")

@@ -89,28 +89,6 @@ public class ExtendedCookingRecipeBuilder extends BaseRecipeBuilder<ExtendedCook
         }
 
         @Override
-        public ResourceLocation getId() {
-            return null;
-        }
-
-        @Override
-        public IRecipeSerializer<?> getType() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public JsonObject serializeAdvancement() {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public ResourceLocation getAdvancementId() {
-            return null;
-        }
-
-        @Override
         protected void serializeResult(JsonObject json) {
             if (count == 1) {
                 json.addProperty(DataGenJsonConstants.RESULT, result.getRegistryName().toString());

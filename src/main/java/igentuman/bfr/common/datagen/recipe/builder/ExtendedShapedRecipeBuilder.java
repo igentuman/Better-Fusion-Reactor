@@ -125,22 +125,5 @@ public class ExtendedShapedRecipeBuilder extends BaseRecipeBuilder<ExtendedShape
             json.add(DataGenJsonConstants.KEY, jsonobject);
         }
 
-        public ResourceLocation getId() {
-            return null;
-        }
-
-        public IRecipeSerializer<?> getType() {
-            return null;
-        }
-
-        @Nullable
-        public JsonObject serializeAdvancement() {
-            return null;
-        }
-
-        @Nullable
-        public ResourceLocation getAdvancementId() {
-            return null;
-        }
     }
 }
