@@ -33,6 +33,11 @@ public class GuiFusionReactorFuel extends GuiFusionReactorInfo {
     }
 
     @Override
+    protected void renderBg(MatrixStack pMatrixStack, float pPartialTicks, int pX, int pY) {
+
+    }
+
+    @Override
     protected void addGuiElements() {
         super.addGuiElements();
         addButton(new GuiEnergyTab(this, () -> {

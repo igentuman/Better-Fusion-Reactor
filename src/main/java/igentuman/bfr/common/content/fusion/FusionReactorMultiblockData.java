@@ -37,13 +37,13 @@ import mekanism.common.util.MekanismUtils;
 import mekanism.common.util.NBTUtils;
 import mekanism.common.util.WorldUtils;
 import igentuman.bfr.common.config.BetterFusionReactorConfig;
-import igentuman.bfr.common.registries.BfrGases;
 import igentuman.bfr.common.slot.ReactorInventorySlot;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorBlock;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorPort;
 import mekanism.generators.common.GeneratorTags;
 import mekanism.generators.common.config.MekanismGeneratorsConfig;
 import mekanism.generators.common.item.ItemHohlraum;
+import mekanism.generators.common.registries.GeneratorsGases;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -268,7 +268,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
         long injectingAmount = amountToInject / 2;
         MekanismUtils.logMismatchedStackSize(deuteriumTank.shrinkStack(injectingAmount, Action.EXECUTE), injectingAmount);
         MekanismUtils.logMismatchedStackSize(tritiumTank.shrinkStack(injectingAmount, Action.EXECUTE), injectingAmount);
-        fuelTank.insert(BfrGases.FUSION_FUEL.getStack(amountToInject), Action.EXECUTE, AutomationType.INTERNAL);
+        fuelTank.insert(GeneratorsGases.FUSION_FUEL.getStack(amountToInject), Action.EXECUTE, AutomationType.INTERNAL);
     }
 
     private long burnFuel() {

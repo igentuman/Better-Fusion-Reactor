@@ -14,4 +14,8 @@ public class TileEntityReactorGlass extends TileEntityStructuralMultiblock {
     public boolean canInterface(MultiblockManager<?> manager) {
         return true;
     }
+
+    public void tick() {
+
+    }
 }

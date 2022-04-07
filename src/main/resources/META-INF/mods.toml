@@ -14,7 +14,7 @@ license="MIT"
     description='''Updated Fusion Reactor for Mekanism'''
 
 [[dependencies.bfr]]
-    modId="bfr"
+    modId="mekanismgenerators"
     mandatory=true
     versionRange="10.1.2.457"
     side="BOTH"

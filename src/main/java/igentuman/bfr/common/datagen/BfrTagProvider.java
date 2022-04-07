@@ -1,11 +1,9 @@
-package igentuman.bfr.common;
+package igentuman.bfr.common.datagen;
 
 import javax.annotation.Nullable;
-import mekanism.common.registration.impl.FluidRegistryObject;
-import mekanism.common.registration.impl.TileEntityTypeRegistryObject;
-import mekanism.common.tag.BaseTagProvider;
-import mekanism.common.tag.MekanismTagProvider;
-import mekanism.common.tags.MekanismTags;
+
+import igentuman.bfr.common.BetterFusionReactor;
+import igentuman.bfr.common.datagen.tag.BaseTagProvider;
 import igentuman.bfr.common.registries.BfrBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.Tags;

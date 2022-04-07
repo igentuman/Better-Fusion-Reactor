@@ -1,17 +1,12 @@
-package igentuman.bfr.common;
+package igentuman.bfr.common.datagen;
 
 import java.util.function.Consumer;
 import javax.annotation.ParametersAreNonnullByDefault;
-import mekanism.api.datagen.recipe.builder.ItemStackChemicalToItemStackRecipeBuilder;
-import mekanism.api.recipes.inputs.ItemStackIngredient;
-import mekanism.api.recipes.inputs.chemical.InfusionStackIngredient;
-import mekanism.common.recipe.BaseRecipeProvider;
-import mekanism.common.recipe.builder.ExtendedShapedRecipeBuilder;
-import mekanism.common.recipe.builder.MekDataShapedRecipeBuilder;
-import mekanism.common.recipe.impl.MekanismRecipeProvider;
-import mekanism.common.recipe.pattern.Pattern;
-import mekanism.common.recipe.pattern.RecipePattern;
-import mekanism.common.recipe.pattern.RecipePattern.TripleLine;
+
+import igentuman.bfr.common.BetterFusionReactor;
+import igentuman.bfr.common.datagen.recipe.BaseRecipeProvider;
+import igentuman.bfr.common.datagen.recipe.builder.ExtendedShapedRecipeBuilder;
+import igentuman.bfr.common.datagen.recipe.pattern.RecipePattern;
 import mekanism.common.registries.MekanismBlocks;
 import mekanism.common.registries.MekanismItems;
 import mekanism.common.resource.PrimaryResource;
@@ -19,11 +14,13 @@ import mekanism.common.resource.ResourceType;
 import mekanism.common.tags.MekanismTags;
 import igentuman.bfr.common.registries.BfrBlocks;
 import mekanism.generators.common.MekanismGenerators;
-import mekanism.generators.common.registries.GeneratorsItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import igentuman.bfr.common.datagen.recipe.pattern.Pattern;
+import igentuman.bfr.common.datagen.recipe.pattern.RecipePattern;
+import igentuman.bfr.common.datagen.recipe.pattern.RecipePattern.TripleLine;
 
 @ParametersAreNonnullByDefault
 public class BfrRecipeProvider extends BaseRecipeProvider {
@@ -41,12 +38,6 @@ public class BfrRecipeProvider extends BaseRecipeProvider {
     }
 
     private void addFusionReactorRecipes(Consumer<IFinishedRecipe> consumer) {
-        //Hohlraum
-        ItemStackChemicalToItemStackRecipeBuilder.metallurgicInfusing(
-              ItemStackIngredient.from(MekanismTags.Items.PROCESSED_RESOURCES.get(ResourceType.DUST, PrimaryResource.GOLD), 4),
-              InfusionStackIngredient.from(MekanismTags.InfuseTypes.CARBON, 10),
-              GeneratorsItems.HOHLRAUM.getItemStack()
-        ).build(consumer);
         //Laser Focus Matrix
         ExtendedShapedRecipeBuilder.shapedRecipe(BfrBlocks.LASER_FOCUS_MATRIX, 2)
               .pattern(RecipePattern.createPattern(

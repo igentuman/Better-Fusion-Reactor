@@ -6,9 +6,7 @@ import mekanism.common.tile.base.TileEntityMekanism;
 import mekanism.common.util.WorldUtils;
 import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.registries.BfrContainerTypes;
-import igentuman.bfr.common.tile.fission.TileEntityFissionReactorCasing;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
-import igentuman.bfr.common.tile.turbine.TileEntityTurbineCasing;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.network.PacketBuffer;
@@ -65,23 +63,11 @@ public class PacketBfrGuiButtonPress implements IMekanismPacket {
     }
 
     public enum ClickedGeneratorsTileButton {
-        TAB_MAIN((tile, extra) -> {
-            if (tile instanceof TileEntityTurbineCasing) {
-                return BfrContainerTypes.INDUSTRIAL_TURBINE.getProvider(BfrLang.TURBINE, tile);
-            } else if (tile instanceof TileEntityFissionReactorCasing) {
-                return BfrContainerTypes.FISSION_REACTOR.getProvider(BfrLang.FISSION_REACTOR, tile);
-            }
-            return null;
-        }),
         TAB_HEAT((tile, extra) -> BfrContainerTypes.FUSION_REACTOR_HEAT.getProvider(BfrLang.HEAT_TAB, tile)),
         TAB_FUEL((tile, extra) -> BfrContainerTypes.FUSION_REACTOR_FUEL.getProvider(BfrLang.FUEL_TAB, tile)),
         TAB_STATS((tile, extra) -> {
-            if (tile instanceof TileEntityTurbineCasing) {
-                return BfrContainerTypes.TURBINE_STATS.getProvider(BfrLang.TURBINE_STATS, tile);
-            } else if (tile instanceof TileEntityFusionReactorController) {
+           if (tile instanceof TileEntityFusionReactorController) {
                 return BfrContainerTypes.FUSION_REACTOR_STATS.getProvider(BfrLang.STATS_TAB, tile);
-            } else if (tile instanceof TileEntityFissionReactorCasing) {
-                return BfrContainerTypes.FISSION_REACTOR_STATS.getProvider(BfrLang.STATS_TAB, tile);
             }
             return null;
         });

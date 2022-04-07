@@ -28,6 +28,11 @@ public class RenderFusionReactor extends MekanismTileEntityRenderer<TileEntityFu
     }
 
     @Override
+    public void render(TileEntityFusionReactorController pBlockEntity, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pCombinedLight, int pCombinedOverlay) {
+
+    }
+
+    @Override
     protected void render(TileEntityFusionReactorController tile, float partialTick, MatrixStack matrix, IRenderTypeBuffer renderer, int light, int overlayLight,
           IProfiler profiler) {
         FusionReactorMultiblockData multiblock = tile.getMultiblock();

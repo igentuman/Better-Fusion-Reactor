@@ -1,9 +1,9 @@
-package igentuman.bfr.client;
+package igentuman.bfr.client.datagen;
 
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.BfrLang;
+import igentuman.bfr.common.datagen.lang.BaseLanguageProvider;
 import igentuman.bfr.common.registries.*;
-import mekanism.client.lang.BaseLanguageProvider;
 import net.minecraft.data.DataGenerator;
 
 public class BfrLangProvider extends BaseLanguageProvider {
@@ -14,7 +14,6 @@ public class BfrLangProvider extends BaseLanguageProvider {
 
     @Override
     protected void addTranslations() {
-        addItems();
         addBlocks();
         addMisc();
     }
@@ -79,6 +78,5 @@ public class BfrLangProvider extends BaseLanguageProvider {
         add(BfrLang.DESCRIPTION_FUSION_REACTOR_LOGIC_ADAPTER, "A block that can be used to allow basic monitoring of a reactor using redstone.");
         add(BfrLang.DESCRIPTION_FUSION_REACTOR_PORT, "A block of reinforced framing that is capable of managing both the gas and energy transfer of the Fusion Reactor.");
                //Modules
-        add(BfrModules.GEOTHERMAL_GENERATOR_UNIT, "Geothermal Generator Unit", "Harnesses geothermal energy from the surrounding environment, and improves protection against damage from heat sources. Install multiple for faster charging and greater protection.");
-    }
+        }
 }

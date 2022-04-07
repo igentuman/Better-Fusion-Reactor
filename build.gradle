@@ -12,7 +12,7 @@ buildscript {
             name "forge"
             url "https://maven.minecraftforge.net/"
         }
-
+        mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
@@ -26,7 +26,6 @@ plugins {
     id 'java'
     id 'eclipse'
     id 'idea'
-    id 'maven-publish'
 }
 
 apply plugin: 'net.minecraftforge.gradle'
@@ -51,7 +50,7 @@ idea {
     }
 }
 
-group = "igentuman"
+group = "igentuman.bfr"
 version = "${minecraft_version}-${mod_version}b"
 archivesBaseName = "BetterFusionReactor"
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
@@ -98,7 +97,6 @@ minecraft {
 }
 
 
-
 repositories {
     maven {
         name 'thiakil'
@@ -136,6 +134,10 @@ repositories {
     maven {
         name 'Modmaven'
         url 'https://modmaven.dev/'
+        content {
+            includeGroup 'mekanism'
+            includeGroup 'team.chisel.ctm'
+        }
     }
     maven {
         name 'curseforge'
@@ -176,22 +178,18 @@ dependencies {
 
     runtimeOnly fg.deobf("team.chisel.ctm:CTM:MC1.16.1-${ctm_version}")
 
-    compileOnly fg.deobf("curse.maven:jade-api-324717:${jade_api_id}")
-    runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
-
     implementation fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${minecraft_version}:${crafttweaker_version}")
 
     compileOnly "mekanism:Mekanism:${mekanism_version}:api"
+    compileOnly "mekanism:Mekanism:${mekanism_version}"
+    compileOnly "mekanism:Mekanism:${mekanism_version}:generators"
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
 
     //Mods we have dependencies on but don't bother loading into the dev environment
     compileOnly fg.deobf("curse.maven:flux-networks-248020:${flux_networks_id}")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
-    def cc = fg.deobf("curse.maven:cc-tweaked-282001:${cc_tweaked_id}")
-    compileOnly cc
+    compileOnly fg.deobf("curse.maven:cc-tweaked-282001:${cc_tweaked_id}")
 }
 
 jar {
@@ -211,7 +209,6 @@ jar {
 tasks.withType(JavaCompile).configureEach({
     it.options.encoding = 'UTF-8'
 })
-
 
 tasks.withType(GenerateModuleMetadata) {
     //Disable Gradle 7 module metadata generation as it does not play nicely with FG

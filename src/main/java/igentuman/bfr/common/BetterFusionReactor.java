@@ -4,11 +4,9 @@ import mekanism.api.MekanismIMC;
 import mekanism.common.Mekanism;
 import mekanism.common.base.IModModule;
 import mekanism.common.command.builders.BuildCommand;
-import mekanism.common.config.MekanismConfig;
 import mekanism.common.config.MekanismModConfig;
 import mekanism.common.lib.Version;
 import mekanism.common.lib.multiblock.MultiblockManager;
-import mekanism.common.registries.MekanismGases;
 import igentuman.bfr.common.config.BetterFusionReactorConfig;
 import igentuman.bfr.common.content.fusion.FusionReactorCache;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
@@ -17,8 +15,6 @@ import igentuman.bfr.common.network.BfrPacketHandler;
 import igentuman.bfr.common.registries.BfrBlocks;
 import igentuman.bfr.common.registries.BfrBuilders.FusionReactorBuilder;
 import igentuman.bfr.common.registries.BfrContainerTypes;
-import igentuman.bfr.common.registries.BfrFluids;
-import igentuman.bfr.common.registries.BfrGases;
 import igentuman.bfr.common.registries.BfrModules;
 import igentuman.bfr.common.registries.BfrTileEntityTypes;
 import net.minecraft.util.ResourceLocation;
@@ -57,10 +53,8 @@ public class BetterFusionReactor implements IModModule {
         modEventBus.addListener(this::imcQueue);
 
         BfrBlocks.BLOCKS.register(modEventBus);
-        BfrFluids.FLUIDS.register(modEventBus);
         BfrContainerTypes.CONTAINER_TYPES.register(modEventBus);
         BfrTileEntityTypes.TILE_ENTITY_TYPES.register(modEventBus);
-        BfrGases.GASES.register(modEventBus);
         BfrModules.MODULES.register(modEventBus);
         //Set our version number to match the mods.toml file, which matches the one in our build.gradle
         versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
@@ -81,7 +75,6 @@ public class BetterFusionReactor implements IModModule {
     }
 
     private void imcQueue(InterModEnqueueEvent event) {
-        MekanismIMC.addMekaSuitPantsModules(BfrModules.GEOTHERMAL_GENERATOR_UNIT);
     }
 
     @Override

@@ -1,11 +1,9 @@
 package igentuman.bfr.client.jei;
 
 import javax.annotation.Nonnull;
-import mekanism.client.jei.CatalystRegistryHelper;
 import mekanism.client.jei.MekanismJEI;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.registries.BfrBlocks;
-import igentuman.bfr.common.registries.BfrItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -28,24 +26,23 @@ public class GeneratorsJEI implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(@Nonnull ISubtypeRegistration registry) {
-        MekanismJEI.registerItemSubtypes(registry, BfrItems.ITEMS.getAllItems());
         MekanismJEI.registerItemSubtypes(registry, BfrBlocks.BLOCKS.getAllBlocks());
     }
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
         IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
-        registry.addRecipeCategories(new FissionReactorRecipeCategory(guiHelper, FISSION));
+        //registry.addRecipeCategories(new FissionReactorRecipeCategory(guiHelper, FISSION));
     }
 
     @Override
     public void registerRecipeCatalysts(@Nonnull IRecipeCatalystRegistration registry) {
-        CatalystRegistryHelper.register(registry, FISSION, BfrBlocks.FISSION_REACTOR_CASING, BfrBlocks.FISSION_REACTOR_PORT,
-              BfrBlocks.FISSION_REACTOR_LOGIC_ADAPTER, BfrBlocks.FISSION_FUEL_ASSEMBLY, BfrBlocks.CONTROL_ROD_ASSEMBLY);
+      //  CatalystRegistryHelper.register(registry, FISSION, BfrBlocks.FISSION_REACTOR_CASING, BfrBlocks.FISSION_REACTOR_PORT,
+        //      BfrBlocks.FISSION_REACTOR_LOGIC_ADAPTER, BfrBlocks.FISSION_FUEL_ASSEMBLY, BfrBlocks.CONTROL_ROD_ASSEMBLY);
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registry) {
-        registry.addRecipes(FissionReactorRecipeCategory.getFissionRecipes(), FISSION);
+     //   registry.addRecipes(FissionReactorRecipeCategory.getFissionRecipes(), FISSION);
     }
 }

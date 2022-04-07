@@ -4,9 +4,6 @@ import mekanism.api.functions.TriConsumer;
 import mekanism.common.network.IMekanismPacket;
 import mekanism.common.tile.base.TileEntityMekanism;
 import mekanism.common.util.WorldUtils;
-import igentuman.bfr.common.tile.fission.TileEntityFissionReactorCasing;
-import igentuman.bfr.common.tile.fission.TileEntityFissionReactorLogicAdapter;
-import igentuman.bfr.common.tile.fission.TileEntityFissionReactorLogicAdapter.FissionReactorLogic;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorBlock;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
@@ -70,20 +67,11 @@ public class PacketBfrGuiInteract implements IMekanismPacket {
         INJECTION_RATE((tile, player, extra) -> {
             if (tile instanceof TileEntityFusionReactorBlock) {
                 ((TileEntityFusionReactorController) tile).setInjectionRateFromPacket((int) Math.round(extra));
-            } else if (tile instanceof TileEntityFissionReactorCasing) {
-                ((TileEntityFissionReactorCasing) tile).setRateLimitFromPacket(extra);
             }
         }),
         LOGIC_TYPE((tile, player, extra) -> {
-            if (tile instanceof TileEntityFissionReactorLogicAdapter) {
-                ((TileEntityFissionReactorLogicAdapter) tile).setLogicTypeFromPacket(FissionReactorLogic.byIndexStatic((int) Math.round(extra)));
-            } else if (tile instanceof TileEntityFusionReactorLogicAdapter) {
+            if (tile instanceof TileEntityFusionReactorLogicAdapter) {
                 ((TileEntityFusionReactorLogicAdapter) tile).setLogicTypeFromPacket(FusionReactorLogic.byIndexStatic((int) Math.round(extra)));
-            }
-        }),
-        FISSION_ACTIVE((tile, player, extra) -> {
-            if (tile instanceof TileEntityFissionReactorCasing) {
-                ((TileEntityFissionReactorCasing) tile).setReactorActive(Math.round(extra) == 1);
             }
         });
 
