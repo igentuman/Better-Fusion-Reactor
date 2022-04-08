@@ -1,22 +1,33 @@
 package igentuman.bfr.client.jei;
 
 import javax.annotation.Nonnull;
+
+import mekanism.client.jei.CatalystRegistryHelper;
 import mekanism.client.jei.MekanismJEI;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.registries.BfrBlocks;
+import mekanism.generators.common.registries.GeneratorsBlockTypes;
+import mekanism.generators.common.registries.GeneratorsBlocks;
+import mekanism.generators.common.registries.GeneratorsItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.registration.ISubtypeRegistration;
+import mezz.jei.api.ingredients.IIngredientType;
+import mezz.jei.api.registration.*;
+import mezz.jei.api.runtime.IIngredientManager;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 
 @JeiPlugin
 public class GeneratorsJEI implements IModPlugin {
 
-    private static final ResourceLocation FISSION = BetterFusionReactor.rl("fission");
+    private static final ResourceLocation FUSION = BetterFusionReactor.rl("fusion");
 
     @Nonnull
     @Override
@@ -32,17 +43,28 @@ public class GeneratorsJEI implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
         IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
-        //registry.addRecipeCategories(new FissionReactorRecipeCategory(guiHelper, FISSION));
+        registry.addRecipeCategories(new FusionReactorRecipeCategory(guiHelper, FUSION));
     }
 
     @Override
     public void registerRecipeCatalysts(@Nonnull IRecipeCatalystRegistration registry) {
-      //  CatalystRegistryHelper.register(registry, FISSION, BfrBlocks.FISSION_REACTOR_CASING, BfrBlocks.FISSION_REACTOR_PORT,
-        //      BfrBlocks.FISSION_REACTOR_LOGIC_ADAPTER, BfrBlocks.FISSION_FUEL_ASSEMBLY, BfrBlocks.CONTROL_ROD_ASSEMBLY);
+        CatalystRegistryHelper.register(registry, FUSION,
+        BfrBlocks.FUSION_REACTOR_CONTROLLER, BfrBlocks.FUSION_REACTOR_PORT);
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registry) {
-     //   registry.addRecipes(FissionReactorRecipeCategory.getFissionRecipes(), FISSION);
+      registry.addRecipes(FusionReactorRecipeCategory.getFusionRecipes(), FUSION);
+
+        Collection<ItemStack> collection = Arrays.asList(
+                GeneratorsBlocks.LASER_FOCUS_MATRIX,
+                GeneratorsBlocks.FUSION_REACTOR_CONTROLLER,
+                GeneratorsBlocks.FUSION_REACTOR_FRAME,
+                GeneratorsBlocks.FUSION_REACTOR_PORT,
+                GeneratorsBlocks.FUSION_REACTOR_LOGIC_ADAPTER,
+                GeneratorsBlocks.REACTOR_GLASS
+        ).stream().map(ItemStack::new).collect(Collectors.toList());
+
+        registry.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM, collection);
     }
 }
