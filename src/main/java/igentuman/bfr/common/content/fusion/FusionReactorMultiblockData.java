@@ -139,6 +139,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
     }
 
     /** value in range 0..100 **/
+    @ComputerMethod
     public float getEfficiency()
     {
         if(!isBurning()) return 0;
@@ -169,6 +170,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
         currentReactivity = Math.abs(val);
     }
 
+    @ComputerMethod
     public float getErrorLevel()
     {
         return errorLevel;
@@ -277,6 +279,16 @@ public class FusionReactorMultiblockData extends MultiblockData {
     {
         return !fluidTanks.get(0).isEmpty();
     }
+
+    @ComputerMethod(nameOverride = "adjustReactivity")
+    private void computerAdjustReactivity(float val) throws ComputerException {
+        if(val > 100 || val < -100) {
+            throw new ComputerException("Adjustment must be float value in range [-100 .. 100]");
+        }
+        adjustReactivity(val);
+    }
+
+
 
     public FusionReactorMultiblockData(TileEntityFusionReactorBlock tile) {
         super(tile);

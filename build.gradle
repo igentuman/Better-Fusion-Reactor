@@ -186,7 +186,7 @@ dependencies {
     //Mods we have dependencies on but don't bother loading into the dev environment
     compileOnly fg.deobf("curse.maven:flux-networks-248020:${flux_networks_id}")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
-    compileOnly fg.deobf("curse.maven:cc-tweaked-282001:${cc_tweaked_id}")
+    implementation fg.deobf("curse.maven:cc-tweaked-282001:${cc_tweaked_id}")
 }
 
 jar {
