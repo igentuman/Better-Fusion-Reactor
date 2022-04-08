@@ -9,6 +9,7 @@ public enum BfrLang implements ILangEntry {
     READY_FOR_REACTION("tooltip", "hohlraum.ready_for_reaction"),
     POWER("gui", "power"),
 
+
     FUSION_REACTOR("reactor", "fusion_reactor"),
     REACTOR_PASSIVE("reactor", "stats.passive"),
     REACTOR_MIN_INJECTION("reactor", "stats.min_inject"),
@@ -27,6 +28,12 @@ public enum BfrLang implements ILangEntry {
     REACTOR_EDIT_RATE("reactor", "fuel.edit_rate"),
     REACTOR_PORT_EJECT("reactor", "configurator.port_eject"),
     REACTOR_LOGIC_TOGGLE_COOLING("reactor", "logic.toggle_cooling"),
+    REACTOR_LOGIC_ERROR_LEVEL("reactor", "logic.efficiency"),
+    REACTOR_LOGIC_INJECTION_UP("reactor", "logic.injection_up"),
+    REACTOR_LOGIC_INJECTION_DOWN("reactor", "logic.injection_down"),
+    REACTOR_LOGIC_REACTIVITY_UP("reactor", "logic.reactivity_up"),
+    REACTOR_LOGIC_REACTIVITY_DOWN("reactor", "logic.reactivity_down"),
+    REACTOR_LOGIC_EFFICIENCY("reactor", "logic.efficiency"),
     REACTOR_LOGIC_REDSTONE_MODE("reactor", "logic.redstone_output_mode"),
     REACTOR_LOGIC_ACTIVE_COOLING("reactor", "logic.active_cooling"),
     REACTOR_LOGIC_ACTIVATION("reactor", "logic.activation"),
@@ -40,6 +47,12 @@ public enum BfrLang implements ILangEntry {
 
     //Descriptions
     DESCRIPTION_REACTOR_DISABLED("description", "reactor.logic.disabled"),
+    DESCRIPTION_REACTOR_INJECTION_DOWN("description", "reactor.logic.injection_down"),
+    DESCRIPTION_REACTOR_REACTIVITY_DOWN("description", "reactor.logic.reactivity_down"),
+    DESCRIPTION_REACTOR_REACTIVITY_UP("description", "reactor.logic.reactivity_up"),
+    DESCRIPTION_REACTOR_INJECTION_UP("description", "reactor.logic.injection_up"),
+    DESCRIPTION_REACTOR_ERROR_LEVEL("description", "reactor.logic.error_level"),
+    DESCRIPTION_REACTOR_EFFICIENCY("description", "reactor.logic.efficiency"),
     DESCRIPTION_REACTOR_ACTIVATION("description", "reactor.logic.activation"),
     DESCRIPTION_REACTOR_TEMPERATURE("description", "reactor.logic.temperature"),
     DESCRIPTION_REACTOR_DAMAGED("description", "reactor.logic.damaged"),

@@ -22,13 +22,13 @@ import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
-public class GuiFusionReactorLogicAdapter extends GuiMekanismTile<TileEntityFusionReactorLogicAdapter, EmptyTileContainer<TileEntityFusionReactorLogicAdapter>> {
+public class GuiFusionReactorLogicAdapterGeneral extends GuiMekanismTile<TileEntityFusionReactorLogicAdapter, EmptyTileContainer<TileEntityFusionReactorLogicAdapter>> {
 
     private static final int DISPLAY_COUNT = 4;
 
     private GuiScrollBar scrollBar;
 
-    public GuiFusionReactorLogicAdapter(EmptyTileContainer<TileEntityFusionReactorLogicAdapter> container, PlayerInventory inv, ITextComponent title) {
+    public GuiFusionReactorLogicAdapterGeneral(EmptyTileContainer<TileEntityFusionReactorLogicAdapter> container, PlayerInventory inv, ITextComponent title) {
         super(container, inv, title);
     }
 

@@ -101,6 +101,8 @@ public class GuiFusionReactorHeat extends GuiFusionReactorInfo {
         addButton(new GuiEnergyGauge(tile.getMultiblock().energyContainer, GaugeType.SMALL, this, 115, 46));
         addButton(new GuiFusionReactorTab(this, tile, FusionReactorTab.FUEL));
         addButton(new GuiFusionReactorTab(this, tile, FusionReactorTab.STAT));
+        addButton(new GuiFusionReactorTab(this, tile, FusionReactorTab.EFFICIENCY));
+
     }
 
     @Override

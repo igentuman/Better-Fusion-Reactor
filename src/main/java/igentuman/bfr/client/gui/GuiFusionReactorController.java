@@ -36,6 +36,7 @@ public class GuiFusionReactorController extends GuiMekanismTile<TileEntityFusion
             addButton(new GuiFusionReactorTab(this, tile, FusionReactorTab.HEAT));
             addButton(new GuiFusionReactorTab(this, tile, FusionReactorTab.FUEL));
             addButton(new GuiFusionReactorTab(this, tile, FusionReactorTab.STAT));
+            addButton(new GuiFusionReactorTab(this, tile, FusionReactorTab.EFFICIENCY));
         }
     }
 

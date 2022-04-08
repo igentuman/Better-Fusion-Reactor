@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 
 public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactorBlock implements IReactorLogic<FusionReactorLogic>, IHasMode {
 
-    public FusionReactorLogic logicType = FusionReactorLogic.DISABLED;
+    public FusionReactorLogic logicType = FusionReactorLogic.READY;
     private boolean activeCooled;
     private boolean prevOutputting;
 
@@ -63,7 +63,6 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
                 case DEPLETED:
                     return (multiblock.deuteriumTank.getStored() < multiblock.getInjectionRate() / 2) ||
                            (multiblock.tritiumTank.getStored() < multiblock.getInjectionRate() / 2);
-                case DISABLED:
                 default:
                     return false;
             }
@@ -125,7 +124,7 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
     @Override
     public void addContainerTrackers(MekanismContainer container) {
         super.addContainerTrackers(container);
-        container.track(SyncableEnum.create(FusionReactorLogic::byIndexStatic, FusionReactorLogic.DISABLED, this::getMode, value -> logicType = value));
+        container.track(SyncableEnum.create(FusionReactorLogic::byIndexStatic, FusionReactorLogic.READY, this::getMode, value -> logicType = value));
         container.track(SyncableBoolean.create(this::isActiveCooled, value -> activeCooled = value));
         container.track(SyncableBoolean.create(() -> prevOutputting, value -> prevOutputting = value));
     }
@@ -140,21 +139,28 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
     //End methods IComputerTile
 
     public enum FusionReactorLogic implements IReactorLogicMode<FusionReactorLogic>, IHasTranslationKey {
-        DISABLED(BfrLang.REACTOR_LOGIC_DISABLED, BfrLang.DESCRIPTION_REACTOR_DISABLED, new ItemStack(Items.GUNPOWDER)),
-        READY(BfrLang.REACTOR_LOGIC_READY, BfrLang.DESCRIPTION_REACTOR_READY, new ItemStack(Items.REDSTONE)),
-        CAPACITY(BfrLang.REACTOR_LOGIC_CAPACITY, BfrLang.DESCRIPTION_REACTOR_CAPACITY, new ItemStack(Items.REDSTONE)),
-        DEPLETED(BfrLang.REACTOR_LOGIC_DEPLETED, BfrLang.DESCRIPTION_REACTOR_DEPLETED, new ItemStack(Items.REDSTONE));
+        READY(BfrLang.REACTOR_LOGIC_READY, BfrLang.DESCRIPTION_REACTOR_READY, new ItemStack(Items.REDSTONE), "out"),
+        CAPACITY(BfrLang.REACTOR_LOGIC_CAPACITY, BfrLang.DESCRIPTION_REACTOR_CAPACITY, new ItemStack(Items.REDSTONE), "out"),
+        DEPLETED(BfrLang.REACTOR_LOGIC_DEPLETED, BfrLang.DESCRIPTION_REACTOR_DEPLETED, new ItemStack(Items.REDSTONE), "out"),
+        EFFICIENCY(BfrLang.REACTOR_LOGIC_EFFICIENCY, BfrLang.DESCRIPTION_REACTOR_EFFICIENCY, new ItemStack(Items.REDSTONE), "out"),
+        ERROR_LEVEL(BfrLang.REACTOR_LOGIC_ERROR_LEVEL, BfrLang.DESCRIPTION_REACTOR_ERROR_LEVEL, new ItemStack(Items.REDSTONE), "out"),
+        INJECTION_UP(BfrLang.REACTOR_LOGIC_INJECTION_UP, BfrLang.DESCRIPTION_REACTOR_INJECTION_UP, new ItemStack(Items.REDSTONE), "in"),
+        INJECTION_DOWN(BfrLang.REACTOR_LOGIC_INJECTION_DOWN, BfrLang.DESCRIPTION_REACTOR_INJECTION_DOWN, new ItemStack(Items.REDSTONE), "in"),
+        REACTIVITY_UP(BfrLang.REACTOR_LOGIC_REACTIVITY_UP, BfrLang.DESCRIPTION_REACTOR_REACTIVITY_UP, new ItemStack(Items.REDSTONE), "in"),
+        REACTIVITY_DOWN(BfrLang.REACTOR_LOGIC_REACTIVITY_DOWN, BfrLang.DESCRIPTION_REACTOR_REACTIVITY_DOWN, new ItemStack(Items.REDSTONE), "in");
 
         private static final FusionReactorLogic[] MODES = values();
 
         private final ILangEntry name;
         private final ILangEntry description;
         private final ItemStack renderStack;
+        private final String direction;
 
-        FusionReactorLogic(ILangEntry name, ILangEntry description, ItemStack stack) {
+        FusionReactorLogic(ILangEntry name, ILangEntry description, ItemStack stack, String dir) {
             this.name = name;
             this.description = description;
             renderStack = stack;
+            direction = dir;
         }
 
         @Override

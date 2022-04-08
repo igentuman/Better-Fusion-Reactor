@@ -1,6 +1,8 @@
 package igentuman.bfr.common.network.to_server;
 
 import java.util.function.BiFunction;
+
+import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
 import mekanism.common.network.IMekanismPacket;
 import mekanism.common.tile.base.TileEntityMekanism;
 import mekanism.common.util.WorldUtils;
@@ -65,8 +67,32 @@ public class PacketBfrGuiButtonPress implements IMekanismPacket {
     public enum ClickedGeneratorsTileButton {
         TAB_HEAT((tile, extra) -> BfrContainerTypes.FUSION_REACTOR_HEAT.getProvider(BfrLang.HEAT_TAB, tile)),
         TAB_FUEL((tile, extra) -> BfrContainerTypes.FUSION_REACTOR_FUEL.getProvider(BfrLang.FUEL_TAB, tile)),
+        TAB_EFFICIENCY((tile, extra) -> {
+           if (tile instanceof TileEntityFusionReactorController) {
+                return BfrContainerTypes.FUSION_REACTOR_STATS.getProvider(BfrLang.STATS_TAB, tile);
+            }
+            return null;
+        }),
         TAB_STATS((tile, extra) -> {
            if (tile instanceof TileEntityFusionReactorController) {
+                return BfrContainerTypes.FUSION_REACTOR_STATS.getProvider(BfrLang.STATS_TAB, tile);
+            }
+            return null;
+        }),
+        TAB_LOGIC_GENERAL((tile, extra) -> {
+            if (tile instanceof TileEntityFusionReactorLogicAdapter) {
+                return BfrContainerTypes.FUSION_REACTOR_STATS.getProvider(BfrLang.STATS_TAB, tile);
+            }
+            return null;
+        }),
+        TAB_LOGIC_INPUT((tile, extra) -> {
+            if (tile instanceof TileEntityFusionReactorLogicAdapter) {
+                return BfrContainerTypes.FUSION_REACTOR_STATS.getProvider(BfrLang.STATS_TAB, tile);
+            }
+            return null;
+        }),
+        TAB_LOGIC_OUTPUT((tile, extra) -> {
+            if (tile instanceof TileEntityFusionReactorLogicAdapter) {
                 return BfrContainerTypes.FUSION_REACTOR_STATS.getProvider(BfrLang.STATS_TAB, tile);
             }
             return null;

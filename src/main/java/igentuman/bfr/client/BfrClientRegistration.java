@@ -1,15 +1,10 @@
 package igentuman.bfr.client;
 
-import mekanism.client.ClientRegistration;
 import mekanism.client.ClientRegistrationUtil;
-import mekanism.client.model.baked.ExtensionBakedModel.TransformedBakedModel;
-import mekanism.client.render.lib.QuadTransformation;
-import mekanism.common.inventory.container.tile.MekanismTileContainer;
-import mekanism.common.registration.impl.FluidRegistryObject;
 import igentuman.bfr.client.gui.GuiFusionReactorController;
 import igentuman.bfr.client.gui.GuiFusionReactorFuel;
 import igentuman.bfr.client.gui.GuiFusionReactorHeat;
-import igentuman.bfr.client.gui.GuiFusionReactorLogicAdapter;
+import igentuman.bfr.client.gui.GuiFusionReactorLogicAdapterGeneral;
 import igentuman.bfr.client.gui.GuiFusionReactorStats;
 import igentuman.bfr.client.render.RenderFusionReactor;
 import igentuman.bfr.common.BetterFusionReactor;
@@ -18,10 +13,7 @@ import igentuman.bfr.common.registries.BfrContainerTypes;
 import igentuman.bfr.common.registries.BfrTileEntityTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -49,7 +41,7 @@ public class BfrClientRegistration {
         ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_CONTROLLER, GuiFusionReactorController::new);
         ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_FUEL, GuiFusionReactorFuel::new);
         ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_HEAT, GuiFusionReactorHeat::new);
-        ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_LOGIC_ADAPTER, GuiFusionReactorLogicAdapter::new);
+        ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_LOGIC_ADAPTER, GuiFusionReactorLogicAdapterGeneral::new);
         ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_STATS, GuiFusionReactorStats::new);
     }
 
