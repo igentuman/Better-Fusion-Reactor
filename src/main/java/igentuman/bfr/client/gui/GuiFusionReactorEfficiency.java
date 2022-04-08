@@ -127,9 +127,9 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
         drawTitleText(matrix, BfrLang.FUSION_REACTOR.translate(), titleLabelY);
         FusionReactorMultiblockData multiblock = tile.getMultiblock();
 
-        drawString(matrix, BfrLang.REACTOR_CR.translateColored(EnumColor.DARK_GREEN), 30, 35, titleTextColor());
-        drawString(matrix, BfrLang.REACTOR_TR.translateColored(EnumColor.DARK_GREEN), 64, 35, titleTextColor());
-        drawString(matrix, BfrLang.REACTOR_EF.translateColored(EnumColor.DARK_GREEN), 102, 35, titleTextColor());
+        drawString(matrix, BfrLang.REACTOR_CR.translate(), 30, 35, titleTextColor());
+        drawString(matrix, BfrLang.REACTOR_TR.translate(), 64, 35, titleTextColor());
+        drawString(matrix, BfrLang.REACTOR_EF.translate(), 102, 35, titleTextColor());
         drawString(matrix, BfrLang.REACTOR_ER.translateColored(EnumColor.DARK_RED), 142, 35, titleTextColor());
 
         if (multiblock.isFormed()) {

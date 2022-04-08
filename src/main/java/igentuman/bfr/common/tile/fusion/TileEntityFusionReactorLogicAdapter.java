@@ -10,6 +10,7 @@ import mekanism.common.integration.computer.annotation.ComputerMethod;
 import mekanism.common.inventory.container.MekanismContainer;
 import mekanism.common.inventory.container.sync.SyncableBoolean;
 import mekanism.common.inventory.container.sync.SyncableEnum;
+import mekanism.common.inventory.container.sync.SyncableInt;
 import mekanism.common.tile.interfaces.IHasMode;
 import mekanism.common.util.NBTUtils;
 import igentuman.bfr.common.BfrLang;
@@ -25,11 +26,13 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactorBlock implements IReactorLogic<FusionReactorLogic>, IHasMode {
 
     public FusionReactorLogic logicType = FusionReactorLogic.READY;
     private boolean activeCooled;
-    private boolean prevOutputting;
 
     public TileEntityFusionReactorLogicAdapter() {
         super(BfrBlocks.FUSION_REACTOR_LOGIC_ADAPTER);
@@ -38,36 +41,71 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
     @Override
     protected boolean onUpdateServer(FusionReactorMultiblockData multiblock) {
         boolean needsPacket = super.onUpdateServer(multiblock);
-        boolean outputting = checkMode();
-        if (outputting != prevOutputting) {
+        int redstone = getRedstoneLevel();
+        if (redstone != prevRedstoneLevel) {
             World world = getLevel();
             if (world != null) {
                 world.updateNeighborsAt(getBlockPos(), getBlockType());
             }
-            prevOutputting = outputting;
+            prevRedstoneLevel = redstone;
         }
+
         return needsPacket;
     }
 
-    public boolean checkMode() {
+    public void onPowerChange()
+    {
+        if(isPowered() && !wasPowered()) {
+            FusionReactorMultiblockData multiblock = getMultiblock();
+            if(multiblock == null || !getMultiblock().isFormed()) {
+                return;
+            }
+            switch (logicType) {
+                case INJECTION_DOWN:
+                    multiblock.setInjectionRate(multiblock.getInjectionRate()-2);
+                    break;
+                case INJECTION_UP:
+                    multiblock.setInjectionRate(multiblock.getInjectionRate()+2);
+                    break;
+                case REACTIVITY_UP:
+                    multiblock.adjustReactivity(5);
+                    break;
+                case REACTIVITY_DOWN:
+                    multiblock.adjustReactivity(-5);
+                    break;
+                default:
+                    return;
+            }
+            markDirty(false);
+        }
+    }
+
+    protected int prevRedstoneLevel;
+
+    public int getRedstoneLevel()
+    {
         if (isRemote()) {
-            return prevOutputting;
+            return prevRedstoneLevel;
         }
         FusionReactorMultiblockData multiblock = getMultiblock();
-        if (multiblock.isFormed()) {
-            switch (logicType) {
-                case READY:
-                    return multiblock.getLastPlasmaTemp() >= multiblock.getIgnitionTemperature(activeCooled);
-                case CAPACITY:
-                    return multiblock.getLastPlasmaTemp() >= multiblock.getMaxPlasmaTemperature(activeCooled);
-                case DEPLETED:
-                    return (multiblock.deuteriumTank.getStored() < multiblock.getInjectionRate() / 2) ||
-                           (multiblock.tritiumTank.getStored() < multiblock.getInjectionRate() / 2);
-                default:
-                    return false;
-            }
+        if (multiblock == null || !getMultiblock().isFormed()) {
+            return 0;
         }
-        return false;
+        switch (logicType) {
+            case READY:
+                return multiblock.getLastPlasmaTemp() >= multiblock.getIgnitionTemperature(activeCooled)  ? 15 : 0;
+            case CAPACITY:
+                return multiblock.getLastPlasmaTemp() >= multiblock.getMaxPlasmaTemperature(activeCooled) ? 15 : 0;
+            case ERROR_LEVEL:
+                return (int)(multiblock.getErrorLevel() / (100 / 15));
+            case EFFICIENCY:
+                return (int)(multiblock.getEfficiency() / (100 / 15));
+            case DEPLETED:
+                return (multiblock.deuteriumTank.getStored() < multiblock.getInjectionRate() / 2) ||
+                        (multiblock.tritiumTank.getStored() < multiblock.getInjectionRate() / 2) ? 15 : 0;
+            default:
+                return 0;
+        }
     }
 
     @Override
@@ -81,7 +119,7 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
     @Override
     public CompoundNBT save(@Nonnull CompoundNBT nbtTags) {
         super.save(nbtTags);
-        nbtTags.putInt(NBTConstants.LOGIC_TYPE, logicType.ordinal());
+        nbtTags.putInt(NBTConstants.LOGIC_TYPE, logicType.getId());
         nbtTags.putBoolean(NBTConstants.ACTIVE_COOLED, activeCooled);
         return nbtTags;
     }
@@ -113,6 +151,34 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
         return FusionReactorLogic.values();
     }
 
+    protected ArrayList<FusionReactorLogic> inLogicModes;
+
+    public FusionReactorLogic[] getInputModes() {
+        if(inLogicModes == null) {
+            inLogicModes = new ArrayList<>();
+            for(int i = 0; i < FusionReactorLogic.values().length; i++) {
+                if(Objects.equals(FusionReactorLogic.byIndexStatic(i).direction, "in")) {
+                    inLogicModes.add(FusionReactorLogic.values()[i]);
+                }
+            }
+        }
+        return inLogicModes.toArray(new FusionReactorLogic[0]);
+    }
+
+    protected ArrayList<FusionReactorLogic> outLogicModes;
+
+    public FusionReactorLogic[] getOutputModes() {
+        if(outLogicModes == null) {
+            outLogicModes = new ArrayList<>();
+            for(int i = 0; i < FusionReactorLogic.values().length; i++) {
+                if(Objects.equals(FusionReactorLogic.byIndexStatic(i).direction, "out")) {
+                    outLogicModes.add(FusionReactorLogic.values()[i]);
+                }
+            }
+        }
+        return outLogicModes.toArray(new FusionReactorLogic[0]);
+    }
+
     @ComputerMethod(nameOverride = "setLogicMode")
     public void setLogicTypeFromPacket(FusionReactorLogic logicType) {
         if (this.logicType != logicType) {
@@ -126,7 +192,7 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
         super.addContainerTrackers(container);
         container.track(SyncableEnum.create(FusionReactorLogic::byIndexStatic, FusionReactorLogic.READY, this::getMode, value -> logicType = value));
         container.track(SyncableBoolean.create(this::isActiveCooled, value -> activeCooled = value));
-        container.track(SyncableBoolean.create(() -> prevOutputting, value -> prevOutputting = value));
+        container.track(SyncableInt.create(() -> prevRedstoneLevel, value -> prevRedstoneLevel = value));
     }
 
     //Methods relating to IComputerTile
@@ -139,24 +205,26 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
     //End methods IComputerTile
 
     public enum FusionReactorLogic implements IReactorLogicMode<FusionReactorLogic>, IHasTranslationKey {
-        READY(BfrLang.REACTOR_LOGIC_READY, BfrLang.DESCRIPTION_REACTOR_READY, new ItemStack(Items.REDSTONE), "out"),
-        CAPACITY(BfrLang.REACTOR_LOGIC_CAPACITY, BfrLang.DESCRIPTION_REACTOR_CAPACITY, new ItemStack(Items.REDSTONE), "out"),
-        DEPLETED(BfrLang.REACTOR_LOGIC_DEPLETED, BfrLang.DESCRIPTION_REACTOR_DEPLETED, new ItemStack(Items.REDSTONE), "out"),
-        EFFICIENCY(BfrLang.REACTOR_LOGIC_EFFICIENCY, BfrLang.DESCRIPTION_REACTOR_EFFICIENCY, new ItemStack(Items.REDSTONE), "out"),
-        ERROR_LEVEL(BfrLang.REACTOR_LOGIC_ERROR_LEVEL, BfrLang.DESCRIPTION_REACTOR_ERROR_LEVEL, new ItemStack(Items.REDSTONE), "out"),
-        INJECTION_UP(BfrLang.REACTOR_LOGIC_INJECTION_UP, BfrLang.DESCRIPTION_REACTOR_INJECTION_UP, new ItemStack(Items.REDSTONE), "in"),
-        INJECTION_DOWN(BfrLang.REACTOR_LOGIC_INJECTION_DOWN, BfrLang.DESCRIPTION_REACTOR_INJECTION_DOWN, new ItemStack(Items.REDSTONE), "in"),
-        REACTIVITY_UP(BfrLang.REACTOR_LOGIC_REACTIVITY_UP, BfrLang.DESCRIPTION_REACTOR_REACTIVITY_UP, new ItemStack(Items.REDSTONE), "in"),
-        REACTIVITY_DOWN(BfrLang.REACTOR_LOGIC_REACTIVITY_DOWN, BfrLang.DESCRIPTION_REACTOR_REACTIVITY_DOWN, new ItemStack(Items.REDSTONE), "in");
+        READY(0, BfrLang.REACTOR_LOGIC_READY, BfrLang.DESCRIPTION_REACTOR_READY, new ItemStack(Items.REDSTONE), "out"),
+        CAPACITY(1, BfrLang.REACTOR_LOGIC_CAPACITY, BfrLang.DESCRIPTION_REACTOR_CAPACITY, new ItemStack(Items.REDSTONE), "out"),
+        DEPLETED(2, BfrLang.REACTOR_LOGIC_DEPLETED, BfrLang.DESCRIPTION_REACTOR_DEPLETED, new ItemStack(Items.REDSTONE), "out"),
+        EFFICIENCY(3, BfrLang.REACTOR_LOGIC_EFFICIENCY, BfrLang.DESCRIPTION_REACTOR_EFFICIENCY, new ItemStack(Items.REDSTONE), "out"),
+        ERROR_LEVEL(4, BfrLang.REACTOR_LOGIC_ERROR_LEVEL, BfrLang.DESCRIPTION_REACTOR_ERROR_LEVEL, new ItemStack(Items.REDSTONE), "out"),
+        INJECTION_UP(5, BfrLang.REACTOR_LOGIC_INJECTION_UP, BfrLang.DESCRIPTION_REACTOR_INJECTION_UP, new ItemStack(Items.REDSTONE), "in"),
+        INJECTION_DOWN(6, BfrLang.REACTOR_LOGIC_INJECTION_DOWN, BfrLang.DESCRIPTION_REACTOR_INJECTION_DOWN, new ItemStack(Items.REDSTONE), "in"),
+        REACTIVITY_UP(7, BfrLang.REACTOR_LOGIC_REACTIVITY_UP, BfrLang.DESCRIPTION_REACTOR_REACTIVITY_UP, new ItemStack(Items.REDSTONE), "in"),
+        REACTIVITY_DOWN(8, BfrLang.REACTOR_LOGIC_REACTIVITY_DOWN, BfrLang.DESCRIPTION_REACTOR_REACTIVITY_DOWN, new ItemStack(Items.REDSTONE), "in");
 
         private static final FusionReactorLogic[] MODES = values();
 
+        private final int id;
         private final ILangEntry name;
         private final ILangEntry description;
         private final ItemStack renderStack;
         private final String direction;
 
-        FusionReactorLogic(ILangEntry name, ILangEntry description, ItemStack stack, String dir) {
+        FusionReactorLogic(int id, ILangEntry name, ILangEntry description, ItemStack stack, String dir) {
+            this.id = id;
             this.name = name;
             this.description = description;
             renderStack = stack;
@@ -181,6 +249,10 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
         @Override
         public EnumColor getColor() {
             return EnumColor.RED;
+        }
+
+        public int getId() {
+            return id;
         }
 
         public static FusionReactorLogic byIndexStatic(int index) {

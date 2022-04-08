@@ -35,6 +35,7 @@ public class GuiFusionReactorStats extends GuiFusionReactorInfo {
         }));
         addButton(new GuiFusionReactorTab(this, tile, FusionReactorTab.HEAT));
         addButton(new GuiFusionReactorTab(this, tile, FusionReactorTab.FUEL));
+        addButton(new GuiFusionReactorTab(this, tile, FusionReactorTab.EFFICIENCY));
     }
 
     @Override

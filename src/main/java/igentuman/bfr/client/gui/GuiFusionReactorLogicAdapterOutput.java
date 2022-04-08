@@ -1,6 +1,7 @@
 package igentuman.bfr.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import igentuman.bfr.client.gui.element.GuReactorLogicTab;
 import igentuman.bfr.client.gui.element.button.ReactorLogicButton;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.BfrLang;
@@ -11,6 +12,7 @@ import mekanism.client.gui.GuiMekanismTile;
 import mekanism.client.gui.element.GuiElementHolder;
 import mekanism.client.gui.element.button.ToggleButton;
 import mekanism.client.gui.element.scroll.GuiScrollBar;
+import mekanism.client.gui.element.tab.GuiRedstoneControlTab;
 import mekanism.common.Mekanism;
 import mekanism.common.MekanismLang;
 import mekanism.common.inventory.container.tile.EmptyTileContainer;
@@ -35,17 +37,29 @@ public class GuiFusionReactorLogicAdapterOutput extends GuiMekanismTile<TileEnti
     @Override
     protected void addGuiElements() {
         super.addGuiElements();
+        for(int i = 0; i < buttons.size(); i++) {
+            if(buttons.get(i) instanceof GuiRedstoneControlTab) {
+                buttons.remove(i);
+                break;
+            }
+        }
+        for(int i = 0; i < children.size(); i++) {
+            if(children.get(i) instanceof GuiRedstoneControlTab) {
+                children.remove(i);
+                break;
+            }
+        }
+        addButton(new GuReactorLogicTab(this, tile, GuReactorLogicTab.ReactorLogicTab.GENERAL));
+        addButton(new GuReactorLogicTab(this, tile, GuReactorLogicTab.ReactorLogicTab.INPUT));
         addButton(new GuiElementHolder(this, 16, 31, 130, 90));
-        addButton(new ToggleButton(this, 16, 19, 11, tile::isActiveCooled,
-              () -> Mekanism.packetHandler.sendToServer(new PacketGuiInteract(GuiInteraction.NEXT_MODE, tile)), getOnHover(BfrLang.REACTOR_LOGIC_TOGGLE_COOLING)));
-        scrollBar = addButton(new GuiScrollBar(this, 146, 31, 90, () -> tile.getModes().length, () -> DISPLAY_COUNT));
+         scrollBar = addButton(new GuiScrollBar(this, 146, 31, 90, () -> tile.getOutputModes().length, () -> DISPLAY_COUNT));
         for (int i = 0; i < DISPLAY_COUNT; i++) {
             int typeShift = 22 * i;
-            addButton(new ReactorLogicButton<>(this, 17, 32 + typeShift, i, tile, scrollBar::getCurrentSelection, tile::getModes, type -> {
+            addButton(new ReactorLogicButton<>(this, 17, 32 + typeShift, i, tile, scrollBar::getCurrentSelection, tile::getOutputModes, type -> {
                 if (type == null) {
                     return;
                 }
-                BetterFusionReactor.packetHandler.sendToServer(new PacketBfrGuiInteract(PacketBfrGuiInteract.BfrGuiInteraction.LOGIC_TYPE, tile, type.ordinal()));
+                BetterFusionReactor.packetHandler.sendToServer(new PacketBfrGuiInteract(PacketBfrGuiInteract.BfrGuiInteraction.LOGIC_TYPE, tile, type.getId()));
             }));
         }
     }
@@ -53,11 +67,7 @@ public class GuiFusionReactorLogicAdapterOutput extends GuiMekanismTile<TileEnti
     @Override
     protected void drawForegroundText(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
         renderTitleText(matrix);
-        drawTextScaledBound(matrix, BfrLang.REACTOR_LOGIC_ACTIVE_COOLING.translate(EnumColor.RED, OnOff.of(tile.isActiveCooled())), 29, 20, titleTextColor(), 117);
-        drawTextScaledBound(matrix, BfrLang.REACTOR_LOGIC_REDSTONE_MODE.translate(EnumColor.RED, tile.logicType), 16, 123, titleTextColor(), 144);
-        drawCenteredText(matrix, MekanismLang.STATUS.translate(EnumColor.RED, tile.checkMode() ? BfrLang.REACTOR_LOGIC_OUTPUTTING : MekanismLang.IDLE),
-              0, imageWidth, 136, titleTextColor());
-        super.drawForegroundText(matrix, mouseX, mouseY);
+         super.drawForegroundText(matrix, mouseX, mouseY);
     }
 
     @Override

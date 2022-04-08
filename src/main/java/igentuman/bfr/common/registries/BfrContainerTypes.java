@@ -22,4 +22,7 @@ public class BfrContainerTypes {
     public static final ContainerTypeRegistryObject<EmptyTileContainer<TileEntityFusionReactorLogicAdapter>> FUSION_REACTOR_LOGIC_ADAPTER = CONTAINER_TYPES.registerEmpty(BfrBlocks.FUSION_REACTOR_LOGIC_ADAPTER, TileEntityFusionReactorLogicAdapter.class);
     public static final ContainerTypeRegistryObject<EmptyTileContainer<TileEntityFusionReactorController>> FUSION_REACTOR_STATS = CONTAINER_TYPES.registerEmpty("fusion_reactor_stats", TileEntityFusionReactorController.class);
     public static final ContainerTypeRegistryObject<EmptyTileContainer<TileEntityFusionReactorController>> FUSION_REACTOR_EFFICIENCY = CONTAINER_TYPES.registerEmpty("fusion_reactor_efficiency", TileEntityFusionReactorController.class);
+    public static final ContainerTypeRegistryObject<EmptyTileContainer<TileEntityFusionReactorLogicAdapter>> FUSION_REACTOR_LOGIC_GENERAL = CONTAINER_TYPES.registerEmpty("fusion_reactor_logic_general", TileEntityFusionReactorLogicAdapter.class);
+    public static final ContainerTypeRegistryObject<EmptyTileContainer<TileEntityFusionReactorLogicAdapter>> FUSION_REACTOR_LOGIC_IN = CONTAINER_TYPES.registerEmpty("fusion_reactor_logic_inl", TileEntityFusionReactorLogicAdapter.class);
+    public static final ContainerTypeRegistryObject<EmptyTileContainer<TileEntityFusionReactorLogicAdapter>> FUSION_REACTOR_LOGIC_OUT = CONTAINER_TYPES.registerEmpty("fusion_reactor_logic_out", TileEntityFusionReactorLogicAdapter.class);
 }

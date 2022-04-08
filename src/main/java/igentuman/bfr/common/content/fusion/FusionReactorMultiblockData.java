@@ -225,7 +225,11 @@ public class FusionReactorMultiblockData extends MultiblockData {
         } else {
             errorLevel -= 0.1;
         }
+
         errorLevel = Math.min(100, Math.max(0, errorLevel));
+        if(errorLevel > 0) {
+            markDirty();
+        }
         if(errorLevel >= 100) {
             currentReactivity = 0;
             targetReactivity = 0;
@@ -244,6 +248,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
     protected void updateAdjustment()
     {
         if(adjustment == 0) return;
+        markDirty();
         currentReactivity += adjustment;
         currentReactivity = Math.min(100, Math.max(0, currentReactivity));
         adjustmentTicks--;
@@ -400,7 +405,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
                 Math.abs(getLastPlasmaTemp() - clientTemp) > 1_000_000 ||
                 getAdjustment() > 0 ||
                 getTargetReactivity() != targetReactivity ||
-                getErrorLevel() != errorLevel
+                getErrorLevel() > 0
         ) {
             clientBurning = isBurning();
             clientTemp = getLastPlasmaTemp();

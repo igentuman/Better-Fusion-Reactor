@@ -48,7 +48,8 @@ public class BfrBlockTypes {
     public static final BlockTypeTile<TileEntityFusionReactorLogicAdapter> FUSION_REACTOR_LOGIC_ADAPTER = BlockTileBuilder
           .createBlock(() -> BfrTileEntityTypes.FUSION_REACTOR_LOGIC_ADAPTER, BfrLang.DESCRIPTION_FUSION_REACTOR_LOGIC_ADAPTER)
           .withGui(() -> BfrContainerTypes.FUSION_REACTOR_LOGIC_ADAPTER)
-          .with(new AttributeRedstoneEmitter<>(tile -> tile.checkMode() ? 15 : 0))
+          .with(new AttributeRedstoneEmitter<>(tile -> tile.getRedstoneLevel()))
+           .with(Attributes.REDSTONE)
           .with(Attributes.MULTIBLOCK, AttributeMobSpawn.WHEN_NOT_FORMED)
           .withComputerSupport("fusionReactorLogicAdapter")
           .build();

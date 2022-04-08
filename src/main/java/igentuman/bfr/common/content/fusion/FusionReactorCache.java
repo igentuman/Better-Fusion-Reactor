@@ -15,7 +15,6 @@ public class FusionReactorCache extends MultiblockCache<FusionReactorMultiblockD
     private float targetReactivity;
     private float adjustment;
     private float errorLevel;
-    private float efficiency;
     private int laserCountdown;
 
 
@@ -80,7 +79,6 @@ public class FusionReactorCache extends MultiblockCache<FusionReactorMultiblockD
         currentReactivity = nbtTags.getFloat(ReactorConstants.NBT_CURRENT_REACTIVITY);
         targetReactivity = nbtTags.getFloat(ReactorConstants.NBT_TARGET_REACTIVITY);
         errorLevel = nbtTags.getFloat(ReactorConstants.NBT_ERROR_LEVEL);
-        efficiency = nbtTags.getFloat(ReactorConstants.NBT_EFFICIENCY);
         laserCountdown = nbtTags.getInt(ReactorConstants.NBT_LASER_SHOOT_COUNTDOWN);
     }
 

@@ -23,9 +23,9 @@ public class GuReactorLogicTab extends GuiTabElementType<TileEntityFusionReactor
     }
 
     public enum ReactorLogicTab implements TabType<TileEntityFusionReactorLogicAdapter> {
-        GENERAL(MekanismUtils.getResource(ResourceType.GUI, "heat.png"), BfrLang.HEAT_TAB, 6, ClickedGeneratorsTileButton.TAB_LOGIC_GENERAL, BfrSpecialColors.TAB_MULTIBLOCK_HEAT),
-        INPUT(MekanismUtils.getResource(ResourceType.GUI, "heat.png"), BfrLang.HEAT_TAB, 34, ClickedGeneratorsTileButton.TAB_LOGIC_INPUT, BfrSpecialColors.TAB_MULTIBLOCK_HEAT),
-        OUTPUT(BetterFusionReactor.rl(ResourceType.GUI.getPrefix() + "fuel.png"), BfrLang.FUEL_TAB, 62, ClickedGeneratorsTileButton.TAB_LOGIC_OUTPUT, BfrSpecialColors.TAB_MULTIBLOCK_FUEL);
+        GENERAL(MekanismUtils.getResource(ResourceType.GUI, "wrench.png"), BfrLang.LOGIC_GENERAL_TAB, 6, ClickedGeneratorsTileButton.TAB_LOGIC_GENERAL, BfrSpecialColors.TAB_MULTIBLOCK_HEAT),
+        INPUT(BetterFusionReactor.rl(ResourceType.GUI.getPrefix() +"logic_input.png"), BfrLang.LOGIC_IN_TAB, 34, ClickedGeneratorsTileButton.TAB_LOGIC_INPUT, BfrSpecialColors.TAB_MULTIBLOCK_HEAT),
+        OUTPUT(BetterFusionReactor.rl(ResourceType.GUI.getPrefix() + "logic_output.png"), BfrLang.LOGIC_OUT_TAB, 62, ClickedGeneratorsTileButton.TAB_LOGIC_OUTPUT, BfrSpecialColors.TAB_MULTIBLOCK_FUEL);
 
         private final ClickedGeneratorsTileButton button;
         private final ColorRegistryObject colorRO;

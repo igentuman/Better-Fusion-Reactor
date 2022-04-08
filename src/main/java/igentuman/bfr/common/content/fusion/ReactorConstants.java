@@ -4,7 +4,6 @@ public final class ReactorConstants {
 
     private ReactorConstants() {}
 
-    public static final String NBT_EFFICIENCY = "efficiency";
     public static final String NBT_ERROR_LEVEL = "error_level";
     public static final String NBT_CURRENT_REACTIVITY = "current_reactivity";
     public static final String NBT_TARGET_REACTIVITY = "target_reactivity";
