@@ -1,11 +1,7 @@
 package igentuman.bfr.client;
 
+import igentuman.bfr.client.gui.*;
 import mekanism.client.ClientRegistrationUtil;
-import igentuman.bfr.client.gui.GuiFusionReactorController;
-import igentuman.bfr.client.gui.GuiFusionReactorFuel;
-import igentuman.bfr.client.gui.GuiFusionReactorHeat;
-import igentuman.bfr.client.gui.GuiFusionReactorLogicAdapterGeneral;
-import igentuman.bfr.client.gui.GuiFusionReactorStats;
 import igentuman.bfr.client.render.RenderFusionReactor;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.registries.BfrBlocks;
@@ -43,6 +39,7 @@ public class BfrClientRegistration {
         ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_HEAT, GuiFusionReactorHeat::new);
         ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_LOGIC_ADAPTER, GuiFusionReactorLogicAdapterGeneral::new);
         ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_STATS, GuiFusionReactorStats::new);
+        ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_EFFICIENCY, GuiFusionReactorEfficiency::new);
     }
 
     @SubscribeEvent

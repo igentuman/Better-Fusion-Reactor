@@ -33,6 +33,18 @@ public class BfrLangProvider extends BaseLanguageProvider {
         add(BfrLang.STATS_TAB, "Stats");
         add(BfrLang.FUEL_TAB, "Fuel");
         add(BfrLang.HEAT_TAB, "Heat");
+        add(BfrLang.REACTOR_ER, "ER");
+        add(BfrLang.REACTOR_CR, "CR");
+        add(BfrLang.REACTOR_TR, "TR");
+        add(BfrLang.REACTOR_EF, "EF");
+        add(BfrLang.REACTOR_BUTTON_REACTIVITY_UP, "+5");
+        add(BfrLang.REACTOR_BUTTON_REACTIVITY_DOWN, "-5");
+        add(BfrLang.REACTOR_HEAT_MULTIPLIER, "Heat Multiplier: %s");
+        add(BfrLang.REACTOR_CURRENT_REACTIVITY, "Current Reactivity: %s");
+        add(BfrLang.REACTOR_TARGET_REACTIVITY, "Target Reactivity: %s");
+        add(BfrLang.REACTOR_EFFICIENCY, "Efficiency: %s");
+        add(BfrLang.REACTOR_ERROR_LEVEL, "Error Level: %s");
+        add(BfrLang.EFFICIENCY_TAB, "Efficiency");
         add(BfrLang.INSUFFICIENT_FUEL, "Insufficient Fuel");
         add(BfrLang.REACTOR_LOGIC_OUTPUTTING, "Outputting");
         add(BfrLang.REACTOR_LOGIC_ACTIVATION, "Activation");
@@ -40,6 +52,8 @@ public class BfrLangProvider extends BaseLanguageProvider {
         add(BfrLang.REACTOR_LOGIC_POWERED, "Powered");
         add(BfrLang.POWER, "Power: %s");
         add(BfrLang.PRODUCING_AMOUNT, "Producing: %s/t");
+        add(BfrLang.REACTOR_LASER_MIN_ENERGY, "Laser Impulse min energy: %s");
+        add(BfrLang.REACTOR_LASER_MIN_ENERGY_DESCR, "Avoid negative effects of Hm (1 minute)");
         add(BfrLang.REACTOR_ACTIVE, "Water-Cooled");
         add(BfrLang.REACTOR_LOGIC_CAPACITY, "Heat Capacity Met");
         add(BfrLang.REACTOR_CASE, "Case: %s");

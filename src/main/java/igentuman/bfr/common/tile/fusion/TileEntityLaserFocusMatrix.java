@@ -23,6 +23,7 @@ public class TileEntityLaserFocusMatrix extends TileEntityFusionReactorBlock imp
         FusionReactorMultiblockData multiblock = getMultiblock();
         if (multiblock.isFormed()) {
             multiblock.addTemperatureFromEnergyInput(energy);
+            multiblock.processLaserShoot(energy);
         }
     }
 

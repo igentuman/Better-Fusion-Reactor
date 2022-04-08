@@ -43,6 +43,14 @@ public class TileEntityFusionReactorBlock extends TileEntityMultiblock<FusionRea
         }
     }
 
+    public void adjustReactivityFromPacket(float val) {
+        FusionReactorMultiblockData multiblock = getMultiblock();
+        if (multiblock.isFormed() && multiblock.isBurning()) {
+            multiblock.adjustReactivity(val);
+            markDirty(false);
+        }
+    }
+
     public void addFuelTabContainerTrackers(MekanismContainer container) {
         SyncMapper.INSTANCE.setup(container, FusionReactorMultiblockData.class, this::getMultiblock, "fuel");
     }

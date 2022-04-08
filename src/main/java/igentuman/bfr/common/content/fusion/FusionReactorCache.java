@@ -11,6 +11,13 @@ public class FusionReactorCache extends MultiblockCache<FusionReactorMultiblockD
     private double plasmaTemperature = -1;
     private int injectionRate = -1;
     private boolean burning;
+    private float currentReactivity;
+    private float targetReactivity;
+    private float adjustment;
+    private float errorLevel;
+    private float efficiency;
+    private int laserCountdown;
+
 
     private int getInjectionRate() {
         if (injectionRate == -1) {
@@ -25,7 +32,12 @@ public class FusionReactorCache extends MultiblockCache<FusionReactorMultiblockD
     public void merge(MultiblockCache<FusionReactorMultiblockData> mergeCache, List<ItemStack> rejectedItems) {
         super.merge(mergeCache, rejectedItems);
         plasmaTemperature = Math.max(plasmaTemperature, ((FusionReactorCache) mergeCache).plasmaTemperature);
+        currentReactivity = Math.max(currentReactivity, ((FusionReactorCache) mergeCache).currentReactivity);
+        targetReactivity = Math.max(targetReactivity, ((FusionReactorCache) mergeCache).targetReactivity);
+        adjustment = Math.max(adjustment, ((FusionReactorCache) mergeCache).adjustment);
+        errorLevel = Math.max(errorLevel, ((FusionReactorCache) mergeCache).errorLevel);
         injectionRate = Math.max(injectionRate, ((FusionReactorCache) mergeCache).injectionRate);
+        laserCountdown = Math.min(laserCountdown, ((FusionReactorCache) mergeCache).laserCountdown);
         burning |= ((FusionReactorCache) mergeCache).burning;
     }
 
@@ -37,6 +49,11 @@ public class FusionReactorCache extends MultiblockCache<FusionReactorMultiblockD
         }
         data.setInjectionRate(getInjectionRate());
         data.setBurning(burning);
+        data.setAdjustment(adjustment);
+        data.setCurrentReactivity(currentReactivity);
+        data.setTargetReactivity(targetReactivity);
+        data.setErrorLevel(errorLevel);
+        data.setLaserShootCountdown(laserCountdown);
         data.updateTemperatures();
     }
 
@@ -45,6 +62,11 @@ public class FusionReactorCache extends MultiblockCache<FusionReactorMultiblockD
         super.sync(data);
         plasmaTemperature = data.plasmaTemperature;
         injectionRate = data.getInjectionRate();
+        currentReactivity = data.getCurrentReactivity();
+        targetReactivity = data.getTargetReactivity();
+        errorLevel = data.getErrorLevel();
+        adjustment = data.getAdjustment();
+        laserCountdown = data.getLaserShootCountdown();
         burning = data.isBurning();
     }
 
@@ -54,6 +76,12 @@ public class FusionReactorCache extends MultiblockCache<FusionReactorMultiblockD
         plasmaTemperature = nbtTags.getDouble(NBTConstants.PLASMA_TEMP);
         injectionRate = nbtTags.getInt(NBTConstants.INJECTION_RATE);
         burning = nbtTags.getBoolean(NBTConstants.BURNING);
+        adjustment = nbtTags.getFloat(ReactorConstants.NBT_ADJUSTMENT);
+        currentReactivity = nbtTags.getFloat(ReactorConstants.NBT_CURRENT_REACTIVITY);
+        targetReactivity = nbtTags.getFloat(ReactorConstants.NBT_TARGET_REACTIVITY);
+        errorLevel = nbtTags.getFloat(ReactorConstants.NBT_ERROR_LEVEL);
+        efficiency = nbtTags.getFloat(ReactorConstants.NBT_EFFICIENCY);
+        laserCountdown = nbtTags.getInt(ReactorConstants.NBT_LASER_SHOOT_COUNTDOWN);
     }
 
     @Override
@@ -61,6 +89,11 @@ public class FusionReactorCache extends MultiblockCache<FusionReactorMultiblockD
         super.save(nbtTags);
         nbtTags.putDouble(NBTConstants.PLASMA_TEMP, plasmaTemperature);
         nbtTags.putInt(NBTConstants.INJECTION_RATE, getInjectionRate());
+        nbtTags.putInt(ReactorConstants.NBT_LASER_SHOOT_COUNTDOWN, laserCountdown);
+        nbtTags.putFloat(ReactorConstants.NBT_CURRENT_REACTIVITY, currentReactivity);
+        nbtTags.putFloat(ReactorConstants.NBT_TARGET_REACTIVITY, targetReactivity);
+        nbtTags.putFloat(ReactorConstants.NBT_ERROR_LEVEL, errorLevel);
+        nbtTags.putFloat(ReactorConstants.NBT_ADJUSTMENT, adjustment);
         nbtTags.putBoolean(NBTConstants.BURNING, burning);
     }
 }

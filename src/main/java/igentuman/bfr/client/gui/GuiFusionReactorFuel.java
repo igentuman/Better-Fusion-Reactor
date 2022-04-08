@@ -19,7 +19,6 @@ import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.network.to_server.PacketBfrGuiInteract;
-import igentuman.bfr.common.network.to_server.PacketBfrGuiInteract.GeneratorsGuiInteraction;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
@@ -53,7 +52,7 @@ public class GuiFusionReactorFuel extends GuiFusionReactorInfo {
         injectionRateField.changeFocus(true);
         injectionRateField.setInputValidator(InputValidator.DIGIT);
         injectionRateField.setEnterHandler(this::setInjection);
-        injectionRateField.setMaxStringLength(2);
+        injectionRateField.setMaxStringLength(3);
     }
 
     @Override
@@ -66,7 +65,7 @@ public class GuiFusionReactorFuel extends GuiFusionReactorInfo {
 
     private void setInjection() {
         if (!injectionRateField.getText().isEmpty()) {
-            BetterFusionReactor.packetHandler.sendToServer(new PacketBfrGuiInteract(GeneratorsGuiInteraction.INJECTION_RATE, tile, Integer.parseInt(injectionRateField.getText())));
+            BetterFusionReactor.packetHandler.sendToServer(new PacketBfrGuiInteract(PacketBfrGuiInteract.BfrGuiInteraction.INJECTION_RATE, tile, Integer.parseInt(injectionRateField.getText())));
             injectionRateField.setText("");
         }
     }

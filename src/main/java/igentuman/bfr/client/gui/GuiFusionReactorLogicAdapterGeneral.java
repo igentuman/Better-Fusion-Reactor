@@ -17,7 +17,6 @@ import igentuman.bfr.client.gui.element.button.ReactorLogicButton;
 import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.network.to_server.PacketBfrGuiInteract;
-import igentuman.bfr.common.network.to_server.PacketBfrGuiInteract.GeneratorsGuiInteraction;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
@@ -45,7 +44,7 @@ public class GuiFusionReactorLogicAdapterGeneral extends GuiMekanismTile<TileEnt
                 if (type == null) {
                     return;
                 }
-                BetterFusionReactor.packetHandler.sendToServer(new PacketBfrGuiInteract(GeneratorsGuiInteraction.LOGIC_TYPE, tile, type.ordinal()));
+                BetterFusionReactor.packetHandler.sendToServer(new PacketBfrGuiInteract(PacketBfrGuiInteract.BfrGuiInteraction.LOGIC_TYPE, tile, type.ordinal()));
             }));
         }
     }

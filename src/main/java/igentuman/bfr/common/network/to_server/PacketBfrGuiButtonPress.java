@@ -69,7 +69,7 @@ public class PacketBfrGuiButtonPress implements IMekanismPacket {
         TAB_FUEL((tile, extra) -> BfrContainerTypes.FUSION_REACTOR_FUEL.getProvider(BfrLang.FUEL_TAB, tile)),
         TAB_EFFICIENCY((tile, extra) -> {
            if (tile instanceof TileEntityFusionReactorController) {
-                return BfrContainerTypes.FUSION_REACTOR_STATS.getProvider(BfrLang.STATS_TAB, tile);
+                return BfrContainerTypes.FUSION_REACTOR_EFFICIENCY.getProvider(BfrLang.EFFICIENCY_TAB, tile);
             }
             return null;
         }),

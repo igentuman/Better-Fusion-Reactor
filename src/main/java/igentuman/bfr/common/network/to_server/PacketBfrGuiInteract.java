@@ -19,23 +19,23 @@ import net.minecraftforge.fml.network.NetworkEvent;
  */
 public class PacketBfrGuiInteract implements IMekanismPacket {
 
-    private final GeneratorsGuiInteraction interaction;
+    private final BfrGuiInteraction interaction;
     private final BlockPos tilePosition;
     private final double extra;
 
-    public PacketBfrGuiInteract(GeneratorsGuiInteraction interaction, TileEntity tile) {
+    public PacketBfrGuiInteract(BfrGuiInteraction interaction, TileEntity tile) {
         this(interaction, tile.getBlockPos());
     }
 
-    public PacketBfrGuiInteract(GeneratorsGuiInteraction interaction, TileEntity tile, double extra) {
+    public PacketBfrGuiInteract(BfrGuiInteraction interaction, TileEntity tile, double extra) {
         this(interaction, tile.getBlockPos(), extra);
     }
 
-    public PacketBfrGuiInteract(GeneratorsGuiInteraction interaction, BlockPos tilePosition) {
+    public PacketBfrGuiInteract(BfrGuiInteraction interaction, BlockPos tilePosition) {
         this(interaction, tilePosition, 0);
     }
 
-    public PacketBfrGuiInteract(GeneratorsGuiInteraction interaction, BlockPos tilePosition, double extra) {
+    public PacketBfrGuiInteract(BfrGuiInteraction interaction, BlockPos tilePosition, double extra) {
         this.interaction = interaction;
         this.tilePosition = tilePosition;
         this.extra = extra;
@@ -60,10 +60,10 @@ public class PacketBfrGuiInteract implements IMekanismPacket {
     }
 
     public static PacketBfrGuiInteract decode(PacketBuffer buffer) {
-        return new PacketBfrGuiInteract(buffer.readEnum(GeneratorsGuiInteraction.class), buffer.readBlockPos(), buffer.readDouble());
+        return new PacketBfrGuiInteract(buffer.readEnum(BfrGuiInteraction.class), buffer.readBlockPos(), buffer.readDouble());
     }
 
-    public enum GeneratorsGuiInteraction {
+    public enum BfrGuiInteraction {
         INJECTION_RATE((tile, player, extra) -> {
             if (tile instanceof TileEntityFusionReactorBlock) {
                 ((TileEntityFusionReactorController) tile).setInjectionRateFromPacket((int) Math.round(extra));
@@ -73,11 +73,20 @@ public class PacketBfrGuiInteract implements IMekanismPacket {
             if (tile instanceof TileEntityFusionReactorLogicAdapter) {
                 ((TileEntityFusionReactorLogicAdapter) tile).setLogicTypeFromPacket(FusionReactorLogic.byIndexStatic((int) Math.round(extra)));
             }
+        }),
+        REACTIVITY_UP((tile, player, extra) -> {
+            if (tile instanceof TileEntityFusionReactorBlock) {
+                ((TileEntityFusionReactorBlock) tile).adjustReactivityFromPacket(5F);
+            }
+        }),
+        REACTIVITY_DOWN((tile, player, extra) -> {
+            if (tile instanceof TileEntityFusionReactorBlock) {
+                ((TileEntityFusionReactorBlock) tile).adjustReactivityFromPacket(-5F);
+            }
         });
-
         private final TriConsumer<TileEntityMekanism, PlayerEntity, Double> consumerForTile;
 
-        GeneratorsGuiInteraction(TriConsumer<TileEntityMekanism, PlayerEntity, Double> consumerForTile) {
+        BfrGuiInteraction(TriConsumer<TileEntityMekanism, PlayerEntity, Double> consumerForTile) {
             this.consumerForTile = consumerForTile;
         }
 

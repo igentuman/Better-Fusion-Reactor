@@ -28,7 +28,7 @@ public class GuiFusionReactorTab extends GuiTabElementType<TileEntityFusionReact
         HEAT(MekanismUtils.getResource(ResourceType.GUI, "heat.png"), BfrLang.HEAT_TAB, 6, ClickedGeneratorsTileButton.TAB_HEAT, BfrSpecialColors.TAB_MULTIBLOCK_HEAT),
         FUEL(BetterFusionReactor.rl(ResourceType.GUI.getPrefix() + "fuel.png"), BfrLang.FUEL_TAB, 34, ClickedGeneratorsTileButton.TAB_FUEL, BfrSpecialColors.TAB_MULTIBLOCK_FUEL),
         STAT(MekanismUtils.getResource(ResourceType.GUI, "stats.png"), BfrLang.STATS_TAB, 62, ClickedGeneratorsTileButton.TAB_STATS, SpecialColors.TAB_MULTIBLOCK_STATS),
-        EFFICIENCY(MekanismUtils.getResource(ResourceType.GUI, "stats.png"), BfrLang.STATS_TAB, 90, ClickedGeneratorsTileButton.TAB_EFFICIENCY, SpecialColors.TAB_MULTIBLOCK_STATS);
+        EFFICIENCY(MekanismUtils.getResource(ResourceType.GUI, "stats.png"), BfrLang.EFFICIENCY_TAB, 90, ClickedGeneratorsTileButton.TAB_EFFICIENCY, SpecialColors.TAB_MULTIBLOCK_STATS);
 
         private final ClickedGeneratorsTileButton button;
         private final ColorRegistryObject colorRO;
