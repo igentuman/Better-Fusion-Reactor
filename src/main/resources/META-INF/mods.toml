@@ -16,5 +16,5 @@ license="MIT"
 [[dependencies.bfr]]
     modId="mekanismgenerators"
     mandatory=true
-    versionRange="10.1.2.457"
+    versionRange="10.2.0.457"
     side="BOTH"

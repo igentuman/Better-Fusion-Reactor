@@ -33,7 +33,7 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 wrapper {
     //Define wrapper values here so as to not have to always do so when updating gradlew.properties
-    gradleVersion = '7.3.3'
+    gradleVersion = '7.4.2'
     distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -53,7 +53,7 @@ idea {
 group = "igentuman.bfr"
 version = "${minecraft_version}-${mod_version}b"
 archivesBaseName = "BetterFusionReactor"
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 minecraft {
@@ -176,16 +176,16 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
 
-    runtimeOnly fg.deobf("team.chisel.ctm:CTM:MC1.16.1-${ctm_version}")
-
-    implementation fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${minecraft_version}:${crafttweaker_version}")
+    runtimeOnly fg.deobf("team.chisel.ctm:CTM:${minecraft_version}-${ctm_version}")
+    implementation fg.deobf("curse.maven:opencomputers2-437654:${oc2_id}")
+    implementation fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${crafttweaker_version}")
 
     implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
     implementation fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
 
     //Mods we have dependencies on but don't bother loading into the dev environment
     compileOnly fg.deobf("curse.maven:flux-networks-248020:${flux_networks_id}")
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}:api")
     implementation fg.deobf("curse.maven:cc-tweaked-282001:${cc_tweaked_id}")
 }
 
