@@ -2,14 +2,14 @@ package igentuman.bfr.common.datagen.recipe.builder;
 
 import com.google.gson.JsonObject;
 import igentuman.bfr.common.datagen.DataGenJsonConstants;
-import mcp.MethodsReturnNonnullByDefault;
 import mekanism.api.JsonConstants;
 import mekanism.api.datagen.recipe.MekanismRecipeBuilder;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Consumer;
@@ -22,7 +22,7 @@ public abstract class BaseRecipeBuilder<BUILDER extends BaseRecipeBuilder<BUILDE
     protected final int count;
     private String group;
 
-    protected BaseRecipeBuilder(IRecipeSerializer<?> serializer, IItemProvider result, int count) {
+    protected BaseRecipeBuilder(RecipeSerializer<?> serializer, ItemLike result, int count) {
         super(serializer.getRegistryName());
         this.result = result.asItem();
         this.count = count;
@@ -33,7 +33,7 @@ public abstract class BaseRecipeBuilder<BUILDER extends BaseRecipeBuilder<BUILDE
         return (BUILDER) this;
     }
 
-    public void build(Consumer<IFinishedRecipe> consumer) {
+    public void build(Consumer<FinishedRecipe> consumer) {
         build(consumer, result.getRegistryName());
     }
 

@@ -6,7 +6,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.datagen.recipe.BaseRecipeProvider;
 import igentuman.bfr.common.datagen.recipe.builder.ExtendedShapedRecipeBuilder;
+import igentuman.bfr.common.datagen.recipe.pattern.Pattern;
 import igentuman.bfr.common.datagen.recipe.pattern.RecipePattern;
+import igentuman.bfr.common.datagen.recipe.pattern.RecipePattern.TripleLine;
+
 import mekanism.common.registries.MekanismBlocks;
 import mekanism.common.registries.MekanismItems;
 import mekanism.common.resource.PrimaryResource;
@@ -15,12 +18,10 @@ import mekanism.common.tags.MekanismTags;
 import igentuman.bfr.common.registries.BfrBlocks;
 import mekanism.generators.common.MekanismGenerators;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import igentuman.bfr.common.datagen.recipe.pattern.Pattern;
-import igentuman.bfr.common.datagen.recipe.pattern.RecipePattern;
-import igentuman.bfr.common.datagen.recipe.pattern.RecipePattern.TripleLine;
+
 
 @ParametersAreNonnullByDefault
 public class BfrRecipeProvider extends BaseRecipeProvider {
@@ -33,11 +34,11 @@ public class BfrRecipeProvider extends BaseRecipeProvider {
     }
 
     @Override
-    protected void addRecipes(Consumer<IFinishedRecipe> consumer) {
+    protected void addRecipes(Consumer<FinishedRecipe> consumer) {
         addFusionReactorRecipes(consumer);
     }
 
-    private void addFusionReactorRecipes(Consumer<IFinishedRecipe> consumer) {
+    private void addFusionReactorRecipes(Consumer<FinishedRecipe> consumer) {
         //Laser Focus Matrix
         ExtendedShapedRecipeBuilder.shapedRecipe(BfrBlocks.LASER_FOCUS_MATRIX, 2)
               .pattern(RecipePattern.createPattern(

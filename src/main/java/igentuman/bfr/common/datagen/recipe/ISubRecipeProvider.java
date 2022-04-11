@@ -1,6 +1,6 @@
 package igentuman.bfr.common.datagen.recipe;
 
-import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.data.recipes.FinishedRecipe;
 
 import java.util.function.Consumer;
 
@@ -9,5 +9,5 @@ import java.util.function.Consumer;
  */
 public interface ISubRecipeProvider {
 
-    void addRecipes(Consumer<IFinishedRecipe> consumer);
+    void addRecipes(Consumer<FinishedRecipe> consumer);
 }

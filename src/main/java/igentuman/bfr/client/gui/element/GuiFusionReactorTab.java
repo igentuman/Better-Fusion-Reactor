@@ -15,8 +15,8 @@ import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.network.to_server.PacketBfrGuiButtonPress;
 import igentuman.bfr.common.network.to_server.PacketBfrGuiButtonPress.ClickedGeneratorsTileButton;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 public class GuiFusionReactorTab extends GuiTabElementType<TileEntityFusionReactorController, FusionReactorTab> {
 
@@ -51,11 +51,11 @@ public class GuiFusionReactorTab extends GuiTabElementType<TileEntityFusionReact
 
         @Override
         public void onClick(TileEntityFusionReactorController tile) {
-            BetterFusionReactor.packetHandler.sendToServer(new PacketBfrGuiButtonPress(button, tile.getBlockPos()));
+            BetterFusionReactor.packetHandler().sendToServer(new PacketBfrGuiButtonPress(button, tile.getBlockPos()));
         }
 
         @Override
-        public ITextComponent getDescription() {
+        public Component getDescription() {
             return description.translate();
         }
 

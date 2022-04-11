@@ -1,35 +1,37 @@
 package igentuman.bfr.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import javax.annotation.ParametersAreNonnullByDefault;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
+import igentuman.bfr.common.BfrProfilerConstants;
+import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
+import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
 import mekanism.api.text.EnumColor;
 import mekanism.client.MekanismClient;
 import mekanism.client.model.ModelEnergyCube.ModelEnergyCore;
 import mekanism.client.render.MekanismRenderer;
 import mekanism.client.render.tileentity.MekanismTileEntityRenderer;
 import mekanism.client.render.tileentity.RenderEnergyCube;
-import igentuman.bfr.common.BfrProfilerConstants;
-import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
-import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.util.profiling.ProfilerFiller;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class RenderFusionReactor extends MekanismTileEntityRenderer<TileEntityFusionReactorController> {
 
-    private static final double SCALE = 100_000_000;
-    private final ModelEnergyCore core = new ModelEnergyCore();
+    private static final double SCALE = 200_000_000;
+    private final ModelEnergyCore core;
 
-    public RenderFusionReactor(TileEntityRendererDispatcher renderer) {
-        super(renderer);
+    public RenderFusionReactor(BlockEntityRendererProvider.Context context) {
+        super(context);
+        core = new ModelEnergyCore(context.getModelSet());
     }
 
     @Override
-    protected void render(TileEntityFusionReactorController tile, float partialTick, MatrixStack matrix, IRenderTypeBuffer renderer, int light, int overlayLight,
-          IProfiler profiler) {
+    protected void render(TileEntityFusionReactorController tile, float partialTick, PoseStack matrix, MultiBufferSource renderer, int light, int overlayLight,
+          ProfilerFiller profiler) {
         FusionReactorMultiblockData multiblock = tile.getMultiblock();
         if (multiblock.isFormed() && multiblock.isBurning()) {
             matrix.pushPose();
@@ -38,7 +40,7 @@ public class RenderFusionReactor extends MekanismTileEntityRenderer<TileEntityFu
             long scaledTemp = Math.round(multiblock.getLastPlasmaTemp() / SCALE);
             float ticks = MekanismClient.ticksPassed + partialTick;
             double scale = 1 + 0.7 * Math.sin(Math.toRadians(ticks * 3.14 * scaledTemp + 135F));
-            IVertexBuilder buffer = core.getBuffer(renderer);
+            VertexConsumer buffer = core.getBuffer(renderer);
             renderPart(matrix, buffer, overlayLight, EnumColor.AQUA, scale, ticks, scaledTemp, -6, -7, 0, 36);
 
             scale = 1 + 0.8 * Math.sin(Math.toRadians(ticks * 3 * scaledTemp));
@@ -56,7 +58,7 @@ public class RenderFusionReactor extends MekanismTileEntityRenderer<TileEntityFu
         return BfrProfilerConstants.FUSION_REACTOR;
     }
 
-    private void renderPart(MatrixStack matrix, IVertexBuilder buffer, int overlayLight, EnumColor color, double scale, float ticks, long scaledTemp, int mult1,
+    private void renderPart(PoseStack matrix, VertexConsumer buffer, int overlayLight, EnumColor color, double scale, float ticks, long scaledTemp, int mult1,
           int mult2, int shift1, int shift2) {
         float ticksScaledTemp = ticks * scaledTemp;
         matrix.pushPose();

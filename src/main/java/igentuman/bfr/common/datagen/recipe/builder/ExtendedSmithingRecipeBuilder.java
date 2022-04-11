@@ -2,12 +2,11 @@ package igentuman.bfr.common.datagen.recipe.builder;
 
 import com.google.gson.JsonObject;
 import igentuman.bfr.common.datagen.DataGenJsonConstants;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -18,17 +17,17 @@ public class ExtendedSmithingRecipeBuilder extends BaseRecipeBuilder<ExtendedSmi
     private final Ingredient ingredient;
     private final Ingredient upgradeIngredient;
 
-    public ExtendedSmithingRecipeBuilder(Ingredient ingredient, Ingredient upgradeIngredient, IItemProvider result) {
-        super(IRecipeSerializer.SMITHING, result, 1);
+    public ExtendedSmithingRecipeBuilder(Ingredient ingredient, Ingredient upgradeIngredient, ItemLike result) {
+        super(RecipeSerializer.SMITHING, result, 1);
         this.ingredient = ingredient;
         this.upgradeIngredient = upgradeIngredient;
     }
 
-    public static ExtendedSmithingRecipeBuilder smithing(IItemProvider ingredient, IItemProvider upgradeIngredient, IItemProvider result) {
+    public static ExtendedSmithingRecipeBuilder smithing(ItemLike ingredient, ItemLike upgradeIngredient, ItemLike result) {
         return smithing(Ingredient.of(ingredient), Ingredient.of(upgradeIngredient), result);
     }
 
-    public static ExtendedSmithingRecipeBuilder smithing(Ingredient ingredient, Ingredient upgradeIngredient, IItemProvider result) {
+    public static ExtendedSmithingRecipeBuilder smithing(Ingredient ingredient, Ingredient upgradeIngredient, ItemLike result) {
         return new ExtendedSmithingRecipeBuilder(ingredient, upgradeIngredient, result);
     }
 

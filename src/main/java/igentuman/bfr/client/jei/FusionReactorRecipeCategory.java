@@ -1,13 +1,10 @@
 package igentuman.bfr.client.jei;
 
+import igentuman.bfr.client.jei.recipe.FusionJEIRecipe;
 import igentuman.bfr.common.BetterFusionReactor;
-import mekanism.api.MekanismAPI;
-import mekanism.api.chemical.gas.Gas;
-import mekanism.api.chemical.gas.GasStack;
-import mekanism.api.chemical.gas.attribute.GasAttributes.CooledCoolant;
-import mekanism.api.heat.HeatAPI;
+import igentuman.bfr.common.BfrLang;
 import mekanism.api.math.MathUtils;
-import mekanism.api.recipes.inputs.chemical.GasStackIngredient;
+import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import mekanism.api.text.EnumColor;
 import mekanism.client.gui.element.GuiInnerScreen;
 import mekanism.client.gui.element.gauge.GaugeType;
@@ -16,36 +13,31 @@ import mekanism.client.gui.element.gauge.GuiGasGauge;
 import mekanism.client.gui.element.gauge.GuiGauge;
 import mekanism.client.jei.BaseRecipeCategory;
 import mekanism.client.jei.MekanismJEI;
-import mekanism.common.MekanismLang;
+import mekanism.client.jei.MekanismJEIRecipeType;
 import mekanism.common.registries.MekanismGases;
+import mekanism.common.tags.TagUtils;
 import mekanism.common.util.HeatUtils;
-import mekanism.common.util.MekanismUtils;
 import mekanism.common.util.MekanismUtils.ResourceType;
-import mekanism.common.util.UnitDisplayUtils.TemperatureUnit;
-import mekanism.common.util.text.BooleanStateDisplay.ActiveDisabled;
-import mekanism.common.util.text.TextUtils;
-
 import mekanism.generators.common.GeneratorsLang;
 import mekanism.generators.common.config.MekanismGeneratorsConfig;
 import mekanism.generators.common.registries.GeneratorsGases;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FusionReactorRecipeCategory extends BaseRecipeCategory<FusionReactorRecipeCategory.FusionJEIRecipe> {
+public class FusionReactorRecipeCategory extends BaseRecipeCategory<FusionJEIRecipe> {
 
     private static final ResourceLocation iconRL = BetterFusionReactor.rl(ResourceType.GUI.getPrefix() + "fuel.png");
     private final GuiGauge<?> coolantTank;
@@ -53,8 +45,8 @@ public class FusionReactorRecipeCategory extends BaseRecipeCategory<FusionReacto
     private final GuiGauge<?> heatedCoolantTank;
     //private final GuiGauge<?> wasteTank;
 
-    public FusionReactorRecipeCategory(IGuiHelper helper, ResourceLocation id) {
-        super(helper, id, GeneratorsLang.FUSION_REACTOR.translate(), createIcon(helper, iconRL), 6, 13, 182, 60);
+    public FusionReactorRecipeCategory(IGuiHelper helper, MekanismJEIRecipeType<FusionJEIRecipe> recipeType) {
+        super(helper, recipeType, BfrLang.FUSION_REACTOR.translate(), createIcon(helper, iconRL), 6, 13, 182, 60);
         addElement(new GuiInnerScreen(this, 45, 17, 105, 56, () -> Arrays.asList(
               //MekanismLang.STATUS.translate(EnumColor.BRIGHT_GREEN, ActiveDisabled.of(true)),
               GeneratorsLang.GAS_BURN_RATE.translate(1.0),
@@ -68,8 +60,8 @@ public class FusionReactorRecipeCategory extends BaseRecipeCategory<FusionReacto
     }
 
     private List<FluidStack> getWaterInput(FusionJEIRecipe recipe) {
-        int amount = MathUtils.clampToInt(recipe.outputCoolant.getAmount());
-        return FluidTags.WATER.getValues().stream().map(fluid -> new FluidStack(fluid, amount)).collect(Collectors.toList());
+        int amount = MathUtils.clampToInt(recipe.outputCoolant().getAmount());
+        return TagUtils.tag(ForgeRegistries.FLUIDS, FluidTags.WATER).stream().map(fluid -> new FluidStack(fluid, amount)).collect(Collectors.toList());
     }
 
     @Nonnull
@@ -78,71 +70,29 @@ public class FusionReactorRecipeCategory extends BaseRecipeCategory<FusionReacto
         return FusionJEIRecipe.class;
     }
 
-    @Override
-    public void setIngredients(FusionJEIRecipe recipe, @Nonnull IIngredients ingredients) {
-        if (recipe.inputCoolant == null) {
-            //Water to steam
-            ingredients.setInputLists(VanillaTypes.FLUID, Collections.singletonList(getWaterInput(recipe)));
-            ingredients.setInputLists(MekanismJEI.TYPE_GAS, Collections.singletonList(recipe.fuel.getRepresentations()));
-        } else {
-            //Coolant attribute
-            ingredients.setInputLists(MekanismJEI.TYPE_GAS, Arrays.asList(
-                  recipe.inputCoolant.getRepresentations(),
-                  recipe.fuel.getRepresentations())
-            );
-        }
-        ingredients.setOutputs(MekanismJEI.TYPE_GAS, Arrays.asList(recipe.outputCoolant, recipe.reactionOutput));
-    }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, FusionJEIRecipe recipe, @Nonnull IIngredients ingredients) {
-        IGuiIngredientGroup<GasStack> gasStacks = recipeLayout.getIngredientsGroup(MekanismJEI.TYPE_GAS);
-        int chemicalTankIndex = 0;
+    public void setRecipe(@Nonnull IRecipeLayoutBuilder builder, FusionJEIRecipe recipe, @Nonnull IFocusGroup focusGroup) {
         //Handle the coolant either special cased water or the proper coolant
-        if (recipe.inputCoolant == null) {
-            initFluid(recipeLayout.getFluidStacks(), 0, true, coolantTank, getWaterInput(recipe));
+        if (recipe.inputCoolant() == null) {
+            initFluid(builder, RecipeIngredientRole.INPUT, coolantTank, getWaterInput(recipe));
         } else {
-            initChemical(gasStacks, chemicalTankIndex++, true, coolantTank, recipe.inputCoolant.getRepresentations());
+            initChemical(builder, MekanismJEI.TYPE_GAS, RecipeIngredientRole.INPUT, coolantTank, recipe.inputCoolant().getRepresentations());
         }
-        initChemical(gasStacks, chemicalTankIndex++, true, fuelTank, recipe.fuel.getRepresentations());
-        initChemical(gasStacks, chemicalTankIndex++, false, heatedCoolantTank, Collections.singletonList(recipe.outputCoolant));
+        initChemical(builder, MekanismJEI.TYPE_GAS, RecipeIngredientRole.INPUT, fuelTank, recipe.fuel().getRepresentations());
+        initChemical(builder, MekanismJEI.TYPE_GAS, RecipeIngredientRole.OUTPUT, heatedCoolantTank, Collections.singletonList(recipe.outputCoolant()));
         //initChemical(gasStacks, chemicalTankIndex, false, wasteTank, Collections.singletonList(recipe.reactionOutput));
     }
 
     public static List<FusionJEIRecipe> getFusionRecipes() {
          List<FusionJEIRecipe> recipes = new ArrayList<>();
         double energyPerFuel = MekanismGeneratorsConfig.generators.energyPerFusionFuel.get().doubleValue();
-        //Special case water recipe
+
         long coolantAmount = Math.round(energyPerFuel * HeatUtils.getSteamEnergyEfficiency() / HeatUtils.getWaterThermalEnthalpy());
-        recipes.add(new FusionJEIRecipe(null, GasStackIngredient.from(GeneratorsGases.FUSION_FUEL, 1),
+        recipes.add(new FusionJEIRecipe(null, IngredientCreatorAccess.gas().from(GeneratorsGases.FUSION_FUEL, 1),
               MekanismGases.STEAM.getStack(coolantAmount),null));
-        //Go through all gases and add each coolant
-       /* for (Gas gas : MekanismAPI.gasRegistry()) {
-            CooledCoolant cooledCoolant = gas.get(CooledCoolant.class);
-            if (cooledCoolant != null) {
-                //If it is a cooled coolant add a recipe for it
-                Gas heatedCoolant = cooledCoolant.getHeatedGas();
-                coolantAmount = Math.round(energyPerFuel / cooledCoolant.getThermalEnthalpy());
-                recipes.add(new FusionJEIRecipe(GasStackIngredient.from(gas, coolantAmount), GasStackIngredient.from(GeneratorsGases.FUSION_FUEL, 1),
-                      heatedCoolant.getStack(coolantAmount), null));
-            }
-        }*/
+
         return recipes;
     }
 
-    public static class FusionJEIRecipe {
-
-        @Nullable//If null -> coolant is water
-        private final GasStackIngredient inputCoolant;
-        private final GasStackIngredient fuel;
-        private final GasStack outputCoolant;
-        private final GasStack reactionOutput;
-
-        public FusionJEIRecipe(@Nullable GasStackIngredient inputCoolant, GasStackIngredient fuel, GasStack outputCoolant, GasStack reactionOutput) {
-            this.inputCoolant = inputCoolant;
-            this.fuel = fuel;
-            this.outputCoolant = outputCoolant;
-            this.reactionOutput = reactionOutput;
-        }
-    }
 }

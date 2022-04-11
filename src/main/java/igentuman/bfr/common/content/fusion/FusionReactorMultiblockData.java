@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import mekanism.api.Action;
+import mekanism.api.AutomationType;
 import mekanism.api.NBTConstants;
 import mekanism.api.chemical.gas.IGasHandler;
 import mekanism.api.chemical.gas.IGasTank;
@@ -13,7 +14,6 @@ import mekanism.api.energy.IEnergyContainer;
 import mekanism.api.fluid.IExtendedFluidTank;
 import mekanism.api.heat.HeatAPI;
 import mekanism.api.heat.IHeatCapacitor;
-import mekanism.api.inventory.AutomationType;
 import mekanism.api.math.FloatingLong;
 import mekanism.api.math.MathUtils;
 import mekanism.common.capabilities.Capabilities;
@@ -33,6 +33,7 @@ import mekanism.common.inventory.container.sync.dynamic.ContainerSync;
 import mekanism.common.lib.multiblock.IValveHandler.ValveData;
 import mekanism.common.lib.multiblock.MultiblockData;
 import mekanism.common.registries.MekanismGases;
+import mekanism.common.tags.MekanismTags;
 import mekanism.common.util.HeatUtils;
 import mekanism.common.util.MekanismUtils;
 import mekanism.common.util.NBTUtils;
@@ -44,14 +45,13 @@ import mekanism.generators.common.GeneratorTags;
 import mekanism.generators.common.config.MekanismGeneratorsConfig;
 import mekanism.generators.common.item.ItemHohlraum;
 import mekanism.generators.common.registries.GeneratorsGases;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fluids.FluidAttributes;
 
 public class FusionReactorMultiblockData extends MultiblockData {
@@ -118,7 +118,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
     private boolean clientBurning;
     private double clientTemp;
 
-    private AxisAlignedBB deathZone;
+    private AABB deathZone;
 
 
     protected int laserShootCountdown = 0;
@@ -297,11 +297,11 @@ public class FusionReactorMultiblockData extends MultiblockData {
         lastPlasmaTemperature = biomeAmbientTemp;
         lastCaseTemperature = biomeAmbientTemp;
         plasmaTemperature = biomeAmbientTemp;
-        gasTanks.add(deuteriumTank = MultiblockChemicalTankBuilder.GAS.input(this, tile, () -> MAX_FUEL, gas -> gas.isIn(GeneratorTags.Gases.DEUTERIUM)));
-        gasTanks.add(tritiumTank = MultiblockChemicalTankBuilder.GAS.input(this, tile, () -> MAX_FUEL, gas -> gas.isIn(GeneratorTags.Gases.TRITIUM)));
-        gasTanks.add(fuelTank = MultiblockChemicalTankBuilder.GAS.input(this, tile, () -> MAX_FUEL, gas -> gas.isIn(GeneratorTags.Gases.FUSION_FUEL)));
+        gasTanks.add(deuteriumTank = MultiblockChemicalTankBuilder.GAS.input(this, tile, () -> MAX_FUEL, GeneratorTags.Gases.DEUTERIUM_LOOKUP::contains));
+        gasTanks.add(tritiumTank = MultiblockChemicalTankBuilder.GAS.input(this, tile, () -> MAX_FUEL, GeneratorTags.Gases.TRITIUM_LOOKUP::contains));
+        gasTanks.add(fuelTank = MultiblockChemicalTankBuilder.GAS.input(this, tile, () -> MAX_FUEL, GeneratorTags.Gases.FUSION_FUEL_LOOKUP::contains));
         gasTanks.add(steamTank = MultiblockChemicalTankBuilder.GAS.output(this, tile, this::getMaxSteam, gas -> gas == MekanismGases.STEAM.getChemical()));
-        fluidTanks.add(waterTank = MultiblockFluidTank.input(this, tile, this::getMaxWater, fluid -> fluid.getFluid().is(FluidTags.WATER)));
+        fluidTanks.add(waterTank = MultiblockFluidTank.input(this, tile, this::getMaxWater, fluid -> MekanismTags.Fluids.WATER_LOOKUP.contains(fluid.getFluid())));
         energyContainers.add(energyContainer = BasicEnergyContainer.output(MAX_ENERGY, this));
         heatCapacitors.add(heatCapacitor = MultiblockHeatCapacitor.create(this, tile, caseHeatCapacity,
               FusionReactorMultiblockData::getInverseConductionCoefficient, () -> inverseInsulation, () -> biomeAmbientTemp));
@@ -309,21 +309,21 @@ public class FusionReactorMultiblockData extends MultiblockData {
     }
 
     @Override
-    public void onCreated(World world) {
+    public void onCreated(Level world) {
         super.onCreated(world);
         for (ValveData data : valves) {
-            TileEntity tile = WorldUtils.getTileEntity(world, data.location);
+            BlockEntity tile = WorldUtils.getTileEntity(world, data.location);
             if (tile instanceof TileEntityFusionReactorPort) {
                 heatHandlers.add((ITileHeatHandler) tile);
             }
         }
         biomeAmbientTemp = calculateAverageAmbientTemperature(world);
-        deathZone = new AxisAlignedBB(getMinPos().getX() + 1, getMinPos().getY() + 1, getMinPos().getZ() + 1,
+        deathZone = new AABB(getMinPos().getX() + 1, getMinPos().getY() + 1, getMinPos().getZ() + 1,
               getMaxPos().getX(), getMaxPos().getY(), getMaxPos().getZ());
     }
 
     @Override
-    public void readUpdateTag(CompoundNBT tag) {
+    public void readUpdateTag(CompoundTag tag) {
         super.readUpdateTag(tag);
         NBTUtils.setDoubleIfPresent(tag, NBTConstants.PLASMA_TEMP, this::setLastPlasmaTemp);
         NBTUtils.setFloatIfPresent(tag, ReactorConstants.NBT_CURRENT_REACTIVITY, this::setCurrentReactivity);
@@ -335,7 +335,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
     }
 
     @Override
-    public void writeUpdateTag(CompoundNBT tag) {
+    public void writeUpdateTag(CompoundTag tag) {
         super.writeUpdateTag(tag);
         tag.putDouble(NBTConstants.PLASMA_TEMP, getLastPlasmaTemp());
         tag.putFloat(ReactorConstants.NBT_CURRENT_REACTIVITY, getCurrentReactivity());
@@ -372,7 +372,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
     }
 
     @Override
-    public boolean tick(World world) {
+    public boolean tick(Level world) {
         boolean needsPacket = super.tick(world);
         //Only thermal transfer happens unless we're hot enough to burn.
         if (getPlasmaTemp() >= burnTemperature) {
@@ -433,7 +433,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
         lastCaseTemperature = heatCapacitor.getTemperature();
     }
 
-    private void kill(World world) {
+    private void kill(Level world) {
         if (world.getRandom().nextInt() % 20 != 0) {
             return;
         }

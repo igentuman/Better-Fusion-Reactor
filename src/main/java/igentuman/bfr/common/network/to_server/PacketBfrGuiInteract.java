@@ -8,11 +8,12 @@ import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorBlock;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter.FusionReactorLogic;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.network.NetworkEvent;
+
 
 /**
  * Used for informing the server that an action happened in a GUI
@@ -23,11 +24,11 @@ public class PacketBfrGuiInteract implements IMekanismPacket {
     private final BlockPos tilePosition;
     private final double extra;
 
-    public PacketBfrGuiInteract(BfrGuiInteraction interaction, TileEntity tile) {
+    public PacketBfrGuiInteract(BfrGuiInteraction interaction, BlockEntity tile) {
         this(interaction, tile.getBlockPos());
     }
 
-    public PacketBfrGuiInteract(BfrGuiInteraction interaction, TileEntity tile, double extra) {
+    public PacketBfrGuiInteract(BfrGuiInteraction interaction, BlockEntity tile, double extra) {
         this(interaction, tile.getBlockPos(), extra);
     }
 
@@ -43,7 +44,7 @@ public class PacketBfrGuiInteract implements IMekanismPacket {
 
     @Override
     public void handle(NetworkEvent.Context context) {
-        PlayerEntity player = context.getSender();
+        Player player = context.getSender();
         if (player != null) {
             TileEntityMekanism tile = WorldUtils.getTileEntity(TileEntityMekanism.class, player.level, tilePosition);
             if (tile != null) {
@@ -53,13 +54,13 @@ public class PacketBfrGuiInteract implements IMekanismPacket {
     }
 
     @Override
-    public void encode(PacketBuffer buffer) {
+    public void encode(FriendlyByteBuf buffer) {
         buffer.writeEnum(interaction);
         buffer.writeBlockPos(tilePosition);
         buffer.writeDouble(extra);
     }
 
-    public static PacketBfrGuiInteract decode(PacketBuffer buffer) {
+    public static PacketBfrGuiInteract decode(FriendlyByteBuf buffer) {
         return new PacketBfrGuiInteract(buffer.readEnum(BfrGuiInteraction.class), buffer.readBlockPos(), buffer.readDouble());
     }
 
@@ -84,13 +85,13 @@ public class PacketBfrGuiInteract implements IMekanismPacket {
                 ((TileEntityFusionReactorBlock) tile).adjustReactivityFromPacket(-5F);
             }
         });
-        private final TriConsumer<TileEntityMekanism, PlayerEntity, Double> consumerForTile;
+        private final TriConsumer<TileEntityMekanism, Player, Double> consumerForTile;
 
-        BfrGuiInteraction(TriConsumer<TileEntityMekanism, PlayerEntity, Double> consumerForTile) {
+        BfrGuiInteraction(TriConsumer<TileEntityMekanism, Player, Double> consumerForTile) {
             this.consumerForTile = consumerForTile;
         }
 
-        public void consume(TileEntityMekanism tile, PlayerEntity player, double extra) {
+        public void consume(TileEntityMekanism tile, Player player, double extra) {
             consumerForTile.accept(tile, player, extra);
         }
     }

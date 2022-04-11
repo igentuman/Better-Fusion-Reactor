@@ -1,7 +1,7 @@
 package igentuman.bfr.common;
 
 import mekanism.api.text.ILangEntry;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
 
 public enum BfrLang implements ILangEntry {
     PRODUCING_AMOUNT("gui", "producing.amount"),

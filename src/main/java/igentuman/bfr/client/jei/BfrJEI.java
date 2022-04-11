@@ -6,28 +6,25 @@ import mekanism.client.jei.CatalystRegistryHelper;
 import mekanism.client.jei.MekanismJEI;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.registries.BfrBlocks;
-import mekanism.generators.common.registries.GeneratorsBlockTypes;
+import mekanism.client.jei.RecipeRegistryHelper;
 import mekanism.generators.common.registries.GeneratorsBlocks;
-import mekanism.generators.common.registries.GeneratorsItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.registration.*;
-import mezz.jei.api.runtime.IIngredientManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import static igentuman.bfr.client.jei.BfrJEIRecipeType.FUSION;
+
 
 @JeiPlugin
-public class GeneratorsJEI implements IModPlugin {
-
-    private static final ResourceLocation FUSION = BetterFusionReactor.rl("fusion");
+public class BfrJEI implements IModPlugin {
 
     @Nonnull
     @Override
@@ -54,7 +51,7 @@ public class GeneratorsJEI implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registry) {
-      registry.addRecipes(FusionReactorRecipeCategory.getFusionRecipes(), FUSION);
+        RecipeRegistryHelper.register(registry, FUSION, FusionReactorRecipeCategory.getFusionRecipes());
 
         Collection<ItemStack> collection = Arrays.asList(
                 GeneratorsBlocks.LASER_FOCUS_MATRIX,
@@ -65,6 +62,6 @@ public class GeneratorsJEI implements IModPlugin {
                 GeneratorsBlocks.REACTOR_GLASS
         ).stream().map(ItemStack::new).collect(Collectors.toList());
 
-        registry.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM, collection);
+        registry.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, collection);
     }
 }

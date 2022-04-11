@@ -19,12 +19,13 @@ import igentuman.bfr.common.base.IReactorLogicMode;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.registries.BfrBlocks;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter.FusionReactorLogic;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -34,8 +35,8 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
     public FusionReactorLogic logicType = FusionReactorLogic.READY;
     private boolean activeCooled;
 
-    public TileEntityFusionReactorLogicAdapter() {
-        super(BfrBlocks.FUSION_REACTOR_LOGIC_ADAPTER);
+    public TileEntityFusionReactorLogicAdapter(BlockPos pos, BlockState state) {
+        super(BfrBlocks.FUSION_REACTOR_LOGIC_ADAPTER, pos, state);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
         boolean needsPacket = super.onUpdateServer(multiblock);
         int redstone = getRedstoneLevel();
         if (redstone != prevRedstoneLevel) {
-            World world = getLevel();
+            Level world = getLevel();
             if (world != null) {
                 world.updateNeighborsAt(getBlockPos(), getBlockType());
             }
@@ -76,7 +77,7 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
                 default:
                     return;
             }
-            markDirty(false);
+            markForSave();
         }
     }
 
@@ -109,19 +110,18 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
     }
 
     @Override
-    public void load(@Nonnull BlockState state, @Nonnull CompoundNBT nbtTags) {
-        super.load(state, nbtTags);
+    public void load(@Nonnull CompoundTag nbtTags) {
+        super.load(nbtTags);
         NBTUtils.setEnumIfPresent(nbtTags, NBTConstants.LOGIC_TYPE, FusionReactorLogic::byIndexStatic, logicType -> this.logicType = logicType);
         activeCooled = nbtTags.getBoolean(NBTConstants.ACTIVE_COOLED);
     }
 
     @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT nbtTags) {
-        super.save(nbtTags);
+    public void saveAdditional(@Nonnull CompoundTag nbtTags) {
+        super.saveAdditional(nbtTags);
         nbtTags.putInt(NBTConstants.LOGIC_TYPE, logicType.getId());
         nbtTags.putBoolean(NBTConstants.ACTIVE_COOLED, activeCooled);
-        return nbtTags;
     }
 
     @Override
@@ -132,7 +132,7 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
     @Override
     public void nextMode() {
         activeCooled = !activeCooled;
-        markDirty(false);
+        markForSave();
     }
 
     @ComputerMethod(nameOverride = "isActiveCooledLogic")
@@ -183,7 +183,7 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
     public void setLogicTypeFromPacket(FusionReactorLogic logicType) {
         if (this.logicType != logicType) {
             this.logicType = logicType;
-            markDirty(false);
+            markForSave();
         }
     }
 
@@ -242,7 +242,7 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
         }
 
         @Override
-        public ITextComponent getDescription() {
+        public Component getDescription() {
             return description.translate();
         }
 

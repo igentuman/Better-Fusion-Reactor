@@ -9,15 +9,17 @@ import mekanism.common.inventory.container.MekanismContainer;
 import mekanism.common.inventory.container.sync.dynamic.SyncMapper;
 import mekanism.common.lib.multiblock.MultiblockManager;
 import mekanism.common.tile.prefab.TileEntityMultiblock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class TileEntityFusionReactorBlock extends TileEntityMultiblock<FusionReactorMultiblockData> {
 
-    public TileEntityFusionReactorBlock() {
-        this(BfrBlocks.FUSION_REACTOR_FRAME);
+    public TileEntityFusionReactorBlock(BlockPos pos, BlockState state) {
+        this(BfrBlocks.FUSION_REACTOR_FRAME, pos, state);
     }
 
-    public TileEntityFusionReactorBlock(IBlockProvider blockProvider) {
-        super(blockProvider);
+    public TileEntityFusionReactorBlock(IBlockProvider blockProvider, BlockPos pos, BlockState state) {
+        super(blockProvider, pos, state);
     }
 
     @Override
@@ -39,7 +41,7 @@ public class TileEntityFusionReactorBlock extends TileEntityMultiblock<FusionRea
         FusionReactorMultiblockData multiblock = getMultiblock();
         if (multiblock.isFormed()) {
             multiblock.setInjectionRate(Math.min(FusionReactorMultiblockData.MAX_INJECTION, Math.max(0, rate - (rate % 2))));
-            markDirty(false);
+            markForSave();
         }
     }
 
@@ -47,7 +49,7 @@ public class TileEntityFusionReactorBlock extends TileEntityMultiblock<FusionRea
         FusionReactorMultiblockData multiblock = getMultiblock();
         if (multiblock.isFormed() && multiblock.isBurning()) {
             multiblock.adjustReactivity(val);
-            markDirty(false);
+            markForSave();
         }
     }
 

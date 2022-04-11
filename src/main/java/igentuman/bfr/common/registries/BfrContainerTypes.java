@@ -16,6 +16,7 @@ public class BfrContainerTypes {
     }
 
     public static final ContainerTypeDeferredRegister CONTAINER_TYPES = new ContainerTypeDeferredRegister(BetterFusionReactor.MODID);
+
     public static final ContainerTypeRegistryObject<MekanismTileContainer<TileEntityFusionReactorController>> FUSION_REACTOR_CONTROLLER = CONTAINER_TYPES.register(BfrBlocks.FUSION_REACTOR_CONTROLLER, TileEntityFusionReactorController.class);
     public static final ContainerTypeRegistryObject<EmptyTileContainer<TileEntityFusionReactorController>> FUSION_REACTOR_FUEL = CONTAINER_TYPES.register("fusion_reactor_fuel", TileEntityFusionReactorController.class, FusionReactorFuelTabContainer::new);
     public static final ContainerTypeRegistryObject<EmptyTileContainer<TileEntityFusionReactorController>> FUSION_REACTOR_HEAT = CONTAINER_TYPES.register("fusion_reactor_heat", TileEntityFusionReactorController.class, FusionReactorHeatTabContainer::new);

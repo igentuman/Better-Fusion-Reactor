@@ -7,19 +7,20 @@ import mekanism.common.capabilities.Capabilities;
 import mekanism.common.capabilities.resolver.BasicCapabilityResolver;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.registries.BfrBlocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class TileEntityLaserFocusMatrix extends TileEntityFusionReactorBlock implements ILaserReceptor {
 
-    public TileEntityLaserFocusMatrix() {
-        super(BfrBlocks.LASER_FOCUS_MATRIX);
+    public TileEntityLaserFocusMatrix(BlockPos pos, BlockState state) {
+        super(BfrBlocks.LASER_FOCUS_MATRIX, pos, state);
         addCapabilityResolver(BasicCapabilityResolver.constant(Capabilities.LASER_RECEPTOR_CAPABILITY, this));
     }
 
     @Override
-    public void receiveLaserEnergy(@Nonnull FloatingLong energy, Direction side) {
+    public void receiveLaserEnergy(@Nonnull FloatingLong energy) {
         FusionReactorMultiblockData multiblock = getMultiblock();
         if (multiblock.isFormed()) {
             multiblock.addTemperatureFromEnergyInput(energy);
@@ -28,15 +29,15 @@ public class TileEntityLaserFocusMatrix extends TileEntityFusionReactorBlock imp
     }
 
     @Override
-    public ActionResultType onRightClick(PlayerEntity player, Direction side) {
+    public InteractionResult onRightClick(Player player) {
         if (!isRemote() && player.isCreative()) {
             FusionReactorMultiblockData multiblock = getMultiblock();
             if (multiblock.isFormed()) {
                 multiblock.setPlasmaTemp(1_000_000_000);
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return super.onRightClick(player, side);
+        return super.onRightClick(player);
     }
 
     @Override

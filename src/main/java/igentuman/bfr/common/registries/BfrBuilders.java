@@ -1,11 +1,11 @@
 package igentuman.bfr.common.registries;
 
 import mekanism.common.command.builders.StructureBuilder;
-import mekanism.common.registries.MekanismBlocks;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+
 
 public class BfrBuilders {
 
@@ -19,7 +19,7 @@ public class BfrBuilders {
         }
 
         @Override
-        protected void build(World world, BlockPos start) {
+        protected void build(Level world, BlockPos start) {
             buildPartialFrame(world, start, 1);
             buildWalls(world, start);
             buildInteriorLayers(world, start, 1, 3, Blocks.AIR);

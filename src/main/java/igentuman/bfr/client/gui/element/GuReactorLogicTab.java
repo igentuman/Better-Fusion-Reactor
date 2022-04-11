@@ -13,8 +13,8 @@ import mekanism.client.gui.element.tab.TabType;
 import mekanism.client.render.lib.ColorAtlas.ColorRegistryObject;
 import mekanism.common.util.MekanismUtils;
 import mekanism.common.util.MekanismUtils.ResourceType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 public class GuReactorLogicTab extends GuiTabElementType<TileEntityFusionReactorLogicAdapter, GuReactorLogicTab.ReactorLogicTab> {
 
@@ -48,11 +48,11 @@ public class GuReactorLogicTab extends GuiTabElementType<TileEntityFusionReactor
 
         @Override
         public void onClick(TileEntityFusionReactorLogicAdapter tile) {
-            BetterFusionReactor.packetHandler.sendToServer(new PacketBfrGuiButtonPress(button, tile.getBlockPos()));
+            BetterFusionReactor.packetHandler().sendToServer(new PacketBfrGuiButtonPress(button, tile.getBlockPos()));
         }
 
         @Override
-        public ITextComponent getDescription() {
+        public Component getDescription() {
             return description.translate();
         }
 

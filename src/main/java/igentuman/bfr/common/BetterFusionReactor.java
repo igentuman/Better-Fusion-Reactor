@@ -1,6 +1,5 @@
 package igentuman.bfr.common;
 
-import mekanism.api.MekanismIMC;
 import mekanism.common.Mekanism;
 import mekanism.common.base.IModModule;
 import mekanism.common.command.builders.BuildCommand;
@@ -17,11 +16,13 @@ import igentuman.bfr.common.registries.BfrBuilders.FusionReactorBuilder;
 import igentuman.bfr.common.registries.BfrContainerTypes;
 import igentuman.bfr.common.registries.BfrModules;
 import igentuman.bfr.common.registries.BfrTileEntityTypes;
-import net.minecraft.util.ResourceLocation;
+import mekanism.generators.common.network.GeneratorsPacketHandler;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -40,7 +41,7 @@ public class BetterFusionReactor implements IModModule {
     /**
      * Mekanism Generators Packet Pipeline
      */
-    public static final BfrPacketHandler packetHandler = new BfrPacketHandler();
+    private final BfrPacketHandler packetHandler;
 
     public static final MultiblockManager<FusionReactorMultiblockData> fusionReactorManager = new MultiblockManager<>("fusionReactor", FusionReactorCache::new, FusionReactorValidator::new);
 
@@ -58,6 +59,11 @@ public class BetterFusionReactor implements IModModule {
         BfrModules.MODULES.register(modEventBus);
         //Set our version number to match the mods.toml file, which matches the one in our build.gradle
         versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
+        packetHandler = new BfrPacketHandler();
+    }
+
+    public static BfrPacketHandler packetHandler() {
+        return instance.packetHandler;
     }
 
     public static ResourceLocation rl(String path) {
@@ -92,7 +98,7 @@ public class BetterFusionReactor implements IModModule {
 
     }
 
-    private void onConfigLoad(ModConfig.ModConfigEvent configEvent) {
+    private void onConfigLoad(ModConfigEvent configEvent) {
         //Note: We listen to both the initial load and the reload, to make sure that we fix any accidentally
         // cached values from calls before the initial loading
         ModConfig config = configEvent.getConfig();

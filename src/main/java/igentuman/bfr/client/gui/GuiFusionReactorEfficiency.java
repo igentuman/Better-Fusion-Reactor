@@ -1,6 +1,6 @@
 package igentuman.bfr.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab.FusionReactorTab;
 import igentuman.bfr.common.BetterFusionReactor;
@@ -26,10 +26,9 @@ import mekanism.common.network.to_server.PacketGuiInteract;
 import mekanism.common.util.MekanismUtils;
 import mekanism.common.util.UnitDisplayUtils.TemperatureUnit;
 import mekanism.common.util.text.EnergyDisplay;
-import mekanism.common.util.text.InputValidator;
-import mekanism.common.util.text.TextUtils;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -39,7 +38,7 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
     private MekanismButton reactivityUpButton;
     private MekanismButton reactivityDownButton;
 
-    public GuiFusionReactorEfficiency(EmptyTileContainer<TileEntityFusionReactorController> container, PlayerInventory inv, ITextComponent title) {
+    public GuiFusionReactorEfficiency(EmptyTileContainer<TileEntityFusionReactorController> container, Inventory inv, Component title) {
         super(container, inv, title);
     }
 
@@ -47,14 +46,14 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
     protected void addGuiElements() {
         super.addGuiElements();
         FusionReactorMultiblockData multiblock = tile.getMultiblock();
-        addButton(new GuiEnergyTab(this, () -> {
+        addRenderableWidget(new GuiEnergyTab(this, () -> {
             return Arrays.asList(MekanismLang.STORING.translate(EnergyDisplay.of(multiblock.energyContainer)),
                   BfrLang.PRODUCING_AMOUNT.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, true))));
         }));
 
-        addButton(new GuiVerticalPowerBar(this, new GuiBar.IBarInfoHandler() {
+        addRenderableWidget(new GuiVerticalPowerBar(this, new GuiBar.IBarInfoHandler() {
             @Override
-            public ITextComponent getTooltip() {
+            public Component getTooltip() {
                 return BfrLang.REACTOR_CURRENT_REACTIVITY.translate(String.format("%.2f",multiblock.getCurrentReactivity()));
             }
 
@@ -64,9 +63,9 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
             }
         }, 30, 55));
 
-        addButton(new GuiVerticalPowerBar(this, new GuiBar.IBarInfoHandler() {
+        addRenderableWidget(new GuiVerticalPowerBar(this, new GuiBar.IBarInfoHandler() {
             @Override
-            public ITextComponent getTooltip() {
+            public Component getTooltip() {
                 return BfrLang.REACTOR_TARGET_REACTIVITY.translate(String.format("%.2f",multiblock.getTargetReactivity()));
             }
             @Override
@@ -75,9 +74,9 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
             }
         }, 64, 55));
 
-        addButton(new GuiVerticalPowerBar(this, new GuiBar.IBarInfoHandler() {
+        addRenderableWidget(new GuiVerticalPowerBar(this, new GuiBar.IBarInfoHandler() {
             @Override
-            public ITextComponent getTooltip() {
+            public Component getTooltip() {
                 return BfrLang.REACTOR_EFFICIENCY.translate(String.format("%.2f",multiblock.getEfficiency()) + "%");
             }
             @Override
@@ -86,9 +85,9 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
             }
         }, 102, 55));
 
-        addButton(new GuiVerticalPowerBar(this, new GuiBar.IBarInfoHandler() {
+        addRenderableWidget(new GuiVerticalPowerBar(this, new GuiBar.IBarInfoHandler() {
             @Override
-            public ITextComponent getTooltip() {
+            public Component getTooltip() {
                 return BfrLang.REACTOR_ERROR_LEVEL.translate(String.format("%.2f",multiblock.getErrorLevel()) + "%");
             }
             @Override
@@ -97,22 +96,22 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
             }
         }, 142, 55));
 
-        addButton(new GuiFusionReactorTab(this, tile, FusionReactorTab.HEAT));
-        addButton(new GuiFusionReactorTab(this, tile, FusionReactorTab.FUEL));
-        addButton(new GuiFusionReactorTab(this, tile, FusionReactorTab.STAT));
+        addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.HEAT));
+        addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.FUEL));
+        addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.STAT));
 
-        reactivityUpButton = addButton(new TranslationButton(this, 8, 56, 20, 20,
+        reactivityUpButton = addRenderableWidget(new TranslationButton(this, 8, 56, 20, 20,
                 BfrLang.REACTOR_BUTTON_REACTIVITY_UP,
-                () -> BetterFusionReactor.packetHandler.sendToServer(new PacketBfrGuiInteract(PacketBfrGuiInteract.BfrGuiInteraction.REACTIVITY_UP, tile))));
+                () -> BetterFusionReactor.packetHandler().sendToServer(new PacketBfrGuiInteract(PacketBfrGuiInteract.BfrGuiInteraction.REACTIVITY_UP, tile))));
 
-        reactivityDownButton = addButton(new TranslationButton(this, 8, 90, 20, 20,
+        reactivityDownButton = addRenderableWidget(new TranslationButton(this, 8, 90, 20, 20,
                 BfrLang.REACTOR_BUTTON_REACTIVITY_DOWN,
-                () -> BetterFusionReactor.packetHandler.sendToServer(new PacketBfrGuiInteract(PacketBfrGuiInteract.BfrGuiInteraction.REACTIVITY_DOWN, tile))));
+                () -> BetterFusionReactor.packetHandler().sendToServer(new PacketBfrGuiInteract(PacketBfrGuiInteract.BfrGuiInteraction.REACTIVITY_DOWN, tile))));
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void containerTick() {
+        super.containerTick();
         updateEnabledButtons();
     }
 
@@ -123,7 +122,7 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
     }
 
     @Override
-    protected void drawForegroundText(@Nonnull MatrixStack matrix, int mouseX, int mouseY) {
+    protected void drawForegroundText(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
         drawTitleText(matrix, BfrLang.FUSION_REACTOR.translate(), titleLabelY);
         FusionReactorMultiblockData multiblock = tile.getMultiblock();
 

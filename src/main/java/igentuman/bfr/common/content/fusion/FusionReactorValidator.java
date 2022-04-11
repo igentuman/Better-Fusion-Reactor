@@ -15,9 +15,9 @@ import mekanism.common.lib.multiblock.Structure.Axis;
 import mekanism.common.lib.multiblock.StructureHelper;
 import igentuman.bfr.common.registries.BfrBlockTypes;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class FusionReactorValidator extends CuboidStructureValidator<FusionReactorMultiblockData> {
 
