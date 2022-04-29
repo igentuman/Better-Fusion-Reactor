@@ -56,10 +56,10 @@ public class TileEntityReactorLogicAdapter extends TileEntityReactorBlock implem
                         getReactor().setInjectionRate(getReactor().getInjectionRate() - 2);
                         break;
                     case REACTIVITY_UP:
-                        getReactor().adjustReactivity(5);
+                        getReactor().adjustReactivity(redstone);
                         break;
                     case REACTIVITY_DOWN:
-                        getReactor().adjustReactivity(-5);
+                        getReactor().adjustReactivity(-redstone);
                         break;
                 }
             }

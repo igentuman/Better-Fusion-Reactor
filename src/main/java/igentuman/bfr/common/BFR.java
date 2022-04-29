@@ -30,7 +30,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 @Mod(modid = BFR.MODID, useMetadata = true, guiFactory = "igentuman.bfr.client.gui.BFRGuiFactory")
 @Mod.EventBusSubscriber()
-public class BFR implements IModule {
+public class BFR  {
 
     public static final String MODID = "bfr";
 
@@ -72,7 +72,7 @@ public class BFR implements IModule {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        Mekanism.modulesLoaded.add(this);
+        //Mekanism.modulesLoaded.add(this);
         PacketSimpleGui.handlers.add(1, proxy);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new BFRGuiHandler());
         MinecraftForge.EVENT_BUS.register(this);
@@ -85,27 +85,5 @@ public class BFR implements IModule {
             BfrRadSources.init();
         }
         Mekanism.logger.info("Loaded BFR module.");
-    }
-
-    @Override
-    public Version getVersion() {
-        return versionNumber;
-    }
-
-    @Override
-    public String getName() {
-        return "BFR";
-    }
-
-    @Override
-    public void writeConfig(ByteBuf byteBuf, MekanismConfig mekanismConfig) {
-    }
-
-    @Override
-    public void readConfig(ByteBuf byteBuf, MekanismConfig mekanismConfig) {
-    }
-
-    @Override
-    public void resetClient() {
     }
 }

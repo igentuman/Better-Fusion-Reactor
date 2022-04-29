@@ -1,5 +1,6 @@
 package igentuman.bfr.common;
 
+import igentuman.bfr.common.config.BfrConfig;
 import igentuman.bfr.common.inventory.container.ContainerReactorController;
 import igentuman.bfr.common.recipes.BFRRecipes;
 import mekanism.common.base.IGuiProvider;
@@ -21,6 +22,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
 
 @Mod.EventBusSubscriber(modid = BFR.MODID)
 public class BFRCommonProxy implements IGuiProvider {
@@ -58,15 +60,13 @@ public class BFRCommonProxy implements IGuiProvider {
      */
     public void registerBlockRenders() {
     }
-
     public void preInit(FMLPreInitializationEvent preEvent) {
+        BfrConfig.preInit();
         MinecraftForge.EVENT_BUS.register(new BFRRecipes());
     }
 
-    /**
-     * Set and load the mod's common configuration properties.
-     */
     public void loadConfiguration() {
+
     }
 
     @Override

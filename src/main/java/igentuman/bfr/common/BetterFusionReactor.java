@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import igentuman.bfr.common.config.BfrConfig;
 import mekanism.generators.common.item.ItemHohlraum;
 import igentuman.bfr.common.tile.reactor.TileEntityReactorBlock;
 import igentuman.bfr.common.tile.reactor.TileEntityReactorController;
@@ -72,8 +73,10 @@ public class BetterFusionReactor {
     public int laserShootCountdown = 0;
     public int laserShootEnergyDuration = 12000;
     public double laserShootMinEnergy = 500000000;
+    public int difficulty = 10;
 
-    public BetterFusionReactor(TileEntityReactorController c) {
+    public BetterFusionReactor(TileEntityReactorController c) {;
+        difficulty = Math.min(20,Math.max(BfrConfig.reactionDifficulty,1));
         controller = c;
     }
 
@@ -171,7 +174,11 @@ public class BetterFusionReactor {
     public void updateErrorLevel()
     {
         if(isBurning()) {
-            errorLevel += ((80 - getEfficiency()) * ((getKt() + 1) / 2)) * 0.0005;
+            float shift = ((80 - getEfficiency()) * ((getKt() + 1) / 2)) * 0.0005f;
+            if(shift > 0) {
+                shift = shift*difficulty/10f;
+            }
+            errorLevel += shift;
         } else {
             errorLevel -= 0.1;
         }
@@ -181,6 +188,9 @@ public class BetterFusionReactor {
             targetReactivity = 0;
             adjustment = 0;
             burning = false;
+            if(BfrConfig.reactorMeltdown) {
+                controller.getWorld().createExplosion(null, controller.getPos().getX(), controller.getPos().getY() + 1, controller.getPos().getZ(), 4.0F, true);
+            }
         }
     }
 
@@ -216,7 +226,7 @@ public class BetterFusionReactor {
 
     public int reactivityUpdateTicksScaled()
     {
-        return (int) ( reactivityUpdateTicks / (getKt() + 0.25));
+        return (int) ((reactivityUpdateTicks / (getKt() + 0.25))*(difficulty/10F));
     }
 
     public void updateReactivity()

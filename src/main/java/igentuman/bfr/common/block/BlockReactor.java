@@ -4,6 +4,7 @@ import buildcraft.api.tools.IToolWrench;
 import javax.annotation.Nonnull;
 
 import igentuman.bfr.common.block.states.BlockStateReactor;
+import igentuman.bfr.common.tile.reactor.TileEntityReactorLaserFocusMatrix;
 import mekanism.common.Mekanism;
 import mekanism.common.base.IActiveState;
 import mekanism.common.tile.prefab.TileEntityBasicBlock;
@@ -141,6 +142,14 @@ public abstract class BlockReactor extends Block implements ITileEntityProvider 
             if (!entityplayer.isSneaking()) {
                 entityplayer.openGui(BFR.instance, BlockStateReactor.ReactorBlockType.get(this, metadata).guiId, world, pos.getX(), pos.getY(), pos.getZ());
                 return true;
+            }
+        }
+
+        if (tileEntity instanceof TileEntityReactorLaserFocusMatrix) {
+            if (entityplayer.isSneaking() && entityplayer.isCreative()) {
+                        ((TileEntityReactorLaserFocusMatrix) tileEntity).getReactor()
+                                .setPlasmaTemp(((TileEntityReactorLaserFocusMatrix) tileEntity).getReactor().getIgnitionTemperature(false)*2);
+                   return true;
             }
         }
         return false;
