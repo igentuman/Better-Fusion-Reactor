@@ -56,6 +56,7 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
     public void onPowerChange()
     {
         if(isPowered() && !wasPowered()) {
+            int power = getTileWorld().getBestNeighborSignal(getBlockPos());
             FusionReactorMultiblockData multiblock = getMultiblock();
             if(multiblock == null || !getMultiblock().isFormed()) {
                 return;
@@ -68,10 +69,10 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
                     multiblock.setInjectionRate(multiblock.getInjectionRate()+2);
                     break;
                 case REACTIVITY_UP:
-                    multiblock.adjustReactivity(5);
+                    multiblock.adjustReactivity(power);
                     break;
                 case REACTIVITY_DOWN:
-                    multiblock.adjustReactivity(-5);
+                    multiblock.adjustReactivity(-power);
                     break;
                 default:
                     return;

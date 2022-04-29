@@ -78,20 +78,20 @@ public class BfrLangProvider extends BaseLanguageProvider {
         add(BfrLang.READY_FOR_REACTION, "Ready for Reaction!");
         add(BfrLang.REACTOR_LOGIC_REDSTONE_MODE, "Redstone mode: %s");
         add(BfrLang.REACTOR_LOGIC_TOGGLE_COOLING, "Toggle Cooling Measurements");
-        add(BfrLang.REACTOR_LOGIC_REACTIVITY_UP, "+5 Reactivity");
-        add(BfrLang.REACTOR_LOGIC_REACTIVITY_DOWN, "-5 Reactivity");
+        add(BfrLang.REACTOR_LOGIC_REACTIVITY_UP, "+ Reactivity");
+        add(BfrLang.REACTOR_LOGIC_REACTIVITY_DOWN, "- Reactivity");
         add(BfrLang.REACTOR_LOGIC_INJECTION_DOWN, "-2 Injection Rate");
         add(BfrLang.REACTOR_LOGIC_INJECTION_UP, "+2 Injection Rate");
         add(BfrLang.REACTOR_LOGIC_EFFICIENCY, "Efficiency");
         add(BfrLang.REACTOR_LOGIC_ERROR_LEVEL, "Error Level");
       //Descriptions
         add(BfrLang.DESCRIPTION_REACTOR_CAPACITY, "Output when the reactor's core heat capacity has been met");
-        add(BfrLang.DESCRIPTION_REACTOR_ERROR_LEVEL, "100% = full redstone signal strength (15 blocks). 1 block ~ 6.7%");
-        add(BfrLang.DESCRIPTION_REACTOR_EFFICIENCY, "100% = full redstone signal strength (15 blocks). 1 block ~ 6.7%");
+        add(BfrLang.DESCRIPTION_REACTOR_ERROR_LEVEL, "100% = full redstone signal strength (15 blocks). 1 block ~ 7%");
+        add(BfrLang.DESCRIPTION_REACTOR_EFFICIENCY, "100% = full redstone signal strength (15 blocks). 1 block ~ 7%");
         add(BfrLang.DESCRIPTION_REACTOR_INJECTION_UP, "Input redstone impulse any strength");
         add(BfrLang.DESCRIPTION_REACTOR_INJECTION_DOWN, "Input redstone impulse any strength");
-        add(BfrLang.DESCRIPTION_REACTOR_REACTIVITY_DOWN, "Input redstone impulse any strength");
-        add(BfrLang.DESCRIPTION_REACTOR_REACTIVITY_UP, "Input redstone impulse any strength");
+        add(BfrLang.DESCRIPTION_REACTOR_REACTIVITY_DOWN, "Redstone impulse will decrease CR by the strength of impulse (1-15)");
+        add(BfrLang.DESCRIPTION_REACTOR_REACTIVITY_UP, "Redstone impulse will increase CR by the strength of impulse (1-15)");
         add(BfrLang.DESCRIPTION_REACTOR_ACTIVATION, "Activate the reactor when powered, and deactivate when unpowered");
         add(BfrLang.DESCRIPTION_REACTOR_TEMPERATURE, "Output when the reactor reaches dangerous temperatures");
         add(BfrLang.DESCRIPTION_REACTOR_DAMAGED, "Output when the reactor reaches critical damage levels (100%+).");
