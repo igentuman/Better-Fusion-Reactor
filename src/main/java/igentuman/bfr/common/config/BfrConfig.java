@@ -1,28 +1,30 @@
 package igentuman.bfr.common.config;
 
 import mekanism.common.config.BaseMekanismConfig;
+import mekanism.common.config.value.CachedBooleanValue;
+import mekanism.common.config.value.CachedIntValue;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig.Type;
 
 public class BfrConfig extends BaseMekanismConfig {
 
-    private static final String FUSION_CATEGORY = "fusion_reactor";
+    private static final String FUSION_CATEGORY = "better_fusion_reactor";
 
     private final ForgeConfigSpec configSpec;
 
+    public final CachedIntValue reactionDifficulty;
+    public final CachedBooleanValue reactorMeltdown;
+
     BfrConfig() {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-        builder.comment("Mekanism Generators Config. This config is synced between server and client.").push("bfr");
+        builder.comment("Better Fusion Reactor. This config is synced between server and client.").push("bfr");
 
-        builder.comment("Fusion Settings").push(FUSION_CATEGORY);
-        //fusionThermocoupleEfficiency = CachedDoubleValue.wrap(this, builder.comment("The fraction of the heat dissipated from the case that is converted to Joules.")
-             // .defineInRange("thermocoupleEfficiency", 0.05D, 0D, 1D));
-        //fusionCasingThermalConductivity = CachedDoubleValue.wrap(this, builder.comment("The fraction fraction of heat from the casing that can be transferred to all sources that are not water. Will impact max heat, heat transfer to thermodynamic conductors, and power generation.")
-            //  .defineInRange("casingThermalConductivity", 0.1D, 0.001D, 1D));
-       // fusionWaterHeatingRatio = CachedDoubleValue.wrap(this, builder.comment("The fraction of the heat from the casing that is dissipated to water when water cooling is in use. Will impact max heat, and steam generation.")
-          //    .defineInRange("waterHeatingRatio", 0.3D, 0D, 1D));
+        builder.comment("Better Fusion Reactor").push(FUSION_CATEGORY);
+        reactionDifficulty = CachedIntValue.wrap(this, builder.comment("How often Reactivity changes and error level change speed. default 10")
+                .defineInRange("reaction_difficulty", 10, 1, 20));
+        reactorMeltdown = CachedBooleanValue.wrap(this, builder.comment("Small explosion when reactor reaches 100% error level")
+                .define("reactor_meltdown", false));
         builder.pop();
-
 
         configSpec = builder.build();
     }

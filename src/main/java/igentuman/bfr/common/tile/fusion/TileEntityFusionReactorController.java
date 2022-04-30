@@ -6,6 +6,7 @@ import mekanism.common.tile.base.SubstanceType;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.registries.BfrBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -25,6 +26,11 @@ public class TileEntityFusionReactorController extends TileEntityFusionReactorBl
     protected boolean onUpdateServer(FusionReactorMultiblockData multiblock) {
         boolean needsPacket = super.onUpdateServer(multiblock);
         setActive(multiblock.isFormed());
+        if(multiblock.explodeFlag) {
+            multiblock.explodeFlag = false;
+            getTileWorld().explode(null, getTilePos().getX(),getTilePos().getY()+1, getTilePos().getZ(), 4F,true, Explosion.BlockInteraction.DESTROY);
+            return false;
+        }
         return needsPacket;
     }
 

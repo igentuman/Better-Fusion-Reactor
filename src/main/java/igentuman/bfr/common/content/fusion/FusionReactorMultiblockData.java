@@ -1,5 +1,6 @@
 package igentuman.bfr.common.content.fusion;
 
+import igentuman.bfr.common.config.BetterFusionReactorConfig;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -131,6 +132,8 @@ public class FusionReactorMultiblockData extends MultiblockData {
     protected int reactivityUpdateTicks = 10000;
     protected int currentReactivityTick = 0;
     protected int adjustmentTicks = 100;
+    protected float difficulty = 10;
+    public boolean explodeFlag = false;
 
     //Target reactivity update rate depends on temperature
     public float getTargetReactivity()
@@ -223,7 +226,11 @@ public class FusionReactorMultiblockData extends MultiblockData {
     protected void updateErrorLevel()
     {
         if(isBurning()) {
-            errorLevel += ((80 - getEfficiency()) * ((getKt() + 1) / 2)) * 0.0005;
+            float shift = ((80 - getEfficiency()) * ((getKt() + 1) / 2)) * 0.0005f;
+            if(shift > 0) {
+                shift = shift*(difficulty/10);
+            }
+            errorLevel += shift;
         } else {
             errorLevel -= 0.1;
         }
@@ -237,6 +244,9 @@ public class FusionReactorMultiblockData extends MultiblockData {
             targetReactivity = 0;
             adjustment = 0;
             setBurning(false);
+            if(BetterFusionReactorConfig.bfr.reactorMeltdown.get()) {
+                explodeFlag = true;
+            }
         }
     }
 
@@ -262,7 +272,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
 
     public int reactivityUpdateTicksScaled()
     {
-        return (int) ( reactivityUpdateTicks / (getKt() + 0.25));
+        return (int) (( reactivityUpdateTicks / (getKt() + 0.25)) * (difficulty/10));
     }
 
     public void updateReactivity()
@@ -306,6 +316,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
         heatCapacitors.add(heatCapacitor = MultiblockHeatCapacitor.create(this, tile, caseHeatCapacity,
               FusionReactorMultiblockData::getInverseConductionCoefficient, () -> inverseInsulation, () -> biomeAmbientTemp));
         inventorySlots.add(reactorSlot = ReactorInventorySlot.at(stack -> stack.getItem() instanceof ItemHohlraum, this, 80, 39));
+        difficulty = (float) BetterFusionReactorConfig.bfr.reactionDifficulty.get();
     }
 
     @Override

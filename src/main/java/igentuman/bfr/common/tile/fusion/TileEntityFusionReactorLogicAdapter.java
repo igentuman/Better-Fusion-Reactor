@@ -61,6 +61,7 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
             if(multiblock == null || !getMultiblock().isFormed()) {
                 return;
             }
+            int power = getTileWorld().getBestNeighborSignal(getBlockPos());
             switch (logicType) {
                 case INJECTION_DOWN:
                     multiblock.setInjectionRate(multiblock.getInjectionRate()-2);
@@ -69,10 +70,10 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
                     multiblock.setInjectionRate(multiblock.getInjectionRate()+2);
                     break;
                 case REACTIVITY_UP:
-                    multiblock.adjustReactivity(5);
+                    multiblock.adjustReactivity(power);
                     break;
                 case REACTIVITY_DOWN:
-                    multiblock.adjustReactivity(-5);
+                    multiblock.adjustReactivity(-power);
                     break;
                 default:
                     return;

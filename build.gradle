@@ -51,7 +51,7 @@ idea {
 }
 
 group = "igentuman.bfr"
-version = "${minecraft_version}-${mod_version}b"
+version = "${minecraft_version}-${mod_version}"
 archivesBaseName = "BetterFusionReactor"
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 sourceSets.main.resources { srcDir 'src/generated/resources' }
