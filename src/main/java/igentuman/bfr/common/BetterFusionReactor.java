@@ -189,7 +189,7 @@ public class BetterFusionReactor {
             adjustment = 0;
             burning = false;
             if(BfrConfig.reactorMeltdown) {
-                controller.getWorld().createExplosion(null, controller.getPos().getX(), controller.getPos().getY() + 1, controller.getPos().getZ(), 4.0F, true);
+                controller.getWorld().createExplosion(null, controller.getPos().getX(), controller.getPos().getY() + 1, controller.getPos().getZ(), BfrConfig.reactorExplosionPower, true);
             }
         }
     }
