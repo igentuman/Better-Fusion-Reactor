@@ -54,7 +54,7 @@ public class BfrConfig {
 
 		Property reactor_explosion_power = config.get(BFR_CATEGORY, "reactor_explosion_power", 160.0f, Lang.localise("gui.bfr.config.better_fusion_reactor.reactor_explosion.comment"));
 		reactor_explosion_power.setLanguageKey("gui.bfr.config.better_fusion_reactor.reactor_explosion");
-		reactorExplosionPower= reactor_explosion_power.geFloat();
+		reactorExplosionPower= reactor_explosion_power.getFloat();
 		if (config.hasChanged()) config.save();
 	}
 
