@@ -16,7 +16,11 @@ import igentuman.bfr.common.registries.BfrBuilders.FusionReactorBuilder;
 import igentuman.bfr.common.registries.BfrContainerTypes;
 import igentuman.bfr.common.registries.BfrModules;
 import igentuman.bfr.common.registries.BfrTileEntityTypes;
+import mekanism.generators.common.GeneratorTags;
+import mekanism.generators.common.GeneratorsLang;
 import mekanism.generators.common.network.GeneratorsPacketHandler;
+import mekanism.generators.common.registries.GeneratorsBuilders;
+import mekanism.generators.common.registries.GeneratorsFluids;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -71,10 +75,12 @@ public class BetterFusionReactor implements IModModule {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-
-        BuildCommand.register("fusion", BfrLang.FUSION_REACTOR, new FusionReactorBuilder());
-
         packetHandler.initialize();
+
+        event.enqueueWork(() -> {
+            BuildCommand.register("fusion", BfrLang.FUSION_REACTOR, new FusionReactorBuilder());
+        });
+
 
         //Finalization
         Mekanism.logger.info("Loaded 'Mekanism Generators' module.");

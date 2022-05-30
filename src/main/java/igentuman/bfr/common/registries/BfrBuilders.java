@@ -19,7 +19,7 @@ public class BfrBuilders {
         }
 
         @Override
-        protected void build(Level world, BlockPos start) {
+        protected void build(Level world, BlockPos start, boolean empty) {
             buildPartialFrame(world, start, 1);
             buildWalls(world, start);
             buildInteriorLayers(world, start, 1, 3, Blocks.AIR);

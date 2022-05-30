@@ -1,5 +1,8 @@
 package igentuman.bfr.common.tile.fusion;
 
+import igentuman.bfr.common.BetterFusionReactor;
+import igentuman.bfr.common.config.BetterFusionReactorConfig;
+import igentuman.bfr.common.config.BfrConfig;
 import mekanism.common.capabilities.Capabilities;
 import mekanism.common.integration.energy.EnergyCompatUtils;
 import mekanism.common.tile.base.SubstanceType;
@@ -28,7 +31,7 @@ public class TileEntityFusionReactorController extends TileEntityFusionReactorBl
         setActive(multiblock.isFormed());
         if(multiblock.explodeFlag) {
             multiblock.explodeFlag = false;
-            getTileWorld().explode(null, getTilePos().getX(),getTilePos().getY()+1, getTilePos().getZ(), 4F,true, Explosion.BlockInteraction.DESTROY);
+            getTileWorld().explode(null, getTilePos().getX(),getTilePos().getY()+1, getTilePos().getZ(), BetterFusionReactorConfig.bfr.reactorExplosionRadius.get(),true, Explosion.BlockInteraction.DESTROY);
             return false;
         }
         return needsPacket;

@@ -1,6 +1,7 @@
 package igentuman.bfr.common.registries;
 
 import mekanism.api.math.FloatingLong;
+import mekanism.common.block.attribute.AttributeMultiblock;
 import mekanism.common.block.attribute.Attributes;
 import mekanism.common.block.attribute.Attributes.AttributeMobSpawn;
 import mekanism.common.block.attribute.Attributes.AttributeRedstoneEmitter;
@@ -30,19 +31,22 @@ public class BfrBlockTypes {
           .createBlock(() -> BfrTileEntityTypes.FUSION_REACTOR_CONTROLLER, BfrLang.DESCRIPTION_FUSION_REACTOR_CONTROLLER)
           .withGui(() -> BfrContainerTypes.FUSION_REACTOR_CONTROLLER)
           .withSound(GeneratorsSounds.FUSION_REACTOR)
-          .with(Attributes.ACTIVE, Attributes.INVENTORY, Attributes.MULTIBLOCK, AttributeMobSpawn.WHEN_NOT_FORMED)
+            .externalMultiblock()
+          .with(Attributes.ACTIVE, Attributes.INVENTORY, AttributeMobSpawn.WHEN_NOT_FORMED)
           .build();
     // Fusion Reactor Port
     public static final BlockTypeTile<TileEntityFusionReactorPort> FUSION_REACTOR_PORT = BlockTileBuilder
           .createBlock(() -> BfrTileEntityTypes.FUSION_REACTOR_PORT, BfrLang.DESCRIPTION_FUSION_REACTOR_PORT)
-          .with(Attributes.ACTIVE, Attributes.MULTIBLOCK, AttributeMobSpawn.WHEN_NOT_FORMED)
+          .with(Attributes.ACTIVE, AttributeMobSpawn.WHEN_NOT_FORMED)
+            .externalMultiblock()
           .withComputerSupport("fusionReactorPort")
           .build();
     // Fusion Reactor Frame
     public static final BlockTypeTile<TileEntityFusionReactorBlock> FUSION_REACTOR_FRAME = BlockTileBuilder
           .createBlock(() -> BfrTileEntityTypes.FUSION_REACTOR_FRAME, BfrLang.DESCRIPTION_FUSION_REACTOR_FRAME)
           .withEnergyConfig(null, null)
-          .with(Attributes.MULTIBLOCK, AttributeMobSpawn.WHEN_NOT_FORMED)
+            .externalMultiblock()
+          .with(AttributeMobSpawn.WHEN_NOT_FORMED)
           .build();
     // Fusion Reactor Logic Adapter
     public static final BlockTypeTile<TileEntityFusionReactorLogicAdapter> FUSION_REACTOR_LOGIC_ADAPTER = BlockTileBuilder
@@ -50,17 +54,18 @@ public class BfrBlockTypes {
           .withGui(() -> BfrContainerTypes.FUSION_REACTOR_LOGIC_ADAPTER)
           .with(new AttributeRedstoneEmitter<>(tile -> tile.getRedstoneLevel()))
            .with(Attributes.REDSTONE)
-          .with(Attributes.MULTIBLOCK, AttributeMobSpawn.WHEN_NOT_FORMED)
+          .with(AttributeMobSpawn.WHEN_NOT_FORMED)
           .withComputerSupport("fusionReactorLogicAdapter")
+            .externalMultiblock()
           .build();
     // Laser Focus Matrix
     public static final BlockTypeTile<TileEntityLaserFocusMatrix> LASER_FOCUS_MATRIX = BlockTileBuilder
           .createBlock(() -> BfrTileEntityTypes.LASER_FOCUS_MATRIX, BfrLang.DESCRIPTION_LASER_FOCUS_MATRIX)
-          .with(Attributes.MULTIBLOCK, AttributeMobSpawn.NEVER)
+          .with(AttributeMultiblock.EXTERNAL, AttributeMobSpawn.NEVER)
           .build();
     // Reactor Glass
     public static final BlockTypeTile<TileEntityReactorGlass> REACTOR_GLASS = BlockTileBuilder
           .createBlock(() -> BfrTileEntityTypes.REACTOR_GLASS, BfrLang.DESCRIPTION_REACTOR_GLASS)
-          .with(Attributes.MULTIBLOCK, AttributeMobSpawn.NEVER)
+          .with(AttributeMultiblock.STRUCTURAL, AttributeMobSpawn.NEVER)
           .build();
 }
