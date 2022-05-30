@@ -26,6 +26,7 @@ public class BfrConfig {
 	}
 	public static int reactionDifficulty;
 	public static boolean reactorMeltdown;
+	public static float explosionRadius;
 
 	public static void preInit()
 	{
@@ -50,6 +51,10 @@ public class BfrConfig {
 		Property reactor_meltdown = config.get(BFR_CATEGORY, "reactor_meltdown", false, Lang.localise("gui.bfr.config.better_fusion_reactor.reactor_meltdown.comment"));
 		reactor_meltdown.setLanguageKey("gui.bfr.config.better_fusion_reactor.reactor_meltdown");
 		reactorMeltdown = reactor_meltdown.getBoolean();
+
+		Property explosion_radius = config.get(BFR_CATEGORY, "explosion_radius", 4.0, Lang.localise("gui.bfr.config.better_fusion_reactor.explosion_radius.comment"));
+		explosion_radius.setLanguageKey("gui.bfr.config.better_fusion_reactor.explosion_radius");
+		explosionRadius = (float)explosion_radius.getInt();
 
 		if (config.hasChanged()) config.save();
 	}
