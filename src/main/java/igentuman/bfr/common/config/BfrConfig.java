@@ -52,7 +52,7 @@ public class BfrConfig {
 		reactor_meltdown.setLanguageKey("gui.bfr.config.better_fusion_reactor.reactor_meltdown");
 		reactorMeltdown = reactor_meltdown.getBoolean();
 
-		Property explosion_radius = config.get(BFR_CATEGORY, "explosion_radius", 4.0, Lang.localise("gui.bfr.config.better_fusion_reactor.explosion_radius.comment"));
+		Property explosion_radius = config.get(BFR_CATEGORY, "explosion_radius", 4, Lang.localise("gui.bfr.config.better_fusion_reactor.explosion_radius.comment"));
 		explosion_radius.setLanguageKey("gui.bfr.config.better_fusion_reactor.explosion_radius");
 		explosionRadius = (float)explosion_radius.getInt();
 
