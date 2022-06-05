@@ -6,6 +6,9 @@ import java.util.Random;
 import java.util.Set;
 
 import igentuman.bfr.common.config.BfrConfig;
+import igentuman.bfr.common.recipes.BFRRecipes;
+import igentuman.bfr.common.recipes.ReactorCoolantRecipe;
+import igentuman.bfr.common.recipes.RecipeManager;
 import mekanism.generators.common.item.ItemHohlraum;
 import igentuman.bfr.common.tile.reactor.TileEntityReactorBlock;
 import igentuman.bfr.common.tile.reactor.TileEntityReactorController;
@@ -28,6 +31,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -317,6 +321,42 @@ public class BetterFusionReactor {
         return fuelBurned;
     }
 
+    private Fluid cachedOutput;
+    private Fluid cachedInput;
+    private ReactorCoolantRecipe currentRecipe;
+    private double coolantConversionRate = 1;
+
+    public Fluid getFluidOutput()
+    {
+        if(getWaterTank().getFluid() == null) {
+            return null;
+        }
+        if(cachedInput != null && cachedInput.equals(getWaterTank().getFluid().getFluid())) {
+            if(cachedOutput == null) {
+                for(ReactorCoolantRecipe recipe: BFRRecipes.REACTOR_COOLANT.getAll()) {
+                    if(cachedInput.equals(recipe.getInput().getFluidStacks().get(0).getFluid())) {
+                        cachedOutput = recipe.getOutput().getFluid();
+                        currentRecipe = recipe;
+                        caseWaterConductivity = (double) (recipe.getOutput().amount)/10000;
+                        coolantConversionRate = (double) recipe.getOutput().amount/recipe.getInput().getFluidStacks().get(0).amount;
+                    }
+                }
+            }
+        } else {
+            cachedInput = getWaterTank().getFluid().getFluid();
+            for(ReactorCoolantRecipe recipe: BFRRecipes.REACTOR_COOLANT.getAll()) {
+                if(cachedInput.equals(recipe.getInput().getFluidStacks().get(0).getFluid())) {
+                    cachedOutput = recipe.getOutput().getFluid();
+                    currentRecipe = recipe;
+                    caseWaterConductivity = (double) (recipe.getOutput().amount)/10000;
+                    coolantConversionRate = (double) recipe.getOutput().amount/recipe.getInput().getFluidStacks().get(0).amount;
+
+                }
+            }
+        }
+        return cachedOutput;
+    }
+
     public void transferHeat() {
         //Transfer from plasma to casing
         double plasmaCaseHeat = plasmaCaseConductivity * (lastPlasmaTemperature - lastCaseTemperature);
@@ -329,8 +369,12 @@ public class BetterFusionReactor {
             int waterToVaporize = (int) (steamTransferEfficiency * caseWaterHeat / enthalpyOfVaporization);
             waterToVaporize = Math.min(waterToVaporize, Math.min(getWaterTank().getFluidAmount(), getSteamTank().getCapacity() - getSteamTank().getFluidAmount()));
             if (waterToVaporize > 0) {
-                getWaterTank().drain(waterToVaporize, true);
-                getSteamTank().fill(new FluidStack(FluidRegistry.getFluid("steam"), waterToVaporize), true);
+                if(getFluidOutput() != null) {
+                    getSteamTank().fill(new FluidStack(getFluidOutput(), waterToVaporize), true);
+
+                    getWaterTank().drain((int)(waterToVaporize/coolantConversionRate), true);
+
+                }
             }
 
             caseWaterHeat = waterToVaporize * enthalpyOfVaporization / steamTransferEfficiency;

@@ -1,6 +1,7 @@
 package igentuman.bfr.common;
 
 import igentuman.bfr.common.config.BfrConfig;
+import igentuman.bfr.common.config.ReactorCoolantRecipesConfig;
 import igentuman.bfr.common.inventory.container.ContainerReactorController;
 import igentuman.bfr.common.recipes.BFRRecipes;
 import mekanism.common.base.IGuiProvider;
@@ -62,6 +63,7 @@ public class BFRCommonProxy implements IGuiProvider {
     }
     public void preInit(FMLPreInitializationEvent preEvent) {
         BfrConfig.preInit();
+        ReactorCoolantRecipesConfig.preInit();
         MinecraftForge.EVENT_BUS.register(new BFRRecipes());
     }
 

@@ -2,6 +2,8 @@ package igentuman.bfr.common.recipes;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -10,11 +12,42 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class StackHelper {
+
+    public static ItemStack getStackFromString(String name,int meta)
+    {
+        return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(name)),1, meta);
+    }
+
+    public static FluidStack getFluidStackFromString(String name,int amount)
+    {
+        return new FluidStack(FluidRegistry.getFluid(name),amount);
+    }
+
+    public static boolean fluidExists(String name) {
+        return FluidRegistry.getRegisteredFluids().keySet().contains(name.toLowerCase(Locale.ROOT));
+    }
+
+    public static boolean fluidsExist(String... names) {
+        String[] var1 = names;
+        int var2 = names.length;
+
+        for(int var3 = 0; var3 < var2; ++var3) {
+            String name = var1[var3];
+            if (!fluidExists(name)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     public static ItemStack fixItemStack(Object object) {
         if (object instanceof ItemStack) {
@@ -116,5 +149,20 @@ public class StackHelper {
 
     public static ItemStack getBucket(String fluidName) {
         return getBucket(new FluidStack(FluidRegistry.getFluid(fluidName), 1000));
+    }
+
+    public static boolean doFluidStacksMatch(FluidStack stack1, FluidStack stack2)
+    {
+        return stack1.isFluidEqual(stack2);
+    }
+
+    public static FluidStack consumeFluid(FluidStack stack, int amount)
+    {
+        if (stack.amount > amount)
+        {
+            stack.amount -= amount;
+            return stack;
+        }
+        return stack;
     }
 }

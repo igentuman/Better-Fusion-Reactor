@@ -2,6 +2,7 @@ package igentuman.bfr.common.recipes;
 
 import com.google.common.collect.Lists;
 import igentuman.bfr.common.BFR;
+import igentuman.bfr.common.config.ReactorCoolantRecipesConfig;
 import mekanism.generators.common.GeneratorsBlocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class BFRRecipes
 {
 	private static boolean initialized = false;
+	public static final RecipeManager<ReactorCoolantRecipe> REACTOR_COOLANT = new RecipeManager<>();
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void registerRecipes(RegistryEvent.Register<IRecipe> event)
@@ -38,6 +40,10 @@ public class BFRRecipes
 		removeRecipeFor(Item.getItemFromBlock(GeneratorsBlocks.Reactor),3);
 		removeRecipeFor(Item.getItemFromBlock(GeneratorsBlocks.ReactorGlass),0);
 		removeRecipeFor(Item.getItemFromBlock(GeneratorsBlocks.ReactorGlass),1);
+
+		for(ReactorCoolantRecipe recipe: ReactorCoolantRecipesConfig.getReactorCoolantRecipes()) {
+			REACTOR_COOLANT.add(recipe);
+		}
 		initialized = true;
 	}
 

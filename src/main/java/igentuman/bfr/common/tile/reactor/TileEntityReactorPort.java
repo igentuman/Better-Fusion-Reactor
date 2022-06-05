@@ -1,5 +1,6 @@
 package igentuman.bfr.common.tile.reactor;
 
+import igentuman.bfr.common.recipes.BFRRecipes;
 import io.netty.buffer.ByteBuf;
 import java.util.EnumSet;
 import javax.annotation.Nonnull;
@@ -109,12 +110,12 @@ public class TileEntityReactorPort extends TileEntityReactorBlock implements IFl
 
     @Override
     public boolean canFill(EnumFacing from, @Nonnull FluidStack fluid) {
-        return getReactor() != null && !fluidEject && fluid.getFluid() == FluidRegistry.WATER;
+        return getReactor() != null && !fluidEject && BFRRecipes.REACTOR_COOLANT.getAllowedInputs().contains(fluid.getFluid());
     }
 
     @Override
     public boolean canDrain(EnumFacing from, @Nullable FluidStack fluid) {
-        return getReactor() != null && (fluid == null || fluid.getFluid() == FluidRegistry.getFluid("steam"));
+        return getReactor() != null && (fluid == null || BFRRecipes.REACTOR_COOLANT.getAllowedOutputs().contains(fluid.getFluid()));
     }
 
     @Override
