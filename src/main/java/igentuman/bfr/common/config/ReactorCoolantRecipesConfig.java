@@ -3,7 +3,7 @@ package igentuman.bfr.common.config;
 import igentuman.bfr.common.recipes.ReactorCoolantRecipe;
 import igentuman.bfr.common.recipes.StackHelper;
 import mekanism.common.Mekanism;
-import nc.util.Lang;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.FluidStack;
@@ -48,7 +48,7 @@ public class ReactorCoolantRecipesConfig {
 				"preheated_water*1000=high_pressure_steam*1000",
 		};
 
-		coolantRecipes = config.get(RECIPES, "reactor_coolant", defaultCoolantRecipes, Lang.localise("gui.bfr.config.better_fusion_reactor.coolant.comment")).getStringList();
+		coolantRecipes = config.get(RECIPES, "reactor_coolant", defaultCoolantRecipes, I18n.translateToLocal("gui.bfr.config.better_fusion_reactor.coolant.comment")).getStringList();
 
 		if (config.hasChanged()) config.save();
 	}

@@ -1,7 +1,7 @@
 package igentuman.bfr.common.config;
 
 import igentuman.bfr.common.BFR;
-import nc.util.Lang;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -11,8 +11,6 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BfrConfig {
 
@@ -44,15 +42,15 @@ public class BfrConfig {
 	{
 		if (loadFromFile) config.load();
 
-		Property reaction_difficulty = config.get(BFR_CATEGORY, "reaction_difficulty", 10, Lang.localise("gui.bfr.config.better_fusion_reactor.reaction_difficulty.comment"),1,20);
+		Property reaction_difficulty = config.get(BFR_CATEGORY, "reaction_difficulty", 10, I18n.translateToLocal("gui.bfr.config.better_fusion_reactor.reaction_difficulty.comment"),1,20);
 		reaction_difficulty.setLanguageKey("gui.bfr.config.better_fusion_reactor.reaction_difficulty");
 		reactionDifficulty = reaction_difficulty.getInt();
 
-		Property reactor_meltdown = config.get(BFR_CATEGORY, "reactor_meltdown", false, Lang.localise("gui.bfr.config.better_fusion_reactor.reactor_meltdown.comment"));
+		Property reactor_meltdown = config.get(BFR_CATEGORY, "reactor_meltdown", false, I18n.translateToLocal("gui.bfr.config.better_fusion_reactor.reactor_meltdown.comment"));
 		reactor_meltdown.setLanguageKey("gui.bfr.config.better_fusion_reactor.reactor_meltdown");
 		reactorMeltdown = reactor_meltdown.getBoolean();
 
-		Property explosion_radius = config.get(BFR_CATEGORY, "explosion_radius", 4, Lang.localise("gui.bfr.config.better_fusion_reactor.explosion_radius.comment"));
+		Property explosion_radius = config.get(BFR_CATEGORY, "explosion_radius", 4, I18n.translateToLocal("gui.bfr.config.better_fusion_reactor.explosion_radius.comment"));
 		explosion_radius.setLanguageKey("gui.bfr.config.better_fusion_reactor.explosion_radius");
 		explosionRadius = (float)explosion_radius.getInt();
 
