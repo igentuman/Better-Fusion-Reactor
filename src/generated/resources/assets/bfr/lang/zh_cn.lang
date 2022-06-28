@@ -82,3 +82,4 @@
   "reactor.bfr.stats.steam_production": "蒸汽产量：%s mB/t",
   "tooltip.bfr.hohlraum.insufficient_fuel": "燃料不足",
   "tooltip.bfr.hohlraum.ready_for_reaction": "已准备好反应！"
+}
