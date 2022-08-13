@@ -59,8 +59,10 @@ public class ReactorCoolantRecipesConfig {
 			ReactorCoolantRecipes = new ReactorCoolantRecipe[coolantRecipes.length];
 			int i = 0;
 			for(String recipe: coolantRecipes) {
-				FluidStack[] parsedRecipe = parseCoolantRecipe(recipe);
-				ReactorCoolantRecipes[i] = new ReactorCoolantRecipe(parsedRecipe[1],parsedRecipe[0]);
+				try {
+					FluidStack[] parsedRecipe = parseCoolantRecipe(recipe);
+					ReactorCoolantRecipes[i] = new ReactorCoolantRecipe(parsedRecipe[1], parsedRecipe[0]);
+				} catch (NullPointerException e) {}
 				i++;
 
 			}

@@ -3,7 +3,7 @@
     "modid": "bfr",
     "name": "Better Fusion Reactor for Mekanism",
     "description": "Better Fusion Reactor for Mekanism Generators",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "mcversion": "${mc_version}",
     "authorList": [
       "igentuman"

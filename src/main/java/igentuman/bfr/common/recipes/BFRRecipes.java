@@ -30,10 +30,7 @@ public class BFRRecipes
 	{
 		if (initialized)
 			return;
-/*		addShapedOreRecipe(
-				new ItemStack(BFRBlocks.Reactor,1),
-				new Object[]{"   ", " SS", " SS", 'S', "ingotCopper"}
-		);*/
+
 		removeRecipeFor(Item.getItemFromBlock(GeneratorsBlocks.Reactor),0);
 		removeRecipeFor(Item.getItemFromBlock(GeneratorsBlocks.Reactor),1);
 		removeRecipeFor(Item.getItemFromBlock(GeneratorsBlocks.Reactor),2);
