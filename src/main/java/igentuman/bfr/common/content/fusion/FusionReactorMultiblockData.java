@@ -53,14 +53,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidType;
 
 public class FusionReactorMultiblockData extends MultiblockData {
 
     private static final FloatingLong MAX_ENERGY = FloatingLong.createConst(1_000_000_000);
-    private static final int MAX_WATER = 1_000 * FluidAttributes.BUCKET_VOLUME;
+    private static final int MAX_WATER = 1_000 * FluidType.BUCKET_VOLUME;
     private static final long MAX_STEAM = MAX_WATER * 100L;
-    private static final long MAX_FUEL = FluidAttributes.BUCKET_VOLUME;
+    private static final long MAX_FUEL = FluidType.BUCKET_VOLUME;
 
     public static final int MAX_INJECTION = 98;//this is the effective cap in the GUI, as text field is limited to 2 chars
     //Reaction characteristics
@@ -369,7 +369,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
         if (!reactorSlot.isEmpty()) {
             ItemStack hohlraum = reactorSlot.getStack();
             if (hohlraum.getItem() instanceof ItemHohlraum) {
-                Optional<IGasHandler> capability = hohlraum.getCapability(Capabilities.GAS_HANDLER_CAPABILITY).resolve();
+                Optional<IGasHandler> capability = hohlraum.getCapability(Capabilities.GAS_HANDLER).resolve();
                 if (capability.isPresent()) {
                     IGasHandler gasHandlerItem = capability.get();
                     if (gasHandlerItem.getTanks() > 0) {
@@ -457,7 +457,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
 
     private void vaporiseHohlraum() {
         ItemStack hohlraum = reactorSlot.getStack();
-        Optional<IGasHandler> capability = hohlraum.getCapability(Capabilities.GAS_HANDLER_CAPABILITY).resolve();
+        Optional<IGasHandler> capability = hohlraum.getCapability(Capabilities.GAS_HANDLER).resolve();
         if (capability.isPresent()) {
             IGasHandler gasHandlerItem = capability.get();
             if (gasHandlerItem.getTanks() > 0) {

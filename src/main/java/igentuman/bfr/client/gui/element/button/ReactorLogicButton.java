@@ -18,7 +18,7 @@ import mekanism.client.render.MekanismRenderer;
 import mekanism.common.util.MekanismUtils.ResourceType;
 
 
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class ReactorLogicButton<TYPE extends Enum<TYPE> & IReactorLogicMode<TYPE>> extends MekanismButton {
@@ -33,7 +33,7 @@ public class ReactorLogicButton<TYPE extends Enum<TYPE> & IReactorLogicMode<TYPE
 
     public ReactorLogicButton(IGuiWrapper gui, int x, int y, int index, @Nonnull IReactorLogic<TYPE> tile, IntSupplier indexSupplier,
                               Supplier<TYPE[]> listSupplier, Consumer<TYPE> onPress) {
-        super(gui, x, y, 128, 22, TextComponent.EMPTY, null, null);
+        super(gui, x, y, 128, 22, Component.empty(), null, null);
         this.index = index;
         this.indexSupplier = indexSupplier;
         this.modeList = listSupplier;

@@ -65,7 +65,6 @@ public class FusionReactorRecipeCategory extends BaseRecipeCategory<FusionJEIRec
     }
 
     @Nonnull
-    @Override
     public Class<? extends FusionJEIRecipe> getRecipeClass() {
         return FusionJEIRecipe.class;
     }

@@ -1,15 +1,15 @@
 package igentuman.bfr.common.datagen;
 
 import igentuman.bfr.client.datagen.BfrLangProvider;
-import igentuman.bfr.common.BetterFusionReactor;
+import mekanism.generators.common.MekanismGenerators;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
-@EventBusSubscriber(modid = BetterFusionReactor.MODID, bus = Bus.MOD)
+@EventBusSubscriber(modid = MekanismGenerators.MODID, bus = Bus.MOD)
 public class BfrDataGenerator {
 
     private BfrDataGenerator() {
@@ -17,15 +17,11 @@ public class BfrDataGenerator {
 
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
+        //BfrDataGenerator.bootstrapConfigs(MekanismGenerators.MODID);
         DataGenerator gen = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-        if (event.includeClient()) {
-            //Client side data generators
-            gen.addProvider(new BfrLangProvider(gen));
-        }
-        if (event.includeServer()) {
-            //Server side data generators
-            gen.addProvider(new BfrRecipeProvider(gen, existingFileHelper));
-        }
+        gen.addProvider(event.includeClient(), new BfrLangProvider(gen));
+        gen.addProvider(event.includeServer(), new BfrTagProvider(gen, existingFileHelper));
+        gen.addProvider(event.includeServer(), new BfrRecipeProvider(gen, existingFileHelper));
     }
 }

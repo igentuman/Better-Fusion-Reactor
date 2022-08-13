@@ -12,6 +12,7 @@ import mekanism.client.model.ModelEnergyCube.ModelEnergyCore;
 import mekanism.client.render.MekanismRenderer;
 import mekanism.client.render.tileentity.MekanismTileEntityRenderer;
 import mekanism.client.render.tileentity.RenderEnergyCube;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -65,7 +66,7 @@ public class RenderFusionReactor extends MekanismTileEntityRenderer<TileEntityFu
         matrix.scale((float) scale, (float) scale, (float) scale);
         matrix.mulPose(Vector3f.YP.rotationDegrees(ticksScaledTemp * mult1 + shift1));
         matrix.mulPose(RenderEnergyCube.coreVec.rotationDegrees(ticksScaledTemp * mult2 + shift2));
-        core.render(matrix, buffer, MekanismRenderer.FULL_LIGHT, overlayLight, color, 1);
+        core.render(matrix, buffer, LightTexture.FULL_BRIGHT, overlayLight, color, 1);
         matrix.popPose();
     }
 

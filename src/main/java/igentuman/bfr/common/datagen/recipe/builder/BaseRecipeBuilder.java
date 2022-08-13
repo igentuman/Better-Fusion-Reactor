@@ -1,40 +1,42 @@
 package igentuman.bfr.common.datagen.recipe.builder;
 
 import com.google.gson.JsonObject;
+import java.util.function.Consumer;
+
 import igentuman.bfr.common.datagen.DataGenJsonConstants;
 import mekanism.api.JsonConstants;
+import mekanism.api.annotations.NothingNullByDefault;
 import mekanism.api.datagen.recipe.MekanismRecipeBuilder;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import mekanism.common.util.RegistryUtils;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.function.Consumer;
-
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+@NothingNullByDefault
 public abstract class BaseRecipeBuilder<BUILDER extends BaseRecipeBuilder<BUILDER>> extends MekanismRecipeBuilder<BUILDER> {
 
     protected final Item result;
     protected final int count;
+    @Nullable
     private String group;
 
     protected BaseRecipeBuilder(RecipeSerializer<?> serializer, ItemLike result, int count) {
-        super(serializer.getRegistryName());
+        super(RegistryUtils.getName(serializer));
         this.result = result.asItem();
         this.count = count;
     }
 
+    @SuppressWarnings("unchecked")
     public BUILDER setGroup(String group) {
         this.group = group;
         return (BUILDER) this;
     }
 
     public void build(Consumer<FinishedRecipe> consumer) {
-        build(consumer, result.getRegistryName());
+        build(consumer, result);
     }
 
     protected abstract class BaseRecipeResult extends RecipeResult {
@@ -53,7 +55,7 @@ public abstract class BaseRecipeBuilder<BUILDER extends BaseRecipeBuilder<BUILDE
 
         protected void serializeResult(JsonObject json) {
             JsonObject jsonResult = new JsonObject();
-            jsonResult.addProperty(JsonConstants.ITEM, result.getRegistryName().toString());
+            jsonResult.addProperty(JsonConstants.ITEM, RegistryUtils.getName(result).toString());
             if (count > 1) {
                 jsonResult.addProperty(JsonConstants.COUNT, count);
             }

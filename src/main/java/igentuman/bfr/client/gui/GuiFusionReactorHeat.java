@@ -14,7 +14,6 @@ import mekanism.client.gui.element.progress.GuiProgress;
 import mekanism.client.gui.element.progress.ProgressType;
 import mekanism.client.gui.element.tab.GuiEnergyTab;
 import mekanism.client.render.MekanismRenderer;
-import mekanism.client.render.MekanismRenderer.FluidType;
 import mekanism.common.MekanismLang;
 import mekanism.common.inventory.container.tile.EmptyTileContainer;
 import mekanism.common.util.MekanismUtils;
@@ -50,7 +49,7 @@ public class GuiFusionReactorHeat extends GuiFusionReactorInfo {
         addRenderableWidget(new GuiNumberGauge(new INumberInfoHandler() {
             @Override
             public TextureAtlasSprite getIcon() {
-                return MekanismRenderer.getBaseFluidTexture(Fluids.LAVA, FluidType.STILL);
+                return MekanismRenderer.getBaseFluidTexture(Fluids.LAVA, MekanismRenderer.FluidTextureType.STILL);
             }
 
             @Override
@@ -75,7 +74,7 @@ public class GuiFusionReactorHeat extends GuiFusionReactorInfo {
         addRenderableWidget(new GuiNumberGauge(new INumberInfoHandler() {
             @Override
             public TextureAtlasSprite getIcon() {
-                return MekanismRenderer.getBaseFluidTexture(Fluids.LAVA, FluidType.STILL);
+                return MekanismRenderer.getBaseFluidTexture(Fluids.LAVA, MekanismRenderer.FluidTextureType.STILL);
             }
 
             @Override

@@ -27,6 +27,7 @@ import mekanism.common.util.text.BooleanStateDisplay.InputOutput;
 import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.registries.BfrBlocks;
+import mekanism.generators.common.GeneratorsLang;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -101,7 +102,7 @@ public class TileEntityFusionReactorPort extends TileEntityFusionReactorBlock im
         if (canHandleHeat() && getHeatCapacitorCount(side) > 0) {
             BlockEntity adj = WorldUtils.getTileEntity(getLevel(), getBlockPos().relative(side));
             if (!(adj instanceof TileEntityFusionReactorBlock)) {
-                return CapabilityUtils.getCapability(adj, Capabilities.HEAT_HANDLER_CAPABILITY, side.getOpposite()).resolve().orElse(null);
+                return CapabilityUtils.getCapability(adj, Capabilities.HEAT_HANDLER, side.getOpposite()).resolve().orElse(null);
             }
         }
         return null;
@@ -112,7 +113,7 @@ public class TileEntityFusionReactorPort extends TileEntityFusionReactorBlock im
         if (!isRemote()) {
             boolean oldMode = getActive();
             setActive(!oldMode);
-            player.sendMessage(MekanismUtils.logFormat(BfrLang.REACTOR_PORT_EJECT.translate(InputOutput.of(oldMode, true))), Util.NIL_UUID);
+            player.sendSystemMessage(MekanismUtils.logFormat(GeneratorsLang.REACTOR_PORT_EJECT.translate(InputOutput.of(oldMode, true))));
         }
         return InteractionResult.SUCCESS;
     }

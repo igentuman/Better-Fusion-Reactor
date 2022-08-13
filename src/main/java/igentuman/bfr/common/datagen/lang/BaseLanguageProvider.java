@@ -7,11 +7,14 @@ import mekanism.api.text.IHasTranslationKey;
 import mekanism.common.block.attribute.Attribute;
 import mekanism.common.block.attribute.AttributeGui;
 import mekanism.common.registration.impl.FluidRegistryObject;
+import mekanism.common.util.RegistryUtils;
 import net.minecraft.Util;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.HashCache;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.LanguageProvider;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -40,7 +43,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
         if (key instanceof IBlockProvider blockProvider) {
             Block block = blockProvider.getBlock();
             if (Attribute.has(block, AttributeGui.class) && !Attribute.get(block, AttributeGui.class).hasCustomName()) {
-                add(Util.makeDescriptionId("container", block.getRegistryName()), value);
+                add(Util.makeDescriptionId("container", RegistryUtils.getName(block)), value);
             }
         }
         add(key.getTranslationKey(), value);
@@ -49,7 +52,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
     protected void add(IBlockProvider blockProvider, String value, String containerName) {
         Block block = blockProvider.getBlock();
         if (Attribute.has(block, AttributeGui.class) && !Attribute.get(block, AttributeGui.class).hasCustomName()) {
-            add(Util.makeDescriptionId("container", block.getRegistryName()), containerName);
+            add(Util.makeDescriptionId("container", RegistryUtils.getName(block)), containerName);
             add(blockProvider.getTranslationKey(), value);
         } else {
             throw new IllegalArgumentException("Block " + blockProvider.getRegistryName() + " does not have a container name set.");
@@ -62,9 +65,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
         add(moduleData.getDescriptionTranslationKey(), description);
     }
 
-    protected void addFluid(FluidRegistryObject<?, ?, ?, ?> fluidRO, String name) {
-        add(fluidRO.getStillFluid().getAttributes().getTranslationKey(), name);
-        add(fluidRO.getFlowingFluid().getAttributes().getTranslationKey(), "Flowing " + name);
+    protected void addFluid(FluidRegistryObject<?, ?, ?, ?, ?> fluidRO, String name) {
         add(fluidRO.getBlock(), name);
         add(fluidRO.getBucket(), name + " Bucket");
     }
@@ -84,7 +85,7 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
     }
 
     @Override
-    public void run(@Nonnull HashCache cache) throws IOException {
+    public void run(@NotNull CachedOutput cache) throws IOException {
         super.run(cache);
         if (altProviders.length > 0) {
             for (ConvertibleLanguageProvider provider : altProviders) {

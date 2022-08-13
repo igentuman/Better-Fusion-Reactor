@@ -33,7 +33,7 @@ import java.util.Map;
 
 public class MekanismTagProvider extends BaseTagProvider {
 
-    public static final TagKey<EntityType<?>> PVI_COMPAT = TagUtils.createKey(ForgeRegistries.ENTITIES, new ResourceLocation("per-viam-invenire", "replace_vanilla_navigator"));
+    public static final TagKey<EntityType<?>> PVI_COMPAT = TagUtils.createKey(ForgeRegistries.ENTITY_TYPES, new ResourceLocation("per-viam-invenire", "replace_vanilla_navigator"));
     public static final TagKey<Fluid> CREATE_NO_INFINITE_FLUID = FluidTags.create(new ResourceLocation("create", "no_infinite_draining"));
 
     public MekanismTagProvider(DataGenerator gen, @Nullable ExistingFileHelper existingFileHelper) {
@@ -210,7 +210,7 @@ public class MekanismTagProvider extends BaseTagProvider {
 
     private void addWrenches() {
         addToTag(MekanismTags.Items.WRENCHES, MekanismItems.CONFIGURATOR);
-        getItemBuilder(MekanismTags.Items.TOOLS).add(MekanismTags.Items.TOOLS_WRENCH);
+        getItemBuilder(Tags.Items.TOOLS).add(MekanismTags.Items.TOOLS_WRENCH);
         addToTag(MekanismTags.Items.TOOLS_WRENCH, MekanismItems.CONFIGURATOR);
         getItemBuilder(MekanismTags.Items.CONFIGURATORS).add(MekanismTags.Items.WRENCHES, MekanismTags.Items.TOOLS_WRENCH);
     }
@@ -443,8 +443,9 @@ public class MekanismTagProvider extends BaseTagProvider {
         addToTag(MekanismTags.Fluids.HYDROFLUORIC_ACID, MekanismFluids.HYDROFLUORIC_ACID);
         addToTag(MekanismTags.Fluids.URANIUM_OXIDE, MekanismFluids.URANIUM_OXIDE);
         addToTag(MekanismTags.Fluids.URANIUM_HEXAFLUORIDE, MekanismFluids.URANIUM_HEXAFLUORIDE);
+        addToTag(Tags.Fluids.GASEOUS, MekanismFluids.STEAM);
         //Prevent all our fluids from being duped by create
-        for (FluidRegistryObject<?, ?, ?, ?> fluid : MekanismFluids.FLUIDS.getAllFluids()) {
+        for (FluidRegistryObject<?, ?, ?, ?, ?> fluid : MekanismFluids.FLUIDS.getAllFluids()) {
             addToTag(CREATE_NO_INFINITE_FLUID, fluid);
         }
     }
