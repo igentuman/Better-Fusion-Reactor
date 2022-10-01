@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "bfr:reactor_glass",
+    "count": 4
+  },
+  "pattern": [
+    "SIS",
+    "IGI",
+    "SIS"
+  ],
+  "key": {
+    "G": {
+      "tag": "forge:glass"
+    },
+    "I": {
+      "tag": "forge:ingots/lead"
+    },
+    "S": {
+      "item": "mekanism:enriched_iron"
+    }
+  }
+}
