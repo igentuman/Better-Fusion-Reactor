@@ -14,6 +14,7 @@ import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorBlock;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorPort;
+import mekanism.generators.common.registries.GeneratorsBlockTypes;
 import net.minecraft.world.level.block.Block;
 
 

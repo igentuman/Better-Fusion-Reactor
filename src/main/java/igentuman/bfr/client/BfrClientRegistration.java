@@ -2,10 +2,10 @@ package igentuman.bfr.client;
 
 import igentuman.bfr.client.gui.*;
 import igentuman.bfr.client.render.RenderFusionReactor;
-import igentuman.bfr.common.registries.BfrTileEntityTypes;
-import mekanism.client.ClientRegistrationUtil;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.registries.BfrContainerTypes;
+import igentuman.bfr.common.registries.BfrTileEntityTypes;
+import mekanism.client.ClientRegistrationUtil;
 import net.minecraft.core.Registry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -23,7 +23,7 @@ public class BfrClientRegistration {
 
     @SubscribeEvent
     public static void init(FMLClientSetupEvent event) {
-
+        //ClientRegistrationUtil.setRenderLayer(RenderType.translucent(), BfrBlocks.LASER_FOCUS_MATRIX, BfrBlocks.REACTOR_GLASS);
     }
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {

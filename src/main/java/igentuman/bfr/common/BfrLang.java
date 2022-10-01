@@ -10,7 +10,11 @@ public enum BfrLang implements ILangEntry {
     POWER("gui", "power"),
 
 
+    REACTOR_LASER_READY_BUTTON("reactor", "reactor_laser_ready_button"),
     FUSION_REACTOR("reactor", "fusion_reactor"),
+    REACTOR_HELP1("reactor", "reactor_help1"),
+    REACTOR_HELP2("reactor", "reactor_helps2"),
+    REACTOR_HELP3("reactor", "reactor_help3"),
     REACTOR_CR("reactor", "efficiency.cr"),
     REACTOR_CURRENT_REACTIVITY("reactor", "efficiency.current_reactivity"),
     REACTOR_BUTTON_REACTIVITY_UP("reactor", "efficiency.reactivity_up_button"),

@@ -1,5 +1,7 @@
 package igentuman.bfr.common.registries;
 
+import igentuman.bfr.common.tile.TileEntityReactorGlass;
+import igentuman.bfr.common.tile.fusion.*;
 import mekanism.api.math.FloatingLong;
 import mekanism.common.block.attribute.AttributeMultiblock;
 import mekanism.common.block.attribute.Attributes;
@@ -8,23 +10,14 @@ import mekanism.common.block.attribute.Attributes.AttributeRedstoneEmitter;
 import mekanism.common.content.blocktype.BlockTypeTile;
 import mekanism.common.content.blocktype.BlockTypeTile.BlockTileBuilder;
 import igentuman.bfr.common.BfrLang;
-import igentuman.bfr.common.tile.TileEntityReactorGlass;
-import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorBlock;
-import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
-import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
-import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorPort;
-import igentuman.bfr.common.tile.fusion.TileEntityLaserFocusMatrix;
 import mekanism.generators.common.registries.GeneratorsSounds;
+
 
 public class BfrBlockTypes {
 
     private BfrBlockTypes() {
     }
 
-    //TODO: Do this in a cleaner way
-    private static final FloatingLong STORAGE = FloatingLong.createConst(160_000);
-    private static final FloatingLong STORAGE2 = FloatingLong.createConst(200_000);
-    private static final FloatingLong SOLAR_STORAGE = FloatingLong.createConst(96_000);
 
     // Fusion Reactor Controller
     public static final BlockTypeTile<TileEntityFusionReactorController> FUSION_REACTOR_CONTROLLER = BlockTileBuilder
@@ -60,12 +53,12 @@ public class BfrBlockTypes {
           .build();
     // Laser Focus Matrix
     public static final BlockTypeTile<TileEntityLaserFocusMatrix> LASER_FOCUS_MATRIX = BlockTileBuilder
-          .createBlock(() -> BfrTileEntityTypes.LASER_FOCUS_MATRIX, BfrLang.DESCRIPTION_LASER_FOCUS_MATRIX)
-          .with(AttributeMultiblock.EXTERNAL, AttributeMobSpawn.NEVER)
-          .build();
+            .createBlock(() -> BfrTileEntityTypes.LASER_FOCUS_MATRIX, BfrLang.DESCRIPTION_LASER_FOCUS_MATRIX)
+            .with(AttributeMultiblock.EXTERNAL, AttributeMobSpawn.NEVER)
+            .build();
     // Reactor Glass
     public static final BlockTypeTile<TileEntityReactorGlass> REACTOR_GLASS = BlockTileBuilder
-          .createBlock(() -> BfrTileEntityTypes.REACTOR_GLASS, BfrLang.DESCRIPTION_REACTOR_GLASS)
-          .with(AttributeMultiblock.STRUCTURAL, AttributeMobSpawn.NEVER)
-          .build();
+            .createBlock(() -> BfrTileEntityTypes.REACTOR_GLASS, BfrLang.DESCRIPTION_REACTOR_GLASS)
+            .with(AttributeMultiblock.STRUCTURAL, AttributeMobSpawn.NEVER)
+            .build();
 }

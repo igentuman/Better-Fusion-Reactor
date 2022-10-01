@@ -31,12 +31,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
 
     private MekanismButton reactivityUpButton;
     private MekanismButton reactivityDownButton;
+    private MekanismButton reactorLaserReadyButton;
+    private ArrayList<String> help = new ArrayList<>();
+    private ArrayList<String> laser = new ArrayList<>();
 
     public GuiFusionReactorEfficiency(EmptyTileContainer<TileEntityFusionReactorController> container, Inventory inv, Component title) {
         super(container, inv, title);
@@ -100,6 +104,13 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
         addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.FUEL));
         addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.STAT));
 
+        help.add(BfrLang.REACTOR_HELP1.translate().toString());
+        help.add(BfrLang.REACTOR_HELP2.translate().toString());
+        help.add(BfrLang.REACTOR_HELP3.translate().toString());
+
+        laser.add(BfrLang.REACTOR_LASER_MIN_ENERGY.translate(EnergyDisplay.of(FloatingLong.create(multiblock.laserShootMinEnergy))).toString());
+        laser.add(BfrLang.REACTOR_LASER_MIN_ENERGY_DESCR.translate().toString());
+
         reactivityUpButton = addRenderableWidget(new TranslationButton(this, 8, 56, 20, 20,
                 BfrLang.REACTOR_BUTTON_REACTIVITY_UP,
                 () -> BetterFusionReactor.packetHandler().sendToServer(new PacketBfrGuiInteract(PacketBfrGuiInteract.BfrGuiInteraction.REACTIVITY_UP, tile))));
@@ -107,6 +118,11 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
         reactivityDownButton = addRenderableWidget(new TranslationButton(this, 8, 90, 20, 20,
                 BfrLang.REACTOR_BUTTON_REACTIVITY_DOWN,
                 () -> BetterFusionReactor.packetHandler().sendToServer(new PacketBfrGuiInteract(PacketBfrGuiInteract.BfrGuiInteraction.REACTIVITY_DOWN, tile))));
+
+        reactorLaserReadyButton = addRenderableWidget(new TranslationButton(this, 8, 130, 120, 16,
+                BfrLang.REACTOR_LASER_READY_BUTTON,
+                null
+                ));
     }
 
     @Override
@@ -119,6 +135,10 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
         FusionReactorMultiblockData multiblock = tile.getMultiblock();
         reactivityUpButton.active = multiblock.getAdjustment() == 0;
         reactivityDownButton.active = multiblock.getAdjustment() == 0;
+        reactorLaserReadyButton.active = false;
+        if(multiblock.getLaserShootCountdown() > 0) {
+            reactorLaserReadyButton.visible = false;
+        }
     }
 
     @Override
@@ -131,11 +151,15 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
         drawString(matrix, BfrLang.REACTOR_EF.translate(), 102, 35, titleTextColor());
         drawString(matrix, BfrLang.REACTOR_ER.translateColored(EnumColor.DARK_RED), 142, 35, titleTextColor());
 
+        drawString(matrix, Component.literal(String.format("%.1f",multiblock.getCurrentReactivity())), 30, 45, titleTextColor());
+        drawString(matrix, Component.literal(String.format("%.1f",multiblock.getTargetReactivity())), 64, 45, titleTextColor());
+        drawString(matrix, Component.literal(String.format("%.1f",multiblock.getEfficiency())), 102, 45, titleTextColor());
+        drawString(matrix, Component.literal(String.format("%.1f",multiblock.getErrorLevel())), 142, 45, titleTextColor());
+
         if (multiblock.isFormed()) {
             drawTextScaledBound(matrix, BfrLang.REACTOR_HEAT_MULTIPLIER.translate(String.format("%.2f",multiblock.getKt()*10)), 8, 120, titleTextColor(), 156);
             if(multiblock.getLaserShootCountdown() == 0) {
-                drawTextScaledBound(matrix, BfrLang.REACTOR_LASER_MIN_ENERGY.translate(EnergyDisplay.of(FloatingLong.create(multiblock.laserShootMinEnergy))), 8, 130, titleTextColor(), 156);
-                drawTextScaledBound(matrix, BfrLang.REACTOR_LASER_MIN_ENERGY_DESCR.translate(), 8, 140, titleTextColor(), 156);
+                reactorLaserReadyButton.visible = true;
             }
         }
         super.drawForegroundText(matrix, mouseX, mouseY);

@@ -40,6 +40,7 @@ public class BfrLangProvider extends BaseLanguageProvider {
         add(BfrLang.REACTOR_CR, "CR");
         add(BfrLang.REACTOR_TR, "TR");
         add(BfrLang.REACTOR_EF, "EF");
+        add(BfrLang.REACTOR_LASER_READY_BUTTON, "Ready for Laser Impulse");
         add(BfrLang.REACTOR_BUTTON_REACTIVITY_UP, "+5");
         add(BfrLang.REACTOR_BUTTON_REACTIVITY_DOWN, "-5");
         add(BfrLang.REACTOR_HEAT_MULTIPLIER, "Heat Multiplier: %1$s");

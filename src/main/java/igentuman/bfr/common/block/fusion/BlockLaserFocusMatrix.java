@@ -1,10 +1,12 @@
 package igentuman.bfr.common.block.fusion;
 
 import javax.annotation.Nonnull;
-import mekanism.common.block.basic.BlockStructuralGlass;
-import mekanism.common.block.prefab.BlockBasicMultiblock;
+
 import igentuman.bfr.common.registries.BfrBlockTypes;
 import igentuman.bfr.common.tile.fusion.TileEntityLaserFocusMatrix;
+import mekanism.common.block.basic.BlockStructuralGlass;
+import mekanism.common.block.prefab.BlockBasicMultiblock;
+import mekanism.common.block.states.BlockStateHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -21,7 +23,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class BlockLaserFocusMatrix extends BlockBasicMultiblock<TileEntityLaserFocusMatrix> {
 
     public BlockLaserFocusMatrix() {
-        super(BfrBlockTypes.LASER_FOCUS_MATRIX, BlockBehaviour.Properties.of(Material.GLASS).strength(3.5F, 4.8F).noOcclusion());
+        super(BfrBlockTypes.LASER_FOCUS_MATRIX, BlockBehaviour.Properties.of(Material.GLASS).strength(3.5F, 4.8F).noOcclusion()
+                .isSuffocating(BlockStateHelper.NEVER_PREDICATE).isViewBlocking(BlockStateHelper.NEVER_PREDICATE));
     }
 
     @Override

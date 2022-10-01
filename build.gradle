@@ -1,19 +1,5 @@
-import com.modrinth.minotaur.TaskModrinthUpload
-import com.modrinth.minotaur.dependencies.ModDependency
-import com.modrinth.minotaur.dependencies.VersionDependency
-import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
-
-import net.minecraftforge.gradle.common.util.RunConfig
-import net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace
-
 plugins {
-    id 'org.ajoberstar.grgit' version '5.0.0'
-    id "com.matthewprenger.cursegradle" version '1.4.0'
-    id "com.modrinth.minotaur" version "2.+"
-    id 'java'
     id 'eclipse'
-    id 'idea'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '5.1.+'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
@@ -26,17 +12,6 @@ wrapper {
 }
 
 defaultTasks 'build'
-
-idea {
-    module {
-        // For some reason this is necessary for IDEA 2014 workspaces to recognize assets
-        inheritOutputDirs = true
-        //Exclude directories from being managed
-        for (String excludeDirName in ["run", "out", "logs", "gradle"]) {
-            excludeDirs.add(new File(projectDir, excludeDirName))
-        }
-    }
-}
 
 ext {
     versionProperties = ["version"       : mod_version, "mc_version": minecraft_version_range, "forge_version": forge_version_range,
@@ -53,18 +28,14 @@ ext {
 group = "igentuman.bfr"
 version = "${minecraft_version}-${mod_version}"
 archivesBaseName = "BetterFusionReactor"
-java {
-    toolchain.languageVersion = JavaLanguageVersion.of("${java_version}")
-    withSourcesJar()
-}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 minecraft {
-    if (mappings_channel == "parchment_previous") {
-        mappings channel: 'parchment', version: "${previous_minecraft_version}-${mappings_version}-${minecraft_version}"
-    } else {
-        mappings channel: "${mappings_channel}", version: "${mappings_version}"
-    }
+    mappings channel: 'parchment', version: '2022.08.14-1.19.2'
+    accessTransformers.from(file('src/main/resources/META-INF/accesstransformer.cfg'))
     runs {
         client {
             workingDirectory project.file('run')
@@ -150,70 +121,23 @@ repositories {
             includeGroup 'mekanism'
         }
     }
-
-    whenObjectAdded {//ForgeGradle adds these in an afterEvaluate, so we need to catch them as they're added and exclude mod artifacts/groups
-        if (it instanceof MavenArtifactRepository) {
-            def url = it.url.toString()
-            if (url == 'https://maven.minecraftforge.net/' || url == 'https://libraries.minecraft.net/' || url == 'https://repo.maven.apache.org/maven2/') {
-                try {
-                    it.content {
-                        excludeGroup 'curse.maven'
-                        excludeGroup 'mezz.jei'
-                        excludeGroup 'mcjty.theoneprobe'
-                        excludeGroup 'team.chisel.ctm'
-                        excludeGroup 'appeng'
-                        excludeGroup 'com.blamejared.crafttweaker'
-                        excludeGroup 'com.blamejared.jeitweaker'
-                        excludeGroup 'top.theillusivec4.curios'
-                    }
-                    println("Adding exclusions to ${url}")
-                } catch (Exception ignored) {
-                    //oh well
-                }
-            }
-        }
-    }
 }
 
-//TODO - 1.19: Re-enable dependencies as they update
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-
-    testImplementation "org.quicktheories:quicktheories:${quicktheories_version}"
     implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
     implementation fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
-    //TODO - 1.19.2: Update when this updates to 1.19.2
-    compileOnly fg.deobf("mezz.jei:jei-${previous_minor_minecraft_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${previous_minor_minecraft_version}-forge-api:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${previous_minor_minecraft_version}-forge:${jei_version}")
-
-    //TODO: Re-enable in dev once https://github.com/Chisel-Team/ConnectedTexturesMod/issues/174 is fixed
-    //runtimeOnly fg.deobf("team.chisel.ctm:CTM:${minecraft_version}-${ctm_version}")
-
-    //TODO: Remove having to specify these as non transitive once https://github.com/McJtyMods/TheOneProbe/issues/548 is fixed
+    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
+    // at runtime, use the full JEI jar for Forge
+    runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
     compileOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}:api") {
         transitive = false
     }
     runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}") {
         transitive = false
     }
-    compileOnly fg.deobf("curse.maven:jade-api-324717:${jade_api_id}")
-    runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
-    compileOnly fg.deobf("curse.maven:wthit-455982:${wthit_id}")
-
-    compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${previous_minecraft_version}:${crafttweaker_version}")
-    compileOnly fg.deobf("com.blamejared.jeitweaker:JEITweaker-${previous_minecraft_version}:${jeitweaker_version}")
-
-    //Mods we have dependencies on but don't bother loading into the dev environment
-    compileOnly fg.deobf("curse.maven:projecte-api-226410:${projecte_api_id}")
-    compileOnly fg.deobf("curse.maven:flux-networks-248020:${flux_networks_id}")
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${previous_minor_minecraft_version}-${curios_version}:api")
-    compileOnly fg.deobf("curse.maven:opencomputers2-437654:${oc2_id}")
-    def cc = fg.deobf("curse.maven:cc-tweaked-282001:${cc_tweaked_id}")
-    compileOnly cc
-    testRuntimeOnly cc
-
 }
 
 jar {
