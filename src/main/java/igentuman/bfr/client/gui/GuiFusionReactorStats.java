@@ -14,11 +14,10 @@ import mekanism.common.util.text.EnergyDisplay;
 import mekanism.common.util.text.TextUtils;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab.FusionReactorTab;
-import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
+import mekanism.generators.common.GeneratorsLang;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class GuiFusionReactorStats extends GuiFusionReactorInfo {
@@ -33,7 +32,7 @@ public class GuiFusionReactorStats extends GuiFusionReactorInfo {
         addRenderableWidget(new GuiEnergyTab(this, () -> {
             FusionReactorMultiblockData multiblock = tile.getMultiblock();
             return Arrays.asList(MekanismLang.STORING.translate(EnergyDisplay.of(multiblock.energyContainer)),
-                  BfrLang.PRODUCING_AMOUNT.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, true))));
+                  GeneratorsLang.PRODUCING_AMOUNT.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, true))));
         }));
         addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.HEAT));
         addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.FUEL));
@@ -42,31 +41,31 @@ public class GuiFusionReactorStats extends GuiFusionReactorInfo {
 
     @Override
     protected void drawForegroundText(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
-        drawTitleText(matrix, BfrLang.FUSION_REACTOR.translate(), titleLabelY);
+        drawTitleText(matrix, GeneratorsLang.FUSION_REACTOR.translate(), titleLabelY);
         FusionReactorMultiblockData multiblock = tile.getMultiblock();
         if (multiblock.isFormed()) {
-            drawString(matrix, BfrLang.REACTOR_PASSIVE.translateColored(EnumColor.DARK_GREEN), 6, 26, titleTextColor());
-            drawTextScaledBound(matrix, BfrLang.REACTOR_MIN_INJECTION.translate(multiblock.getMinInjectionRate(false)), 16, 36, titleTextColor(), 156);
-            drawTextScaledBound(matrix, BfrLang.REACTOR_IGNITION.translate(MekanismUtils.getTemperatureDisplay(multiblock.getIgnitionTemperature(false),
+            drawString(matrix, GeneratorsLang.REACTOR_PASSIVE.translateColored(EnumColor.DARK_GREEN), 6, 26, titleTextColor());
+            drawTextScaledBound(matrix, GeneratorsLang.REACTOR_MIN_INJECTION.translate(multiblock.getMinInjectionRate(false)), 16, 36, titleTextColor(), 156);
+            drawTextScaledBound(matrix, GeneratorsLang.REACTOR_IGNITION.translate(MekanismUtils.getTemperatureDisplay(multiblock.getIgnitionTemperature(false),
                   TemperatureUnit.KELVIN, true)), 16, 46, titleTextColor(), 156);
-            drawTextScaledBound(matrix, BfrLang.REACTOR_MAX_PLASMA.translate(MekanismUtils.getTemperatureDisplay(multiblock.getMaxPlasmaTemperature(false),
+            drawTextScaledBound(matrix, GeneratorsLang.REACTOR_MAX_PLASMA.translate(MekanismUtils.getTemperatureDisplay(multiblock.getMaxPlasmaTemperature(false),
                   TemperatureUnit.KELVIN, true)), 16, 56, titleTextColor(), 156);
-            drawTextScaledBound(matrix, BfrLang.REACTOR_MAX_CASING.translate(MekanismUtils.getTemperatureDisplay(multiblock.getMaxCasingTemperature(false),
+            drawTextScaledBound(matrix, GeneratorsLang.REACTOR_MAX_CASING.translate(MekanismUtils.getTemperatureDisplay(multiblock.getMaxCasingTemperature(false),
                   TemperatureUnit.KELVIN, true)), 16, 66, titleTextColor(), 156);
-            drawTextScaledBound(matrix, BfrLang.REACTOR_PASSIVE_RATE.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, false))),
+            drawTextScaledBound(matrix, GeneratorsLang.REACTOR_PASSIVE_RATE.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, false))),
                   16, 76, titleTextColor(), 156);
 
-            drawString(matrix, BfrLang.REACTOR_ACTIVE.translateColored(EnumColor.DARK_BLUE), 6, 92, titleTextColor());
-            drawTextScaledBound(matrix, BfrLang.REACTOR_MIN_INJECTION.translate(multiblock.getMinInjectionRate(true)), 16, 102, titleTextColor(), 156);
-            drawTextScaledBound(matrix, BfrLang.REACTOR_IGNITION.translate(MekanismUtils.getTemperatureDisplay(multiblock.getIgnitionTemperature(true),
+            drawString(matrix, GeneratorsLang.REACTOR_ACTIVE.translateColored(EnumColor.DARK_BLUE), 6, 92, titleTextColor());
+            drawTextScaledBound(matrix, GeneratorsLang.REACTOR_MIN_INJECTION.translate(multiblock.getMinInjectionRate(true)), 16, 102, titleTextColor(), 156);
+            drawTextScaledBound(matrix, GeneratorsLang.REACTOR_IGNITION.translate(MekanismUtils.getTemperatureDisplay(multiblock.getIgnitionTemperature(true),
                   TemperatureUnit.KELVIN, true)), 16, 112, titleTextColor(), 156);
-            drawTextScaledBound(matrix, BfrLang.REACTOR_MAX_PLASMA.translate(MekanismUtils.getTemperatureDisplay(multiblock.getMaxPlasmaTemperature(true),
+            drawTextScaledBound(matrix, GeneratorsLang.REACTOR_MAX_PLASMA.translate(MekanismUtils.getTemperatureDisplay(multiblock.getMaxPlasmaTemperature(true),
                   TemperatureUnit.KELVIN, true)), 16, 122, titleTextColor(), 156);
-            drawTextScaledBound(matrix, BfrLang.REACTOR_MAX_CASING.translate(MekanismUtils.getTemperatureDisplay(multiblock.getMaxCasingTemperature(true),
+            drawTextScaledBound(matrix, GeneratorsLang.REACTOR_MAX_CASING.translate(MekanismUtils.getTemperatureDisplay(multiblock.getMaxCasingTemperature(true),
                   TemperatureUnit.KELVIN, true)), 16, 132, titleTextColor(), 156);
-            drawTextScaledBound(matrix, BfrLang.REACTOR_PASSIVE_RATE.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(true, false))),
+            drawTextScaledBound(matrix, GeneratorsLang.REACTOR_PASSIVE_RATE.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(true, false))),
                   16, 142, titleTextColor(), 156);
-            drawTextScaledBound(matrix, BfrLang.REACTOR_STEAM_PRODUCTION.translate(TextUtils.format(multiblock.getSteamPerTick(false))),
+            drawTextScaledBound(matrix, GeneratorsLang.REACTOR_STEAM_PRODUCTION.translate(TextUtils.format(multiblock.getSteamPerTick(false))),
                   16, 152, titleTextColor(), 156);
         }
         super.drawForegroundText(matrix, mouseX, mouseY);

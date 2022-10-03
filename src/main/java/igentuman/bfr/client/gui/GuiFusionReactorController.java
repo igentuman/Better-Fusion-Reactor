@@ -15,6 +15,7 @@ import igentuman.bfr.client.gui.element.GuiFusionReactorTab.FusionReactorTab;
 import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
+import mekanism.generators.common.GeneratorsLang;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -33,7 +34,7 @@ public class GuiFusionReactorController extends GuiMekanismTile<TileEntityFusion
             addRenderableWidget(new GuiEnergyTab(this, () -> {
                 FusionReactorMultiblockData multiblock = tile.getMultiblock();
                 return Arrays.asList(MekanismLang.STORING.translate(EnergyDisplay.of(multiblock.energyContainer)),
-                      BfrLang.PRODUCING_AMOUNT.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, true))));
+                      GeneratorsLang.PRODUCING_AMOUNT.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, true))));
             }));
             addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.HEAT));
             addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.FUEL));
@@ -44,7 +45,7 @@ public class GuiFusionReactorController extends GuiMekanismTile<TileEntityFusion
 
     @Override
     protected void drawForegroundText(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
-        drawTitleText(matrix, BfrLang.FUSION_REACTOR.translate(), titleLabelY);
+        drawTitleText(matrix, GeneratorsLang.FUSION_REACTOR.translate(), titleLabelY);
         drawString(matrix, MekanismLang.MULTIBLOCK_FORMED.translate(), 8, 16, titleTextColor());
         super.drawForegroundText(matrix, mouseX, mouseY);
     }

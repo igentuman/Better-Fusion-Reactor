@@ -13,18 +13,6 @@ wrapper {
 
 defaultTasks 'build'
 
-ext {
-    versionProperties = ["version"       : mod_version, "mc_version": minecraft_version_range, "forge_version": forge_version_range,
-                         "loader_version": loader_version_range, "crafttweaker_version": crafttweaker_version_range, "jei_version": jei_version_range,
-                         "curios_version": curios_version_range]
-    //Fallback pack format is the larger of the resource and data pack formats
-    packProperties = ["pack_format"         : Math.max(Integer.parseInt(resource_pack_format), Integer.parseInt(data_pack_format)),
-                      "resource_pack_format": resource_pack_format, "data_pack_format": data_pack_format]
-    jsonPatterns = ["**/*.json", "**/*.mcmeta"]
-    secondaryModules = ['additions', 'defense', 'generators', 'tools']
-    extraTypes = ['datagen', 'gameTest']
-}
-
 group = "igentuman.bfr"
 version = "${minecraft_version}-${mod_version}"
 archivesBaseName = "BetterFusionReactor"
@@ -63,7 +51,6 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             args '--mod', 'bfr', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
                 bfr {

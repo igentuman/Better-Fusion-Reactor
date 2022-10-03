@@ -78,7 +78,7 @@ public class BetterFusionReactor implements IModModule {
         packetHandler.initialize();
 
         event.enqueueWork(() -> {
-            BuildCommand.register("fusion", BfrLang.FUSION_REACTOR, new FusionReactorBuilder());
+            BuildCommand.register("fusion", GeneratorsLang.FUSION_REACTOR, new FusionReactorBuilder());
         });
 
 

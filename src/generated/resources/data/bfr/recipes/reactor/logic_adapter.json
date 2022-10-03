@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "F": {
+      "item": "bfr:fusion_reactor_frame"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "pattern": [
+    " R ",
+    "RFR",
+    " R "
+  ],
+  "result": {
+    "item": "bfr:fusion_reactor_logic_adapter"
+  }
+}

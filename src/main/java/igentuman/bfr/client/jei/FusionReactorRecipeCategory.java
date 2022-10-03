@@ -46,7 +46,7 @@ public class FusionReactorRecipeCategory extends BaseRecipeCategory<FusionJEIRec
     //private final GuiGauge<?> wasteTank;
 
     public FusionReactorRecipeCategory(IGuiHelper helper, MekanismJEIRecipeType<FusionJEIRecipe> recipeType) {
-        super(helper, recipeType, BfrLang.FUSION_REACTOR.translate(), createIcon(helper, iconRL), 6, 13, 182, 60);
+        super(helper, recipeType, GeneratorsLang.FUSION_REACTOR.translate(), createIcon(helper, iconRL), 6, 13, 182, 60);
         addElement(new GuiInnerScreen(this, 45, 17, 105, 56, () -> Arrays.asList(
               //MekanismLang.STATUS.translate(EnumColor.BRIGHT_GREEN, ActiveDisabled.of(true)),
               GeneratorsLang.GAS_BURN_RATE.translate(1.0),

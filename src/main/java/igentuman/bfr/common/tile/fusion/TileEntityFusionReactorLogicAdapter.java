@@ -19,6 +19,7 @@ import igentuman.bfr.common.base.IReactorLogicMode;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.registries.BfrBlocks;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter.FusionReactorLogic;
+import mekanism.generators.common.GeneratorsLang;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -206,9 +207,9 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
     //End methods IComputerTile
 
     public enum FusionReactorLogic implements IReactorLogicMode<FusionReactorLogic>, IHasTranslationKey {
-        READY(0, BfrLang.REACTOR_LOGIC_READY, BfrLang.DESCRIPTION_REACTOR_READY, new ItemStack(Items.REDSTONE), "out"),
-        CAPACITY(1, BfrLang.REACTOR_LOGIC_CAPACITY, BfrLang.DESCRIPTION_REACTOR_CAPACITY, new ItemStack(Items.REDSTONE), "out"),
-        DEPLETED(2, BfrLang.REACTOR_LOGIC_DEPLETED, BfrLang.DESCRIPTION_REACTOR_DEPLETED, new ItemStack(Items.REDSTONE), "out"),
+        READY(0, GeneratorsLang.REACTOR_LOGIC_READY, GeneratorsLang.DESCRIPTION_REACTOR_READY, new ItemStack(Items.REDSTONE), "out"),
+        CAPACITY(1, GeneratorsLang.REACTOR_LOGIC_CAPACITY, GeneratorsLang.DESCRIPTION_REACTOR_CAPACITY, new ItemStack(Items.REDSTONE), "out"),
+        DEPLETED(2, GeneratorsLang.REACTOR_LOGIC_DEPLETED, GeneratorsLang.DESCRIPTION_REACTOR_DEPLETED, new ItemStack(Items.REDSTONE), "out"),
         EFFICIENCY(3, BfrLang.REACTOR_LOGIC_EFFICIENCY, BfrLang.DESCRIPTION_REACTOR_EFFICIENCY, new ItemStack(Items.REDSTONE), "out"),
         ERROR_LEVEL(4, BfrLang.REACTOR_LOGIC_ERROR_LEVEL, BfrLang.DESCRIPTION_REACTOR_ERROR_LEVEL, new ItemStack(Items.REDSTONE), "out"),
         INJECTION_UP(5, BfrLang.REACTOR_LOGIC_INJECTION_UP, BfrLang.DESCRIPTION_REACTOR_INJECTION_UP, new ItemStack(Items.REDSTONE), "in"),

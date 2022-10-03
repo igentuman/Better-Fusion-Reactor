@@ -22,9 +22,9 @@ import mekanism.common.util.UnitDisplayUtils.TemperatureUnit;
 import mekanism.common.util.text.EnergyDisplay;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab.FusionReactorTab;
-import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
+import mekanism.generators.common.GeneratorsLang;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -44,7 +44,7 @@ public class GuiFusionReactorHeat extends GuiFusionReactorInfo {
         addRenderableWidget(new GuiEnergyTab(this, () -> {
             FusionReactorMultiblockData multiblock = tile.getMultiblock();
             return List.of(MekanismLang.STORING.translate(EnergyDisplay.of(multiblock.energyContainer)),
-                    BfrLang.PRODUCING_AMOUNT.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, true))));
+                    GeneratorsLang.PRODUCING_AMOUNT.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, true))));
         }));
         addRenderableWidget(new GuiNumberGauge(new INumberInfoHandler() {
             @Override
@@ -64,7 +64,7 @@ public class GuiFusionReactorHeat extends GuiFusionReactorInfo {
 
             @Override
             public Component getText() {
-                return BfrLang.REACTOR_PLASMA.translate(MekanismUtils.getTemperatureDisplay(getLevel(), TemperatureUnit.KELVIN, true));
+                return GeneratorsLang.REACTOR_PLASMA.translate(MekanismUtils.getTemperatureDisplay(getLevel(), TemperatureUnit.KELVIN, true));
             }
         }, GaugeType.STANDARD, this, 7, 50));
         addRenderableWidget(new GuiProgress(() -> {
@@ -89,7 +89,7 @@ public class GuiFusionReactorHeat extends GuiFusionReactorInfo {
 
             @Override
             public Component getText() {
-                return BfrLang.REACTOR_CASE.translate(MekanismUtils.getTemperatureDisplay(getLevel(), TemperatureUnit.KELVIN, true));
+                return GeneratorsLang.REACTOR_CASE.translate(MekanismUtils.getTemperatureDisplay(getLevel(), TemperatureUnit.KELVIN, true));
             }
         }, GaugeType.STANDARD, this, 61, 50));
         addRenderableWidget(new GuiProgress(() -> tile.getMultiblock().getCaseTemp() > 0, ProgressType.SMALL_RIGHT, this, 83, 61));
@@ -108,7 +108,7 @@ public class GuiFusionReactorHeat extends GuiFusionReactorInfo {
 
     @Override
     protected void drawForegroundText(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
-        drawTitleText(matrix, BfrLang.FUSION_REACTOR.translate(), titleLabelY);
+        drawTitleText(matrix, GeneratorsLang.FUSION_REACTOR.translate(), titleLabelY);
         super.drawForegroundText(matrix, mouseX, mouseY);
     }
 }

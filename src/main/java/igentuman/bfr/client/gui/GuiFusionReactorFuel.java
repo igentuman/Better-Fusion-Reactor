@@ -16,11 +16,11 @@ import mekanism.common.util.text.EnergyDisplay;
 import mekanism.common.util.text.InputValidator;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab.FusionReactorTab;
-import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.network.to_server.PacketBfrGuiInteract;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
+import mekanism.generators.common.GeneratorsLang;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -38,7 +38,7 @@ public class GuiFusionReactorFuel extends GuiFusionReactorInfo {
         addRenderableWidget(new GuiEnergyTab(this, () -> {
             FusionReactorMultiblockData multiblock = tile.getMultiblock();
             return Arrays.asList(MekanismLang.STORING.translate(EnergyDisplay.of(multiblock.energyContainer)),
-                  BfrLang.PRODUCING_AMOUNT.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, true))));
+                  GeneratorsLang.PRODUCING_AMOUNT.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, true))));
         }));
         addRenderableWidget(new GuiGasGauge(() -> tile.getMultiblock().deuteriumTank, () -> tile.getMultiblock().getGasTanks(null), GaugeType.SMALL, this, 25, 64));
         addRenderableWidget(new GuiGasGauge(() -> tile.getMultiblock().fuelTank, () -> tile.getMultiblock().getGasTanks(null), GaugeType.STANDARD, this, 79, 50));
@@ -58,9 +58,9 @@ public class GuiFusionReactorFuel extends GuiFusionReactorInfo {
 
     @Override
     protected void drawForegroundText(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
-        drawTitleText(matrix, BfrLang.FUSION_REACTOR.translate(), titleLabelY);
-        drawCenteredText(matrix, BfrLang.REACTOR_INJECTION_RATE.translate(tile.getMultiblock().getInjectionRate()), 0, imageWidth, 35, titleTextColor());
-        drawString(matrix, BfrLang.REACTOR_EDIT_RATE.translate(), 50, 117, titleTextColor());
+        drawTitleText(matrix, GeneratorsLang.FUSION_REACTOR.translate(), titleLabelY);
+        drawCenteredText(matrix, GeneratorsLang.REACTOR_INJECTION_RATE.translate(tile.getMultiblock().getInjectionRate()), 0, imageWidth, 35, titleTextColor());
+        drawString(matrix, GeneratorsLang.REACTOR_EDIT_RATE.translate(), 50, 117, titleTextColor());
         super.drawForegroundText(matrix, mouseX, mouseY);
     }
 

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "tag": "forge:circuits/ultimate"
+    },
+    "F": {
+      "item": "bfr:fusion_reactor_frame"
+    },
+    "G": {
+      "tag": "forge:glass_panes"
+    },
+    "T": {
+      "item": "mekanism:basic_chemical_tank"
+    }
+  },
+  "pattern": [
+    "CGC",
+    "FTF",
+    "FFF"
+  ],
+  "result": {
+    "item": "bfr:fusion_reactor_controller"
+  }
+}
