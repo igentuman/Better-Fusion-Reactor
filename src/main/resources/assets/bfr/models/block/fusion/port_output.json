@@ -1,5 +1,5 @@
 {
-  "parent": "bfr:block/fusion/port",
+  "parent": "block/cube_all",
   "textures": {
     "all": "bfr:block/reactor_port_output"
   }

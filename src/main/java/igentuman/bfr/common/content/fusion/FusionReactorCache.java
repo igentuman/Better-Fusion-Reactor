@@ -29,8 +29,8 @@ public class FusionReactorCache extends MultiblockCache<FusionReactorMultiblockD
     }
 
     @Override
-    public void merge(MultiblockCache<FusionReactorMultiblockData> mergeCache, List<ItemStack> rejectedItems) {
-        super.merge(mergeCache, rejectedItems);
+    public void merge(MultiblockCache<FusionReactorMultiblockData> mergeCache, RejectContents rejectContents) {
+        super.merge(mergeCache, rejectContents);
         plasmaTemperature = Math.max(plasmaTemperature, ((FusionReactorCache) mergeCache).plasmaTemperature);
         currentReactivity = Math.max(currentReactivity, ((FusionReactorCache) mergeCache).currentReactivity);
         targetReactivity = Math.max(targetReactivity, ((FusionReactorCache) mergeCache).targetReactivity);
