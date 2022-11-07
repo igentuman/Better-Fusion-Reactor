@@ -2,6 +2,7 @@ package igentuman.bfr.common.datagen;
 
 import igentuman.bfr.client.datagen.BfrLangProvider;
 import igentuman.bfr.common.BetterFusionReactor;
+import igentuman.bfr.common.datagen.loot.BfrLootProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -25,6 +26,8 @@ public class BfrDataGenerator {
         }
         if (event.includeServer()) {
             //Server side data generators
+            gen.addProvider(new BfrTagProvider(gen, existingFileHelper));
+            gen.addProvider(new BfrLootProvider(gen));
             gen.addProvider(new BfrRecipeProvider(gen, existingFileHelper));
         }
     }

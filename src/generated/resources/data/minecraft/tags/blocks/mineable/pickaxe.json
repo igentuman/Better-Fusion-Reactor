@@ -1,0 +1,10 @@
+{
+  "values": [
+    "bfr:reactor_glass",
+    "bfr:fusion_reactor_controller",
+    "bfr:fusion_reactor_frame",
+    "bfr:fusion_reactor_port",
+    "bfr:laser_focus_matrix",
+    "bfr:fusion_reactor_logic_adapter"
+  ]
+}

@@ -5,7 +5,7 @@ license="MIT"
 
 [[mods]]
     modId="bfr"
-    version="1.2.2"
+    version="1.2.3"
     displayName="Better Fusion Reactor for Mekanism"
     displayURL="https://itman.website/"
     authors="igentuman"
