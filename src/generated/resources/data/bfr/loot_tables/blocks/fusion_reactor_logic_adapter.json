@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "ops": [
+                {
+                  "op": "replace",
+                  "source": "controlType",
+                  "target": "mekData.controlType"
+                }
+              ],
+              "source": "block_entity"
+            }
+          ],
+          "name": "bfr:fusion_reactor_logic_adapter"
+        }
+      ],
+      "name": "main",
+      "rolls": 1.0
+    }
+  ]
+}
