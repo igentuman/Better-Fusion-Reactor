@@ -14,6 +14,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Level;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import static igentuman.bfr.common.BFR.MODID;
 
@@ -22,7 +24,7 @@ public class ReactorCoolantRecipesConfig {
 	private static Configuration config = null;
 	public static final String RECIPES = "recipes";
 	public static String[] coolantRecipes;
-	public static ReactorCoolantRecipe[] ReactorCoolantRecipes;
+	public static List<ReactorCoolantRecipe> ReactorCoolantRecipes;
 	public static void preInit()
 	{
 		config = new Configuration(new File(Loader.instance().getConfigDir(), "bfr_coolant_recipes.cfg"));
@@ -53,18 +55,16 @@ public class ReactorCoolantRecipesConfig {
 		if (config.hasChanged()) config.save();
 	}
 
-	public static ReactorCoolantRecipe[] getReactorCoolantRecipes()
+	public static List<ReactorCoolantRecipe> getReactorCoolantRecipes()
 	{
 		if(ReactorCoolantRecipes == null) {
-			ReactorCoolantRecipes = new ReactorCoolantRecipe[coolantRecipes.length];
-			int i = 0;
+			ReactorCoolantRecipes = new ArrayList<>();
 			for(String recipe: coolantRecipes) {
 				try {
 					FluidStack[] parsedRecipe = parseCoolantRecipe(recipe);
-					ReactorCoolantRecipes[i] = new ReactorCoolantRecipe(parsedRecipe[1], parsedRecipe[0]);
+					if(parsedRecipe == null) continue;
+					ReactorCoolantRecipes.add(new ReactorCoolantRecipe(parsedRecipe[1], parsedRecipe[0]));
 				} catch (NullPointerException e) {}
-				i++;
-
 			}
 		}
 		return ReactorCoolantRecipes;
@@ -85,6 +85,7 @@ public class ReactorCoolantRecipesConfig {
 					qty = Integer.parseInt(ingredient[1]);
 				}
 				recipeObj[i] = fluidStack(ingredient[0], qty);
+				if(recipeObj[i] == null) return null;
 			}
 			String[] output = parts[1].split("\\*");
 			qty = 1;
@@ -92,6 +93,7 @@ public class ReactorCoolantRecipesConfig {
 				qty = Integer.parseInt(output[1]);
 			}
 			recipeObj[recipeObj.length-1] = fluidStack(output[0], qty);
+			if(recipeObj[recipeObj.length-1] == null) return null;
 		} catch (Exception e) {
 			Mekanism.logger.log(Level.ERROR,"Coolant Recipe format issue");
 			return null;

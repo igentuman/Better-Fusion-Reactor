@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import igentuman.bfr.client.gui.element.GuiReactorTab;
+import igentuman.bfr.common.config.BfrConfig;
 import igentuman.bfr.common.tile.reactor.TileEntityReactorController;
 import mekanism.api.TileNetworkList;
 import mekanism.client.gui.element.GuiEnergyInfo;
@@ -101,7 +102,7 @@ public class GuiReactorFuel extends GuiReactorInfo {
 
     private void setInjection() {
         if (!injectionRateField.getText().isEmpty()) {
-            int toUse = Math.max(0, Integer.parseInt(injectionRateField.getText()));
+            int toUse = Math.min(BfrConfig.guiMaxInjectionRate, Math.max(0, Integer.parseInt(injectionRateField.getText())));
             toUse -= toUse % 2;
             TileNetworkList data = TileNetworkList.withContents(0, toUse);
             Mekanism.packetHandler.sendToServer(new TileEntityMessage(tileEntity, data));

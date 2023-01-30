@@ -36,3 +36,4 @@ gui.reactor.laserMinEnergy.desc=Avoid negative effects of Heat Multiplier for 1 
 gui.bfr.config.category.better_fusion_reactor=Better Fusion Reactor
 gui.bfr.config.better_fusion_reactor.reactor_meltdown.comment=Small explosion when reactor reaches 100% error level
 gui.bfr.config.better_fusion_reactor.reaction_difficulty.comment=How often Reactivity changes and error level change speed. Values between (1..20), default 10
+gui.bfr.config.better_fusion_reactor.gui_max_injection_rate.comment=Max Injection Rate in reactor GUI (client side)

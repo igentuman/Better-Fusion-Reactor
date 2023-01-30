@@ -23,6 +23,7 @@ public class BfrConfig {
 		return config;
 	}
 	public static int reactionDifficulty;
+	public static int guiMaxInjectionRate;
 	public static boolean reactorMeltdown;
 	public static float explosionRadius;
 
@@ -41,6 +42,10 @@ public class BfrConfig {
 	private static void syncConfig(boolean loadFromFile, boolean setFromConfig)
 	{
 		if (loadFromFile) config.load();
+
+		Property gui_max_injection_rate = config.get(BFR_CATEGORY, "gui_max_injection_rate", 998, I18n.translateToLocal("gui.bfr.config.better_fusion_reactor.gui_max_injection_rate.comment"),2,998);
+		gui_max_injection_rate.setLanguageKey("gui.bfr.config.better_fusion_reactor.gui_max_injection_rate");
+		guiMaxInjectionRate = gui_max_injection_rate.getInt();
 
 		Property reaction_difficulty = config.get(BFR_CATEGORY, "reaction_difficulty", 10, I18n.translateToLocal("gui.bfr.config.better_fusion_reactor.reaction_difficulty.comment"),1,20);
 		reaction_difficulty.setLanguageKey("gui.bfr.config.better_fusion_reactor.reaction_difficulty");

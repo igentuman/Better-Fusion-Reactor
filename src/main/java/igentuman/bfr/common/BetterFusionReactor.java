@@ -38,7 +38,7 @@ import net.minecraftforge.fluids.FluidTank;
 
 public class BetterFusionReactor {
 
-    public static final int MAX_INJECTION = 98;//this is the effective cap in the GUI, as text field is limited to 2 chars
+    public static final int MAX_INJECTION = 98;
     //Reaction characteristics
     public static double burnTemperature = TemperatureUnit.AMBIENT.convertFromK(1E8, true);
     public static double burnRatio = 1;
