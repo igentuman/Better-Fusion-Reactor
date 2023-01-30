@@ -2,6 +2,8 @@ package igentuman.bfr.common.tile.reactor;
 
 import io.netty.buffer.ByteBuf;
 import javax.annotation.Nonnull;
+
+import li.cil.oc.api.network.SimpleComponent;
 import mekanism.api.TileNetworkList;
 import mekanism.common.integration.computer.IComputerIntegration;
 import mekanism.common.util.LangUtils;
@@ -14,6 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Optional;
 
 public class TileEntityReactorLogicAdapter extends TileEntityReactorBlock implements IComputerIntegration {
 
@@ -31,6 +34,12 @@ public class TileEntityReactorLogicAdapter extends TileEntityReactorBlock implem
         fullName = "ReactorLogicAdapter";
     }
     int prevInputRedstone = 0;
+
+    @Override
+    public String getName() {
+        if(world.isRemote) return super.getName();
+        return "reactor_logic_adapter";
+    }
 
     @Override
     public void onUpdate() {

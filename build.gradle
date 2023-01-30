@@ -96,7 +96,7 @@ dependencies {
     deobfCompile "nuclearcraft-overhauled:NuclearCraft:${nuclearcraft_version}:${minecraft_version}"
     compileOnly "net.darkhax.tesla:Tesla-${minecraft_version}:${tesla_version}"
     compileOnly "inventory-tweaks:InventoryTweaks:${invtweak_version}:api"
-    deobfCompile "li.cil.oc:OpenComputers:MC${minecraft_version}-${opencomputers_version}:api"
+    deobfCompile "li.cil.oc:OpenComputers:${oc_version}"
 
     compileOnly "com.mod-buildcraft:buildcraft-api:${buildcraft_version}"
     compileOnly "team.chisel.ctm:CTM:MC${minecraft_version}-${ctm_version}:api"
