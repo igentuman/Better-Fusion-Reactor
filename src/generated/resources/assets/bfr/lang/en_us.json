@@ -38,7 +38,14 @@
   "reactor.bfr.logic_in_tab": "Input Signals",
   "reactor.bfr.logic_out_tab": "Output Signals",
   "reactor.bfr.reactor_help1": "Keep EF higher than 80% by adjusting",
+  "reactor.bfr.reactor_help_heat_multiplier1": "HM affects stability of reaction. And depends on reactor's heat.",
+  "reactor.bfr.reactor_help_heat_multiplier2": "Bigger values of HM increases the volatility of changes in the CR. And how fast Error level changes.",
+  "reactor.bfr.reactor_help_heat_multiplier3": "There are some ideal conditions to keep HM at 0. But if you need more power, prepare your control circuits.",
   "reactor.bfr.reactor_help3": "Automate this process with Logic Adapters",
   "reactor.bfr.reactor_helps2": "CR as close as possible to TR.",
-  "reactor.bfr.stats.active": "Water-Cooled"
+  "reactor.bfr.logic_help1": "Logic ports used for automation.",
+  "reactor.bfr.logic_help2": "Output signal strength represents value divided by 15",
+  "reactor.bfr.logic_help3": "CR adjustments uses input signal strength value",
+  "reactor.bfr.logic_help4": "Use computers for accurate automation",
+  "reactor.bfr.stats.active": "Liquid-Cooled"
 }

@@ -4,6 +4,13 @@ import mekanism.api.text.ILangEntry;
 import net.minecraft.Util;
 
 public enum BfrLang implements ILangEntry {
+    REACTOR_LOGIC_HELP1("reactor", "logic_help1"),
+    REACTOR_LOGIC_HELP2("reactor", "logic_help2"),
+    REACTOR_LOGIC_HELP3("reactor", "logic_help3"),
+    REACTOR_LOGIC_HELP4("reactor", "logic_help4"),
+    REACTOR_HELP_HEAT_MULTIPLIER1("reactor", "reactor_help_heat_multiplier1"),
+    REACTOR_HELP_HEAT_MULTIPLIER2("reactor", "reactor_help_heat_multiplier2"),
+    REACTOR_HELP_HEAT_MULTIPLIER3("reactor", "reactor_help_heat_multiplier3"),
     REACTOR_HELP1("reactor", "reactor_help1"),
     REACTOR_HELP2("reactor", "reactor_helps2"),
     REACTOR_HELP3("reactor", "reactor_help3"),

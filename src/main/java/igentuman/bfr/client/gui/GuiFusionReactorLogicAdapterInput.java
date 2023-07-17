@@ -7,12 +7,12 @@ import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.network.to_server.PacketBfrGuiInteract;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
 import mekanism.client.gui.GuiMekanismTile;
+import mekanism.client.gui.element.GuiElementHolder;
 import mekanism.client.gui.element.scroll.GuiScrollBar;
 import mekanism.client.gui.element.tab.GuiRedstoneControlTab;
 import mekanism.common.inventory.container.tile.EmptyTileContainer;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.Nonnull;
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class GuiFusionReactorLogicAdapterInput extends GuiMekanismTile<TileEntityFusionReactorLogicAdapter, EmptyTileContainer<TileEntityFusionReactorLogicAdapter>> {
 
-    private static final int DISPLAY_COUNT = 4;
+    private static final int DISPLAY_COUNT = 5;
 
     private GuiScrollBar scrollBar;
 
@@ -45,7 +45,8 @@ public class GuiFusionReactorLogicAdapterInput extends GuiMekanismTile<TileEntit
         }
         addRenderableWidget(new GuReactorLogicTab(this, tile, GuReactorLogicTab.ReactorLogicTab.GENERAL));
         addRenderableWidget(new GuReactorLogicTab(this, tile, GuReactorLogicTab.ReactorLogicTab.OUTPUT));
-        scrollBar = addRenderableWidget(new GuiScrollBar(this, 146, 31, 90, () -> tile.getInputModes().length, () -> DISPLAY_COUNT));
+        addRenderableWidget(new GuiElementHolder(this, 16, 31, 130, 112));
+        scrollBar = addRenderableWidget(new GuiScrollBar(this, 146, 31, 112, () -> tile.getInputModes().length, () -> DISPLAY_COUNT));
         for (int i = 0; i < DISPLAY_COUNT; i++) {
             int typeShift = 22 * i;
             addRenderableWidget(new ReactorLogicButton<>(this, 17, 32 + typeShift, i, tile, scrollBar::getCurrentSelection, tile::getInputModes, type -> {

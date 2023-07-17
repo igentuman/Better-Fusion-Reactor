@@ -137,6 +137,11 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
         markForSave();
     }
 
+    @Override
+    public void previousMode() {
+
+    }
+
     @ComputerMethod(nameOverride = "isActiveCooledLogic")
     public boolean isActiveCooled() {
         return activeCooled;

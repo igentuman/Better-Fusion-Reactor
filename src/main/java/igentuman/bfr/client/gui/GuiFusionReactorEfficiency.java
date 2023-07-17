@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import igentuman.bfr.client.gui.element.GuiCustomVerticalBar;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab.FusionReactorTab;
+import igentuman.bfr.client.gui.element.button.HeatMultiplierButton;
 import igentuman.bfr.client.gui.element.button.HelpButton;
 import igentuman.bfr.client.gui.element.button.LaserReadyButton;
 import igentuman.bfr.common.BetterFusionReactor;
@@ -37,6 +38,7 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
     private MekanismButton reactivityDownButton;
     private LaserReadyButton reactorLaserReadyButton;
     private HelpButton helpButton;
+    private HeatMultiplierButton heatMultiplierButton;
 
     public GuiFusionReactorEfficiency(EmptyTileContainer<TileEntityFusionReactorController> container, Inventory inv, Component title) {
         super(container, inv, title);
@@ -110,6 +112,7 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
 
         reactorLaserReadyButton = addRenderableWidget(new LaserReadyButton(this, 8, 132, 120));
         helpButton = addRenderableWidget(new HelpButton(this, 152, 6, 121));
+        heatMultiplierButton = addRenderableWidget(new HeatMultiplierButton(this, 152, 118, 122));
     }
 
     @Override
@@ -123,10 +126,9 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
         reactivityUpButton.active = multiblock.getAdjustment() == 0;
         reactivityDownButton.active = multiblock.getAdjustment() == 0;
         helpButton.active = false;
+        heatMultiplierButton.active = false;
         reactorLaserReadyButton.active = false;
-        if(multiblock.getLaserShootCountdown() > 0) {
-            reactorLaserReadyButton.visible = false;
-        }
+
     }
 
     @Override
@@ -144,11 +146,15 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
         drawString(matrix, Component.literal(String.format("%.1f",multiblock.getEfficiency())), 102, 45, titleTextColor());
         drawString(matrix, Component.literal(String.format("%.1f",multiblock.getErrorLevel())), 142, 45, titleTextColor());
 
-        if (multiblock.isFormed()) {
+        if (multiblock.isFormed() && multiblock.isBurning()) {
             drawTextScaledBound(matrix, BfrLang.REACTOR_HEAT_MULTIPLIER.translate(String.format("%.2f",multiblock.getKt()*10)), 8, 120, titleTextColor(), 156);
+            heatMultiplierButton.visible = true;
             if(multiblock.getLaserShootCountdown() == 0) {
                 reactorLaserReadyButton.visible = true;
             }
+        } else {
+            heatMultiplierButton.visible = false;
+            reactorLaserReadyButton.visible = false;
         }
         super.drawForegroundText(matrix, mouseX, mouseY);
     }

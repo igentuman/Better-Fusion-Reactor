@@ -19,7 +19,7 @@ public class HelpButton extends MekanismButton {
 
 
     public HelpButton(IGuiWrapper gui, int x, int y, int index) {
-        super(gui, x, y, 14, 14, TextComponentUtil.getString("?"), null, null);
+        super(gui, x, y, 14, 14, TextComponentUtil.getString("?"),  () -> {}, null);
         this.index = index;
     }
 

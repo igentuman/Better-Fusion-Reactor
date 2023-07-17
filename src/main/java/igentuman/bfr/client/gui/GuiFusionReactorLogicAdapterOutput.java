@@ -20,7 +20,7 @@ import java.util.List;
 
 public class GuiFusionReactorLogicAdapterOutput extends GuiMekanismTile<TileEntityFusionReactorLogicAdapter, EmptyTileContainer<TileEntityFusionReactorLogicAdapter>> {
 
-    private static final int DISPLAY_COUNT = 4;
+    private static final int DISPLAY_COUNT = 5;
 
     private GuiScrollBar scrollBar;
 
@@ -45,8 +45,8 @@ public class GuiFusionReactorLogicAdapterOutput extends GuiMekanismTile<TileEnti
         }
         addRenderableWidget(new GuReactorLogicTab(this, tile, GuReactorLogicTab.ReactorLogicTab.GENERAL));
         addRenderableWidget(new GuReactorLogicTab(this, tile, GuReactorLogicTab.ReactorLogicTab.INPUT));
-        addRenderableWidget(new GuiElementHolder(this, 16, 31, 130, 90));
-         scrollBar = addRenderableWidget(new GuiScrollBar(this, 146, 31, 90, () -> tile.getOutputModes().length, () -> DISPLAY_COUNT));
+        addRenderableWidget(new GuiElementHolder(this, 16, 31, 130, 112));
+         scrollBar = addRenderableWidget(new GuiScrollBar(this, 146, 31, 112, () -> tile.getOutputModes().length, () -> DISPLAY_COUNT));
         for (int i = 0; i < DISPLAY_COUNT; i++) {
             int typeShift = 22 * i;
             addRenderableWidget(new ReactorLogicButton<>(this, 17, 32 + typeShift, i, tile, scrollBar::getCurrentSelection, tile::getOutputModes, type -> {

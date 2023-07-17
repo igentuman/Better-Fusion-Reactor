@@ -50,7 +50,7 @@ public class GuiFusionReactorLogicAdapterGeneral extends GuiMekanismTile<TileEnt
         addRenderableWidget(new GuReactorLogicTab(this, tile, GuReactorLogicTab.ReactorLogicTab.OUTPUT));
 
 
-        addRenderableWidget(new GuiElementHolder(this, 16, 31, 130, 90));
+
         addRenderableWidget(new ToggleButton(this, 16, 19, 11, tile::isActiveCooled,
               () -> Mekanism.packetHandler().sendToServer(new PacketGuiInteract(GuiInteraction.NEXT_MODE, tile)), getOnHover(GeneratorsLang.REACTOR_LOGIC_TOGGLE_COOLING)));
     }
@@ -58,6 +58,10 @@ public class GuiFusionReactorLogicAdapterGeneral extends GuiMekanismTile<TileEnt
     @Override
     protected void drawForegroundText(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
         renderTitleText(matrix);
+        drawTextScaledBound(matrix, BfrLang.REACTOR_LOGIC_HELP1.translate(), 10, 45, titleTextColor(), 150);
+        drawTextScaledBound(matrix, BfrLang.REACTOR_LOGIC_HELP2.translate(), 10, 55, titleTextColor(), 150);
+        drawTextScaledBound(matrix, BfrLang.REACTOR_LOGIC_HELP3.translate(), 10, 65, titleTextColor(), 150);
+        drawTextScaledBound(matrix, BfrLang.REACTOR_LOGIC_HELP4.translate(), 10, 75, titleTextColor(), 150);
         drawTextScaledBound(matrix, GeneratorsLang.REACTOR_LOGIC_ACTIVE_COOLING.translate(EnumColor.RED, OnOff.of(tile.isActiveCooled())), 29, 20, titleTextColor(), 117);
         drawTextScaledBound(matrix, GeneratorsLang.REACTOR_LOGIC_REDSTONE_MODE.translate(EnumColor.RED, tile.logicType), 16, 123, titleTextColor(), 144);
         drawCenteredText(matrix, MekanismLang.STATUS.translate(EnumColor.RED, tile.getRedstoneLevel() > 0 ? GeneratorsLang.REACTOR_LOGIC_OUTPUTTING : MekanismLang.IDLE),
