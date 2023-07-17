@@ -7,6 +7,8 @@ import mekanism.common.config.value.CachedIntValue;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig.Type;
 
+import java.util.List;
+
 public class BfrConfig extends BaseMekanismConfig {
 
     private static final String FUSION_CATEGORY = "better_fusion_reactor";
@@ -17,6 +19,8 @@ public class BfrConfig extends BaseMekanismConfig {
     public final CachedBooleanValue reactorMeltdown;
     public final CachedFloatValue reactorExplosionRadius;
 
+    public final ForgeConfigSpec.ConfigValue<List<? extends String>> fusionCoolants;
+
     BfrConfig() {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
         builder.comment("Better Fusion Reactor. This config is synced between server and client.").push("bfr");
@@ -26,9 +30,15 @@ public class BfrConfig extends BaseMekanismConfig {
                 .defineInRange("reaction_difficulty", 10, 1, 20));
         reactorMeltdown = CachedBooleanValue.wrap(this, builder.comment("Explosion when reactor reaches 100% error level")
                 .define("reactor_meltdown", false));
-        builder.pop();
         reactorExplosionRadius = CachedFloatValue.wrap(this, builder.comment("Radius of Explosion (default 4 - TNT size)")
                 .define("reactor_explosion_radius", 4.0));
+        fusionCoolants = builder.comment("List of fluids that can be used as coolants in the fusion reactor (; separated)")
+                .defineList("fusion_coolants", () -> {
+                    return List.of(
+                            "water;mekanism:steam",
+                            "mekanism:sodium;mekanism:superheated_sodium"
+                    );
+                }, o -> o instanceof String);
         builder.pop();
 
         configSpec = builder.build();
