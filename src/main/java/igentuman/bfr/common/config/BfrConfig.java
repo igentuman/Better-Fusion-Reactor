@@ -1,12 +1,24 @@
 package igentuman.bfr.common.config;
 
+import igentuman.bfr.client.jei.recipe.FusionJEIRecipe;
+import mekanism.api.NBTConstants;
+import mekanism.api.chemical.gas.Gas;
+import mekanism.api.chemical.gas.GasStack;
+import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
+import mekanism.common.Mekanism;
 import mekanism.common.config.BaseMekanismConfig;
 import mekanism.common.config.value.CachedBooleanValue;
 import mekanism.common.config.value.CachedFloatValue;
 import mekanism.common.config.value.CachedIntValue;
+import mekanism.generators.common.registries.GeneratorsGases;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.config.ModConfig.Type;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class BfrConfig extends BaseMekanismConfig {
@@ -20,6 +32,68 @@ public class BfrConfig extends BaseMekanismConfig {
     public final CachedFloatValue reactorExplosionRadius;
 
     public final ForgeConfigSpec.ConfigValue<List<? extends String>> fusionCoolants;
+
+    public List<Fluid> allowedCoolantFluids;
+    public List<Gas> allowedCoolantGases;
+    public List<Gas> allowedCoolantHotGases;
+
+    public HashMap<Gas, Object> coolantMap;
+    private static FluidStack resolveFluidIgredient(String name, int amount)
+    {
+        CompoundTag tag = new CompoundTag();
+        tag.putString("FluidName", name);
+        tag.putInt("Amount", amount);
+        return FluidStack.loadFluidStackFromNBT(tag);
+    }
+
+    private static GasStack resolveGasIgredient(String name, long amount)
+    {
+        CompoundTag tag = new CompoundTag();
+        tag.putString("gasName", name);
+        tag.putLong(NBTConstants.AMOUNT, amount);
+        return GasStack.readFromNBT(tag);
+    }
+
+    public void initFusionCoolants()
+    {
+        if(coolantMap != null) {
+            return;
+        }
+        coolantMap = new HashMap<>();
+        allowedCoolantFluids = new ArrayList<>();
+        allowedCoolantGases = new ArrayList<>();
+        allowedCoolantHotGases = new ArrayList<>();
+        for(String recipe: BetterFusionReactorConfig.bfr.fusionCoolants.get()) {
+            String cold = recipe.split(";")[0];
+            String hot = recipe.split(";")[1];
+            GasStack inputGas = resolveGasIgredient(cold, 1);
+            GasStack outputGas = resolveGasIgredient(hot, 1);
+            Object coolantCold = null;
+            if(inputGas.isEmpty()) {
+                //Probably liquid
+                FluidStack inputFluid = resolveFluidIgredient(cold,1);
+                coolantCold = inputFluid.getFluid();
+                if(!inputFluid.isEmpty()) {
+                    allowedCoolantFluids.add(inputFluid.getFluid());
+                } else {
+                    Mekanism.logger.warn("Invalid coolant input: " + cold);
+                }
+            } else {
+                coolantCold = inputGas.getType();
+                allowedCoolantGases.add(inputGas.getType());
+            }
+
+            if(!outputGas.isEmpty()) {
+                if(coolantCold != null) {
+                    coolantMap.put(outputGas.getType(), coolantCold);
+                }
+                allowedCoolantHotGases.add(outputGas.getType());
+            } else {
+                Mekanism.logger.warn("Invalid coolant output: " + hot);
+            }
+        }
+    }
+
 
     BfrConfig() {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();

@@ -90,7 +90,7 @@ public class TileEntityFusionReactorPort extends TileEntityFusionReactorBlock im
         boolean needsPacket = super.onUpdateServer(multiblock);
         if (getActive() && multiblock.isFormed()) {
             Set<Direction> directionsToEmit = multiblock.getDirectionsToEmit(getBlockPos());
-            ChemicalUtil.emit(directionsToEmit, multiblock.steamTank, this);
+            ChemicalUtil.emit(directionsToEmit, multiblock.hotCoolantTank, this);
             CableUtils.emit(directionsToEmit, multiblock.energyContainer, this);
         }
         return needsPacket;

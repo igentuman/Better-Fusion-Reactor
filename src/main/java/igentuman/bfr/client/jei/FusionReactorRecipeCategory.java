@@ -4,6 +4,7 @@ import igentuman.bfr.client.jei.recipe.FusionJEIRecipe;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.config.BetterFusionReactorConfig;
 import mekanism.api.NBTConstants;
+import mekanism.api.chemical.gas.Gas;
 import mekanism.api.chemical.gas.GasStack;
 import mekanism.api.recipes.ingredients.ChemicalStackIngredient;
 import mekanism.api.recipes.ingredients.FluidStackIngredient;
@@ -29,6 +30,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -100,33 +102,17 @@ public class FusionReactorRecipeCategory extends BaseRecipeCategory<FusionJEIRec
     public static List<FusionJEIRecipe> getFusionRecipes() {
          List<FusionJEIRecipe> recipes = new ArrayList<>();
         double energyPerFuel = MekanismGeneratorsConfig.generators.energyPerFusionFuel.get().doubleValue();
-
+        BetterFusionReactorConfig.bfr.initFusionCoolants();
         long coolantAmount = Math.round(energyPerFuel * HeatUtils.getSteamEnergyEfficiency() / HeatUtils.getWaterThermalEnthalpy());
-        for(String recipe: BetterFusionReactorConfig.bfr.fusionCoolants.get()) {
-            String cold = recipe.split(";")[0];
-            String hot = recipe.split(";")[1];
-            GasStack inputGas = resolveGasIgredient(cold, coolantAmount);
-            GasStack outputGas = resolveGasIgredient(hot, coolantAmount);
-
-            if(inputGas.isEmpty()) {
-                //Probably liquid
-                FluidStack inputFluid = resolveFluidIgredient(cold, (int)coolantAmount);
-                if(inputFluid.isEmpty()) {
-                    Mekanism.logger.warn("Invalid fusion recipe for ingredient: " + cold);
-                    continue;
-                }
-                if(outputGas.isEmpty()) {
-                    Mekanism.logger.warn("Invalid fusion recipe for ingredient: " + hot);
-                    continue;
-                }
+        for(Gas hot: BetterFusionReactorConfig.bfr.coolantMap.keySet()) {
+            GasStack outputGas = new GasStack(hot, coolantAmount);
+            if(BetterFusionReactorConfig.bfr.coolantMap.get(hot) instanceof Fluid) {
+                FluidStack inputFluid = new FluidStack((Fluid) BetterFusionReactorConfig.bfr.coolantMap.get(hot), (int)coolantAmount);
                 recipes.add(new FusionJEIRecipe(IngredientCreatorAccess.fluid().from(inputFluid), IngredientCreatorAccess.gas().from(GeneratorsGases.FUSION_FUEL, 1),
                         outputGas));
                 continue;
             }
-            if(outputGas.isEmpty()) {
-                Mekanism.logger.warn("Invalid fusion recipe for ingredient: " + hot);
-                continue;
-            }
+            GasStack inputGas = new GasStack(hot, coolantAmount);
             recipes.add(new FusionJEIRecipe(IngredientCreatorAccess.gas().from(inputGas), IngredientCreatorAccess.gas().from(GeneratorsGases.FUSION_FUEL, 1),
                     outputGas));
         }
