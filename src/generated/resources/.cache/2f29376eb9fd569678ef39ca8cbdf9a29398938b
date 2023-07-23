@@ -1,0 +1,10 @@
+// 1.19.2	2023-07-22T14:49:52.4576946	Recipes: bfr
+aad22fc7105ee31908fcb9d161808c381e67d26f data/bfr/recipes/irradiating/charcoal_dust.json
+3895d7f18164eaca3b0d4e77f7a76c5abc3e12b8 data/bfr/recipes/irradiating/coal_dust.json
+f31a2ee84c7b7573524629a3f1a73e2e25d50ac6 data/bfr/recipes/irradiator.json
+ea37680bfd74f7dc589ca2943897eeb0f0e41f13 data/bfr/recipes/laser_focus_matrix.json
+b0ab5835291fe0e90b863e80c9323909ac86db95 data/bfr/recipes/reactor/controller.json
+57fd1dfc268cd94cf937d0a99cf499d54cfca17a data/bfr/recipes/reactor/frame.json
+dd8893ab64e63c2f41a66b3c86484e07cf1fdd2d data/bfr/recipes/reactor/glass.json
+18838162e76eb981b48e9d8a331444c0d7247db9 data/bfr/recipes/reactor/logic_adapter.json
+214961527c23a0497050efd2d9dd2547833695a1 data/bfr/recipes/reactor/port.json

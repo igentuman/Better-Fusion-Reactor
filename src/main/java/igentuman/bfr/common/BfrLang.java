@@ -4,6 +4,11 @@ import mekanism.api.text.ILangEntry;
 import net.minecraft.Util;
 
 public enum BfrLang implements ILangEntry {
+    DESCRIPTION_IRRADIATOR("irradiator", "irradiator_desc"),
+    IRRADIATOR_NO_SOURCE("irradiator", "no_source"),
+    IRRADIATOR_HAS_SOURCE("irradiator", "has_source"),
+    IRRADIATOR_FLUX("irradiator", "flux"),
+    IRRADIATOR_SOURCE_GUIDE("irradiator", "source_guide"),
     REACTOR_LOGIC_HELP1("reactor", "logic_help1"),
     REACTOR_LOGIC_HELP2("reactor", "logic_help2"),
     REACTOR_LOGIC_HELP3("reactor", "logic_help3"),

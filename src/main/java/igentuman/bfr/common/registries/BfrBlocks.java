@@ -1,10 +1,15 @@
 package igentuman.bfr.common.registries;
 
 import java.util.function.Supplier;
+
+import igentuman.bfr.common.tile.TileEntityIrradiator;
 import mekanism.common.block.basic.BlockStructuralGlass;
 import mekanism.common.block.interfaces.IHasDescription;
 import mekanism.common.block.prefab.BlockBasicMultiblock;
+import mekanism.common.block.prefab.BlockTile;
+import mekanism.common.content.blocktype.Machine;
 import mekanism.common.item.block.ItemBlockTooltip;
+import mekanism.common.item.block.machine.ItemBlockMachine;
 import mekanism.common.registration.impl.BlockDeferredRegister;
 import mekanism.common.registration.impl.BlockRegistryObject;
 import igentuman.bfr.common.BetterFusionReactor;
@@ -14,6 +19,8 @@ import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorBlock;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorPort;
+import mekanism.common.registries.MekanismBlockTypes;
+import mekanism.common.tile.machine.TileEntityRotaryCondensentrator;
 import mekanism.generators.common.registries.GeneratorsBlockTypes;
 import net.minecraft.world.level.block.Block;
 
@@ -24,6 +31,9 @@ public class BfrBlocks {
     }
 
     public static final BlockDeferredRegister BLOCKS = new BlockDeferredRegister(BetterFusionReactor.MODID);
+
+    public static final BlockRegistryObject<BlockTile.BlockTileModel<TileEntityIrradiator, Machine<TileEntityIrradiator>>, ItemBlockMachine> IRRADIATOR = BLOCKS.register("irradiator", () -> new BlockTile.BlockTileModel<>(BfrBlockTypes.IRRADIATOR), ItemBlockMachine::new);
+
     public static final BlockRegistryObject<BlockStructuralGlass<TileEntityReactorGlass>, ItemBlockTooltip<BlockStructuralGlass<TileEntityReactorGlass>>> REACTOR_GLASS = registerTooltipBlock("reactor_glass", () -> new BlockStructuralGlass<>(BfrBlockTypes.REACTOR_GLASS));
 
     public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityFusionReactorController>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityFusionReactorController>>> FUSION_REACTOR_CONTROLLER = registerTooltipBlock("fusion_reactor_controller", () -> new BlockBasicMultiblock<>(BfrBlockTypes.FUSION_REACTOR_CONTROLLER));

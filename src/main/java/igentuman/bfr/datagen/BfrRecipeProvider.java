@@ -1,11 +1,14 @@
 package igentuman.bfr.datagen;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.registries.BfrBlocks;
 import igentuman.bfr.datagen.recipe.BaseRecipeProvider;
+import igentuman.bfr.datagen.recipe.ISubRecipeProvider;
 import igentuman.bfr.datagen.recipe.builder.ExtendedShapedRecipeBuilder;
+import igentuman.bfr.datagen.recipe.impl.IrradiatorRecipeProvider;
 import igentuman.bfr.datagen.recipe.pattern.Pattern;
 import igentuman.bfr.datagen.recipe.pattern.RecipePattern;
 import igentuman.bfr.datagen.recipe.pattern.RecipePattern.TripleLine;
@@ -23,6 +26,7 @@ import mekanism.generators.common.registries.GeneratorsBlocks;
 import mekanism.generators.common.registries.GeneratorsItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -40,6 +44,13 @@ public class BfrRecipeProvider extends BaseRecipeProvider {
     @Override
     protected void addRecipes(Consumer<FinishedRecipe> consumer) {
         addFusionReactorRecipes(consumer);
+    }
+
+    @Override
+    protected List<ISubRecipeProvider> getSubRecipeProviders() {
+        return List.of(
+                new IrradiatorRecipeProvider()
+        );
     }
 
     private void addFusionReactorRecipes(Consumer<FinishedRecipe> consumer) {
@@ -101,5 +112,17 @@ public class BfrRecipeProvider extends BaseRecipeProvider {
                 .key(FRAME_CHAR, BfrBlocks.FUSION_REACTOR_FRAME)
                 .key(Pattern.TANK, MekanismBlocks.BASIC_CHEMICAL_TANK)
                 .build(consumer, BetterFusionReactor.rl("reactor/controller"));
+        //IRRADIATOR
+        ExtendedShapedRecipeBuilder.shapedRecipe(BfrBlocks.IRRADIATOR)
+                .pattern(RecipePattern.createPattern(
+                        TripleLine.of(Pattern.CIRCUIT, GLASS_CHAR, Pattern.CIRCUIT),
+                        TripleLine.of(GLASS_CHAR, Pattern.TANK, GLASS_CHAR),
+                        TripleLine.of(FRAME_CHAR, 'H', FRAME_CHAR))
+                ).key(Pattern.CIRCUIT, MekanismTags.Items.CIRCUITS_ULTIMATE)
+                .key(GLASS_CHAR, BfrBlocks.REACTOR_GLASS)
+                .key(FRAME_CHAR, MekanismBlocks.LASER_TRACTOR_BEAM)
+                .key(Pattern.TANK, MekanismBlocks.BASIC_CHEMICAL_TANK)
+                .key('H', Items.CHEST)
+                .build(consumer);
     }
 }

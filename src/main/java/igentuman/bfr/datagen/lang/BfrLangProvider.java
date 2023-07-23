@@ -25,6 +25,7 @@ public class BfrLangProvider extends BaseLanguageProvider {
         add(BfrBlocks.FUSION_REACTOR_FRAME, "Fusion Reactor Frame");
         add(BfrBlocks.FUSION_REACTOR_LOGIC_ADAPTER, "Fusion Reactor Logic Adapter");
         add(BfrBlocks.FUSION_REACTOR_PORT, "Fusion Reactor Port");
+        add(BfrBlocks.IRRADIATOR, "Irradiator");
 
     }
 
@@ -64,5 +65,12 @@ public class BfrLangProvider extends BaseLanguageProvider {
         add(BfrLang.DESCRIPTION_REACTOR_INJECTION_DOWN, "Input redstone impulse any strength");
         add(BfrLang.DESCRIPTION_REACTOR_REACTIVITY_DOWN, "Redstone impulse will decrease CR by the strength of impulse (1-15)");
         add(BfrLang.DESCRIPTION_REACTOR_REACTIVITY_UP, "Redstone impulse will increase CR by the strength of impulse (1-15)");
+
+        add(BfrLang.DESCRIPTION_IRRADIATOR, "Transforms items with power of high energy particles and radiation");
+        add(BfrLang.IRRADIATOR_NO_SOURCE, "No radiation source detected");
+        add(BfrLang.IRRADIATOR_HAS_SOURCE, "Radiation source detected");
+        add(BfrLang.IRRADIATOR_SOURCE_GUIDE, "Place Irradiator next to reactor port");
+        add(BfrLang.IRRADIATOR_FLUX, "Radiation Flux: %1$s");
+
     }
 }

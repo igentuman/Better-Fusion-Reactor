@@ -1,0 +1,12 @@
+{
+  "type": "mekanism:irradiating",
+  "input": {
+    "ingredient": {
+      "item": "minecraft:charcoal"
+    }
+  },
+  "output": {
+    "item": "mekanism:dust_charcoal"
+  },
+  "ticks": 1000
+}

@@ -1,15 +1,24 @@
 package igentuman.bfr.common.registries;
 
+import igentuman.bfr.common.BfrLang;
+import igentuman.bfr.common.config.BetterFusionReactorConfig;
+import igentuman.bfr.common.tile.TileEntityIrradiator;
 import igentuman.bfr.common.tile.TileEntityReactorGlass;
 import igentuman.bfr.common.tile.fusion.*;
+import mekanism.api.math.FloatingLong;
+import mekanism.common.MekanismLang;
+import mekanism.common.block.attribute.AttributeEnergy;
 import mekanism.common.block.attribute.AttributeMultiblock;
 import mekanism.common.block.attribute.Attributes;
 import mekanism.common.block.attribute.Attributes.AttributeMobSpawn;
 import mekanism.common.block.attribute.Attributes.AttributeRedstoneEmitter;
 import mekanism.common.content.blocktype.BlockTypeTile;
 import mekanism.common.content.blocktype.BlockTypeTile.BlockTileBuilder;
+import mekanism.common.content.blocktype.Machine;
 import mekanism.generators.common.GeneratorsLang;
 import mekanism.generators.common.registries.GeneratorsSounds;
+
+import java.util.Set;
 
 
 public class BfrBlockTypes {
@@ -17,6 +26,12 @@ public class BfrBlockTypes {
     private BfrBlockTypes() {
     }
 
+    public static final Machine<TileEntityIrradiator> IRRADIATOR = Machine.MachineBuilder
+            .createMachine(() -> BfrTileEntityTypes.IRRADIATOR, MekanismLang.DESCRIPTION_SOLAR_NEUTRON_ACTIVATOR)
+            .withGui(() -> BfrContainerTypes.IRRADIATOR)
+            .with(new AttributeEnergy(() -> FloatingLong.create(0), () -> FloatingLong.create(0)))
+            .withComputerSupport("irradiator")
+            .build();
 
     // Fusion Reactor Controller
     public static final BlockTypeTile<TileEntityFusionReactorController> FUSION_REACTOR_CONTROLLER = BlockTileBuilder

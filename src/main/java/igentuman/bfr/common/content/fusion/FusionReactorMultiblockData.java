@@ -306,7 +306,9 @@ public class FusionReactorMultiblockData extends MultiblockData {
 
     public FusionReactorMultiblockData(TileEntityFusionReactorBlock tile) {
         super(tile);
-        BetterFusionReactorConfig.bfr.initFusionCoolants();
+        if(BetterFusionReactorConfig.bfr.isLoaded()) {
+            BetterFusionReactorConfig.bfr.initFusionCoolants();
+        }
         //Default biome temp to the ambient temperature at the block we are at
         biomeAmbientTemp = HeatAPI.getAmbientTemp(tile.getLevel(), tile.getTilePos());
         lastPlasmaTemperature = biomeAmbientTemp;

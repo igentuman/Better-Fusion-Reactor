@@ -1,0 +1,12 @@
+{
+  "parent": "mekanism:block/machine",
+  "textures": {
+    "sides": "bfr:block/irradiator/side",
+    "front": "bfr:block/irradiator/front",
+    "west": "bfr:block/irradiator/side",
+    "east": "bfr:block/irradiator/side",
+    "south": "bfr:block/irradiator/back",
+    "up": "bfr:block/irradiator/top",
+    "down": "bfr:block/irradiator/bottom"
+  }
+}

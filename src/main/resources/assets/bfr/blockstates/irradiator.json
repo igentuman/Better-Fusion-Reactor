@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,active=false": {
+      "model": "bfr:block/irradiator"
+    },
+    "facing=south,active=false": {
+      "model": "bfr:block/irradiator",
+      "y": 180
+    },
+    "facing=east,active=false": {
+      "model": "bfr:block/irradiator",
+      "y": 90
+    },
+    "facing=west,active=false": {
+      "model": "bfr:block/irradiator",
+      "y": -90
+    },
+    "facing=north,active=true": {
+      "model": "bfr:block/irradiator_active"
+    },
+    "facing=south,active=true": {
+      "model": "bfr:block/irradiator_active",
+      "y": 180
+    },
+    "facing=east,active=true": {
+      "model": "bfr:block/irradiator_active",
+      "y": 90
+    },
+    "facing=west,active=true": {
+      "model": "bfr:block/irradiator_active",
+      "y": -90
+    }
+  }
+}

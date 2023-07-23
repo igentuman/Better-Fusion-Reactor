@@ -24,9 +24,11 @@ import java.util.List;
 public class BfrConfig extends BaseMekanismConfig {
 
     private static final String FUSION_CATEGORY = "better_fusion_reactor";
+    private static final String IRRADIATOR_CATEGORY = "irradiator";
 
     private final ForgeConfigSpec configSpec;
 
+    public final CachedIntValue irradiatorBaseProcessTicks;
     public final CachedIntValue reactionDifficulty;
     public final CachedBooleanValue reactorMeltdown;
     public final CachedFloatValue reactorExplosionRadius;
@@ -99,6 +101,10 @@ public class BfrConfig extends BaseMekanismConfig {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
         builder.comment("Better Fusion Reactor. This config is synced between server and client.").push("bfr");
 
+        builder.comment("Irradiator").push(IRRADIATOR_CATEGORY);
+        irradiatorBaseProcessTicks = CachedIntValue.wrap(this, builder.comment("Default process time in ticks")
+                .defineInRange("base_process_time", 200, 1, 10000));
+        builder.pop();
         builder.comment("Better Fusion Reactor").push(FUSION_CATEGORY);
         reactionDifficulty = CachedIntValue.wrap(this, builder.comment("How often Reactivity changes and error level change speed. default 10")
                 .defineInRange("reaction_difficulty", 10, 1, 20));

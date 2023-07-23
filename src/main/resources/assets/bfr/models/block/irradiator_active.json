@@ -1,0 +1,6 @@
+{
+  "parent": "bfr:block/irradiator",
+  "textures": {
+    "front": "bfr:block/irradiator/front_active"
+  }
+}

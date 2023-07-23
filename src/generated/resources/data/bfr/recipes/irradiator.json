@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "tag": "forge:circuits/ultimate"
+    },
+    "F": {
+      "item": "mekanism:laser_tractor_beam"
+    },
+    "G": {
+      "item": "bfr:reactor_glass"
+    },
+    "H": {
+      "item": "minecraft:chest"
+    },
+    "T": {
+      "item": "mekanism:basic_chemical_tank"
+    }
+  },
+  "pattern": [
+    "CGC",
+    "GTG",
+    "FHF"
+  ],
+  "result": {
+    "item": "bfr:irradiator"
+  }
+}

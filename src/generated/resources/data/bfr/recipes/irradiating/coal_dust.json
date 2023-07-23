@@ -1,0 +1,12 @@
+{
+  "type": "mekanism:irradiating",
+  "input": {
+    "ingredient": {
+      "item": "minecraft:coal"
+    }
+  },
+  "output": {
+    "item": "mekanism:dust_coal"
+  },
+  "ticks": 500
+}

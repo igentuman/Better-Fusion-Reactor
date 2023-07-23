@@ -5,6 +5,7 @@
     "bfr:fusion_reactor_controller",
     "bfr:fusion_reactor_frame",
     "bfr:fusion_reactor_port",
-    "bfr:fusion_reactor_logic_adapter"
+    "bfr:fusion_reactor_logic_adapter",
+    "bfr:irradiator"
   ]
 }

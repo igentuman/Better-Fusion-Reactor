@@ -31,7 +31,8 @@ public class BfrTagProvider extends BaseTagProvider {
               BfrBlocks.FUSION_REACTOR_FRAME,
               BfrBlocks.FUSION_REACTOR_LOGIC_ADAPTER,
               BfrBlocks.LASER_FOCUS_MATRIX,
-              BfrBlocks.REACTOR_GLASS
+              BfrBlocks.REACTOR_GLASS,
+              BfrBlocks.IRRADIATOR
         );
     }
 
@@ -42,7 +43,8 @@ public class BfrTagProvider extends BaseTagProvider {
                 BfrBlocks.FUSION_REACTOR_CONTROLLER,
                 BfrBlocks.FUSION_REACTOR_FRAME,
                 BfrBlocks.FUSION_REACTOR_PORT,
-                BfrBlocks.FUSION_REACTOR_LOGIC_ADAPTER
+                BfrBlocks.FUSION_REACTOR_LOGIC_ADAPTER,
+                BfrBlocks.IRRADIATOR
         );
     }
 }

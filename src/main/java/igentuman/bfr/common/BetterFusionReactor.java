@@ -1,5 +1,7 @@
 package igentuman.bfr.common;
 
+import igentuman.bfr.common.registries.*;
+import mekanism.api.recipes.ItemStackToItemStackRecipe;
 import mekanism.common.Mekanism;
 import mekanism.common.base.IModModule;
 import mekanism.common.command.builders.BuildCommand;
@@ -11,16 +13,11 @@ import igentuman.bfr.common.content.fusion.FusionReactorCache;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.content.fusion.FusionReactorValidator;
 import igentuman.bfr.common.network.BfrPacketHandler;
-import igentuman.bfr.common.registries.BfrBlocks;
 import igentuman.bfr.common.registries.BfrBuilders.FusionReactorBuilder;
-import igentuman.bfr.common.registries.BfrContainerTypes;
-import igentuman.bfr.common.registries.BfrModules;
-import igentuman.bfr.common.registries.BfrTileEntityTypes;
-import mekanism.generators.common.GeneratorTags;
+import mekanism.common.recipe.MekanismRecipeType;
+import mekanism.common.recipe.lookup.cache.InputRecipeCache;
+import mekanism.common.registration.impl.RecipeTypeRegistryObject;
 import mekanism.generators.common.GeneratorsLang;
-import mekanism.generators.common.network.GeneratorsPacketHandler;
-import mekanism.generators.common.registries.GeneratorsBuilders;
-import mekanism.generators.common.registries.GeneratorsFluids;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -56,11 +53,11 @@ public class BetterFusionReactor implements IModModule {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::onConfigLoad);
         modEventBus.addListener(this::imcQueue);
-
         BfrBlocks.BLOCKS.register(modEventBus);
         BfrContainerTypes.CONTAINER_TYPES.register(modEventBus);
         BfrTileEntityTypes.TILE_ENTITY_TYPES.register(modEventBus);
         BfrModules.MODULES.register(modEventBus);
+        BfrRecipes.init();
         //Set our version number to match the mods.toml file, which matches the one in our build.gradle
         versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
         packetHandler = new BfrPacketHandler();
@@ -82,8 +79,9 @@ public class BetterFusionReactor implements IModModule {
         });
 
 
+
         //Finalization
-        Mekanism.logger.info("Loaded 'Mekanism Generators' module.");
+        Mekanism.logger.info("Loaded 'Better Fusion Reactor' module.");
     }
 
     private void imcQueue(InterModEnqueueEvent event) {

@@ -6,6 +6,8 @@ import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.registries.BfrContainerTypes;
 import igentuman.bfr.common.registries.BfrTileEntityTypes;
 import mekanism.client.ClientRegistrationUtil;
+import mekanism.client.gui.machine.GuiCombiner;
+import mekanism.common.registries.MekanismContainerTypes;
 import net.minecraft.core.Registry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -43,6 +45,7 @@ public class BfrClientRegistration {
             ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_LOGIC_IN, GuiFusionReactorLogicAdapterInput::new);
             ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_LOGIC_OUT, GuiFusionReactorLogicAdapterOutput::new);
             ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_EFFICIENCY, GuiFusionReactorEfficiency::new);
+            ClientRegistrationUtil.registerScreen(BfrContainerTypes.IRRADIATOR, GuiIrradiator::new);
         });
     }
 }
