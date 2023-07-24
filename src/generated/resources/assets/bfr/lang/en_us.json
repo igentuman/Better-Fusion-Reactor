@@ -27,6 +27,7 @@
   "irradiator.bfr.irradiator_desc": "Transforms items with power of high energy particles and radiation",
   "irradiator.bfr.no_source": "Radiation source: NOT FOUND",
   "irradiator.bfr.source_guide": "Place Irradiator next to reactor port",
+  "item.bfr.solidified_waste": "Solidified Nuclear Waste",
   "reactor.bfr.efficiency.cr": "CR",
   "reactor.bfr.efficiency.current_reactivity": "Current Reactivity: %1$s",
   "reactor.bfr.efficiency.ef": "EF",
@@ -53,6 +54,9 @@
   "reactor.bfr.logic_out_tab": "Output Signals",
   "reactor.bfr.reactor_help1": "Keep EF higher than 80% by adjusting",
   "reactor.bfr.reactor_help3": "Automate this process with Logic Adapters",
+  "reactor.bfr.reactor_help_heat_multiplier1": "Hm affects how often TR changes",
+  "reactor.bfr.reactor_help_heat_multiplier2": "It depends on plasma temperature",
+  "reactor.bfr.reactor_help_heat_multiplier3": "At some conditions Hm becomes 0",
   "reactor.bfr.reactor_helps2": "CR as close as possible to TR.",
   "reactor.bfr.stats.active": "Water-Cooled"
 }

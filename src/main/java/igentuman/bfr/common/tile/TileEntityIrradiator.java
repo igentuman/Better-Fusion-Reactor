@@ -1,5 +1,7 @@
 package igentuman.bfr.common.tile;
 
+import igentuman.bfr.common.config.BetterFusionReactorConfig;
+import igentuman.bfr.common.config.BfrConfig;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.recipe.impl.IrradiatingIRecipe;
 import igentuman.bfr.common.registries.BfrBlocks;
@@ -29,6 +31,8 @@ public class TileEntityIrradiator extends TileEntityMachine {
     protected double radiativeFlux = 0;
     public boolean hasRadiationSource = false;
 
+    public double reactorCoolingRate = 0;
+
     //update source each 20 ticks
     protected int updateSourceTimer = 20;
     public BlockEntity radiationSource;
@@ -37,6 +41,9 @@ public class TileEntityIrradiator extends TileEntityMachine {
     public TileEntityIrradiator(BlockPos pos, BlockState state) {
         super(BfrBlocks.IRRADIATOR, pos, state, 200);
         configComponent.addDisabledSides(RelativeSide.BACK);
+        if(BetterFusionReactorConfig.bfr.isLoaded()) {
+            reactorCoolingRate = (10 - BetterFusionReactorConfig.bfr.irradiatorCoolingRate.get()) / 100000.0+0.9999;
+        }
     }
 
     Field recipeOperatingTicks;
@@ -63,6 +70,7 @@ public class TileEntityIrradiator extends TileEntityMachine {
                         throw new RuntimeException(e);
                     }
                     setOperatingTicks(getOperatingTicks() + ((int)fluxAggregated));
+                    cooldownRadiativeFluxSource();
                     fluxAggregated = 0;
                 }
             }
@@ -70,6 +78,28 @@ public class TileEntityIrradiator extends TileEntityMachine {
 
         if (ejectorComponent != null) {
             ejectorComponent.tickServer();
+        }
+    }
+
+    private void cooldownRadiativeFluxSource() {
+        if(radiationSource instanceof TileEntityFusionReactorPort) {
+            FusionReactorMultiblockData reactor = ((TileEntityFusionReactorPort)radiationSource).getMultiblock();
+            if(reactor != null) {
+                if(reactor.isBurning()) {
+                    reactor.setPlasmaTemp(reactor.plasmaTemperature*reactorCoolingRate);
+                    reactor.setLastPlasmaTemp(reactor.getLastPlasmaTemp()*reactorCoolingRate);
+                    return;
+                }
+            }
+        }
+        if(radiationSource instanceof TileEntityFissionReactorPort) {
+            FissionReactorMultiblockData reactor = ((TileEntityFissionReactorPort)radiationSource).getMultiblock();
+            if(reactor != null) {
+                if(reactor.isBurning()) {
+                    double temperature = reactor.getTotalTemperature()*reactorCoolingRate;
+                    reactor.handleHeat(reactor.getTotalTemperature()-temperature);
+                }
+            }
         }
     }
 
@@ -98,9 +128,11 @@ public class TileEntityIrradiator extends TileEntityMachine {
         FissionReactorMultiblockData reactor = port.getMultiblock();
         if(reactor == null) return 0;
         if(!reactor.isBurning()) return  0;
-        double burnRateRelation = reactor.getMaxBurnRate()/reactor.lastBurnRate*10;
-
-        return burnRateRelation;
+        double burnRateRelation = (reactor.lastBurnRate/reactor.getMaxBurnRate()+1.3)/2;
+        //possible burn rate is 0.1-1920
+        //rate less 10 will affect irradiation in a negative way
+        //we also count burn rate relation
+        return Math.min((reactor.lastBurnRate/20)*burnRateRelation, 100);
     }
 
     private double getRadiationFromFusionReactor()
@@ -126,6 +158,7 @@ public class TileEntityIrradiator extends TileEntityMachine {
 
     public void updateRadiativeFlux()
     {
+        boolean updateFlag = hasRadiationSource;
         updateSourceTimer--;
         if(updateSourceTimer <= 0) {
             updateSourceTimer = 20;
@@ -150,7 +183,8 @@ public class TileEntityIrradiator extends TileEntityMachine {
                 setRadiativeFlux(0);
                 hasRadiationSource = false;
             }
-            if(fluxBefore != getRadiativeFlux()) {
+            updateFlag = updateFlag != hasRadiationSource;
+            if(fluxBefore != getRadiativeFlux() || updateFlag) {
                 markForSave();
                 sendUpdatePacket();
             }

@@ -1,0 +1,13 @@
+{
+  "type": "mekanism:irradiating",
+  "input": {
+    "amount": 5,
+    "ingredient": {
+      "item": "bfr:solidified_waste"
+    }
+  },
+  "output": {
+    "item": "mekanism:pellet_polonium"
+  },
+  "ticks": 2000
+}

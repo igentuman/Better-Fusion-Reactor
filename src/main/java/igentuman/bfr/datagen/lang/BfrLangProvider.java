@@ -65,7 +65,15 @@ public class BfrLangProvider extends BaseLanguageProvider {
         add(BfrLang.REACTOR_HELP1, "Keep EF higher than 80% by adjusting");
         add(BfrLang.REACTOR_HELP2, "CR as close as possible to TR.");
         add(BfrLang.REACTOR_HELP3, "Automate this process with Logic Adapters");
-        add(BfrLang.REACTOR_ACTIVE, "Water-Cooled");
+        add(BfrLang.REACTOR_HELP_HEAT_MULTIPLIER1, "Hm affects how often TR changes");
+        add(BfrLang.REACTOR_HELP_HEAT_MULTIPLIER2, "It depends on plasma temperature");
+        add(BfrLang.REACTOR_HELP_HEAT_MULTIPLIER3, "At some conditions Hm becomes 0");
+        add(BfrLang.REACTOR_LOGIC_HELP1, "Logic ports used for automation");
+        add(BfrLang.REACTOR_LOGIC_HELP2, "Output signal strength represents value divided by 15");
+        add(BfrLang.REACTOR_LOGIC_HELP3, "CR adjustments uses input signal strength value");
+        add(BfrLang.REACTOR_LOGIC_HELP4, "Use computers for accurate automation");
+
+        add(BfrLang.REACTOR_ACTIVE, "Liquid-Cooled");
         add(BfrLang.REACTOR_LOGIC_REACTIVITY_UP, "+ Reactivity");
         add(BfrLang.REACTOR_LOGIC_REACTIVITY_DOWN, "- Reactivity");
         add(BfrLang.REACTOR_LOGIC_INJECTION_DOWN, "-2 Injection Rate");
@@ -85,6 +93,7 @@ public class BfrLangProvider extends BaseLanguageProvider {
         add(BfrLang.IRRADIATOR_HAS_SOURCE, "Radiation source: OK");
         add(BfrLang.IRRADIATOR_SOURCE_GUIDE, "Place Irradiator next to reactor port");
         add(BfrLang.IRRADIATOR_FLUX, "Radiative Flux: %1$s");
+        add(BfrLang.SOLIDIFIED_WASTE, "Solidified Nuclear Waste");
 
     }
 }

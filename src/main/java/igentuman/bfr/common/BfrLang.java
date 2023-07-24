@@ -4,6 +4,7 @@ import mekanism.api.text.ILangEntry;
 import net.minecraft.Util;
 
 public enum BfrLang implements ILangEntry {
+    SOLIDIFIED_WASTE("item", "solidified_waste"),
     DESCRIPTION_IRRADIATOR("irradiator", "irradiator_desc"),
     IRRADIATOR_NO_SOURCE("irradiator", "no_source"),
     IRRADIATOR_HAS_SOURCE("irradiator", "has_source"),

@@ -8,6 +8,7 @@ import igentuman.bfr.common.registries.BfrBlocks;
 import igentuman.bfr.datagen.recipe.BaseRecipeProvider;
 import igentuman.bfr.datagen.recipe.ISubRecipeProvider;
 import igentuman.bfr.datagen.recipe.builder.ExtendedShapedRecipeBuilder;
+import igentuman.bfr.datagen.recipe.impl.CustomRecipes;
 import igentuman.bfr.datagen.recipe.impl.IrradiatorRecipeProvider;
 import igentuman.bfr.datagen.recipe.pattern.Pattern;
 import igentuman.bfr.datagen.recipe.pattern.RecipePattern;
@@ -49,7 +50,8 @@ public class BfrRecipeProvider extends BaseRecipeProvider {
     @Override
     protected List<ISubRecipeProvider> getSubRecipeProviders() {
         return List.of(
-                new IrradiatorRecipeProvider()
+                new IrradiatorRecipeProvider(),
+                new CustomRecipes()
         );
     }
 

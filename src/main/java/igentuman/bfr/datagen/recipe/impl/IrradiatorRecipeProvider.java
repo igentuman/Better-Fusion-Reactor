@@ -2,6 +2,7 @@ package igentuman.bfr.datagen.recipe.impl;
 
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.registries.BfrBlocks;
+import igentuman.bfr.common.registries.BfrItems;
 import igentuman.bfr.datagen.recipe.ISubRecipeProvider;
 import igentuman.bfr.datagen.recipe.builder.ItemStackToItemStackRecipeBuilder;
 import igentuman.bfr.datagen.recipe.builder.ItemStackToItemStackWithTimeRecipeBuilder;
@@ -17,6 +18,7 @@ import mekanism.common.resource.ore.OreType;
 import mekanism.common.tags.MekanismTags;
 import mekanism.common.util.EnumUtils;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 
@@ -27,7 +29,6 @@ public class IrradiatorRecipeProvider implements ISubRecipeProvider {
     @Override
     public void addRecipes(Consumer<FinishedRecipe> consumer) {
         String basePath = "irradiating/";
-
 
         ItemStackToItemStackWithTimeRecipeBuilder.irradiating(
               IngredientCreatorAccess.item().from(MekanismTags.Items.ORES.get(OreType.OSMIUM)),
@@ -71,13 +72,13 @@ public class IrradiatorRecipeProvider implements ISubRecipeProvider {
                 200
         ).build(consumer, BetterFusionReactor.rl(basePath + "copper"));
 
-        for (PrimaryResource resource : EnumUtils.PRIMARY_RESOURCES) {
-            SlurryRegistryObject<?, ?> slurry = MekanismSlurries.PROCESSED_RESOURCES.get(resource);
-            ChemicalDissolutionRecipeBuilder.dissolution(
-                    IngredientCreatorAccess.item().from(BfrBlocks.ORE_BLOCKS.get(resource.getRegistrySuffix()).getItemStack()),
-                    IngredientCreatorAccess.gas().from(MekanismGases.SULFURIC_ACID, 1),
-                    slurry.getDirtySlurry().getStack(1_200)
-            ).build(consumer, BetterFusionReactor.rl(basePath + "slurry/dirty/from_"+resource.getRegistrySuffix()+"irradiated_ore"));
-        }
+        ItemStack waste = BfrItems.SOLIDIFIED_WASTE.getItemStack();
+        waste.setCount(7);
+
+        ItemStackToItemStackWithTimeRecipeBuilder.irradiating(
+                IngredientCreatorAccess.item().from(waste),
+                MekanismItems.POLONIUM_PELLET.getItemStack(),
+                2000
+        ).build(consumer, BetterFusionReactor.rl(basePath + "polonium_from_waste"));
     }
 }

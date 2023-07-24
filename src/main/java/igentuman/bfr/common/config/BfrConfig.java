@@ -29,6 +29,7 @@ public class BfrConfig extends BaseMekanismConfig {
     private final ForgeConfigSpec configSpec;
 
     public final CachedIntValue irradiatorBaseProcessTicks;
+    public final CachedIntValue irradiatorCoolingRate;
     public final CachedIntValue reactionDifficulty;
     public final CachedBooleanValue reactorMeltdown;
     public final CachedFloatValue reactorExplosionRadius;
@@ -102,9 +103,12 @@ public class BfrConfig extends BaseMekanismConfig {
         builder.comment("Better Fusion Reactor. This config is synced between server and client.").push("bfr");
 
         builder.comment("Irradiator").push(IRRADIATOR_CATEGORY);
-        irradiatorBaseProcessTicks = CachedIntValue.wrap(this, builder.comment("Default process time in ticks")
+        irradiatorBaseProcessTicks = CachedIntValue.wrap(this, builder.comment("Default process time in ticks", "Recipe can override this value")
                 .defineInRange("base_process_time", 200, 1, 10000));
+        irradiatorCoolingRate = CachedIntValue.wrap(this, builder.comment("How much temperature production by reactor will be suppressed by Irradiator")
+                .defineInRange("reactor_cooling", 5, 1, 10));
         builder.pop();
+
         builder.comment("Better Fusion Reactor").push(FUSION_CATEGORY);
         reactionDifficulty = CachedIntValue.wrap(this, builder.comment("How often Reactivity changes and error level change speed. default 10")
                 .defineInRange("reaction_difficulty", 10, 1, 20));

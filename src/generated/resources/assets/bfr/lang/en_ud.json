@@ -27,6 +27,7 @@
   "irradiator.bfr.irradiator_desc": "uoᴉʇɐᴉpɐɹ puɐ sǝꞁɔᴉʇɹɐd ʎᵷɹǝuǝ ɥᵷᴉɥ ɟo ɹǝʍod ɥʇᴉʍ sɯǝʇᴉ sɯɹoɟsuɐɹ⟘",
   "irradiator.bfr.no_source": "ᗡN∩OℲ ⟘ON :ǝɔɹnos uoᴉʇɐᴉpɐᴚ",
   "irradiator.bfr.source_guide": "ʇɹod ɹoʇɔɐǝɹ oʇ ʇxǝu ɹoʇɐᴉpɐɹɹI ǝɔɐꞁԀ",
+  "item.bfr.solidified_waste": "ǝʇsɐM ɹɐǝꞁɔnN pǝᴉɟᴉpᴉꞁoS",
   "reactor.bfr.efficiency.cr": "ᴚƆ",
   "reactor.bfr.efficiency.current_reactivity": "%s :ʎʇᴉʌᴉʇɔɐǝᴚ ʇuǝɹɹnƆ",
   "reactor.bfr.efficiency.ef": "ℲƎ",
@@ -53,6 +54,9 @@
   "reactor.bfr.logic_out_tab": "sꞁɐuᵷᴉS ʇndʇnO",
   "reactor.bfr.reactor_help1": "ᵷuᴉʇsnɾpɐ ʎ% b08 uɐɥʇ ɹǝɥᵷᴉɥ ℲƎ dǝǝꞰ",
   "reactor.bfr.reactor_help3": "sɹǝʇdɐpⱯ ɔᴉᵷoꞀ ɥʇᴉʍ ssǝɔoɹd sᴉɥʇ ǝʇɐɯoʇnⱯ",
+  "reactor.bfr.reactor_help_heat_multiplier1": "sǝᵷuɐɥɔ ᴚ⟘ uǝʇɟo ʍoɥ sʇɔǝɟɟɐ ɯH",
+  "reactor.bfr.reactor_help_heat_multiplier2": "ǝɹnʇɐɹǝdɯǝʇ ɐɯsɐꞁd uo spuǝdǝp ʇI",
+  "reactor.bfr.reactor_help_heat_multiplier3": "0 sǝɯoɔǝq ɯH suoᴉʇᴉpuoɔ ǝɯos ʇⱯ",
   "reactor.bfr.reactor_helps2": "˙ᴚ⟘ oʇ ǝꞁqᴉssod sɐ ǝsoꞁɔ sɐ ᴚƆ",
   "reactor.bfr.stats.active": "pǝꞁooƆ-ɹǝʇɐM"
 }
