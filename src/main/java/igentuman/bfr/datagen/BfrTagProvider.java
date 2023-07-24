@@ -5,9 +5,14 @@ import javax.annotation.Nullable;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.datagen.tag.BaseTagProvider;
 import igentuman.bfr.common.registries.BfrBlocks;
+import mekanism.api.providers.IBlockProvider;
+import mekanism.common.registration.impl.BlockDeferredRegister;
+import mekanism.common.registration.impl.BlockRegistryObject;
 import mekanism.generators.common.registries.GeneratorsBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -34,6 +39,9 @@ public class BfrTagProvider extends BaseTagProvider {
               BfrBlocks.REACTOR_GLASS,
               BfrBlocks.IRRADIATOR
         );
+        for(BlockRegistryObject<Block, BlockItem> ore : BfrBlocks.ORE_BLOCKS.values()) {
+            addToTag(Tags.Blocks.ENDERMAN_PLACE_ON_BLACKLIST, ore);
+        }
     }
 
     private void addHarvestRequirements() {
@@ -46,5 +54,8 @@ public class BfrTagProvider extends BaseTagProvider {
                 BfrBlocks.FUSION_REACTOR_LOGIC_ADAPTER,
                 BfrBlocks.IRRADIATOR
         );
+        for(BlockRegistryObject<Block, BlockItem> ore : BfrBlocks.ORE_BLOCKS.values()) {
+            addToTag(BlockTags.MINEABLE_WITH_PICKAXE, ore);
+        }
     }
 }

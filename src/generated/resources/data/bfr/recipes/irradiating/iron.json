@@ -2,11 +2,11 @@
   "type": "mekanism:irradiating",
   "input": {
     "ingredient": {
-      "item": "minecraft:charcoal"
+      "tag": "forge:ores/iron"
     }
   },
   "output": {
-    "item": "mekanism:dust_charcoal"
+    "item": "bfr:irradiated_iron_ore"
   },
-  "ticks": 1000
+  "ticks": 200
 }

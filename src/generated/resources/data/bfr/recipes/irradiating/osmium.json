@@ -1,0 +1,12 @@
+{
+  "type": "mekanism:irradiating",
+  "input": {
+    "ingredient": {
+      "tag": "forge:ores/osmium"
+    }
+  },
+  "output": {
+    "item": "bfr:irradiated_osmium_ore"
+  },
+  "ticks": 200
+}

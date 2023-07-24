@@ -1,0 +1,12 @@
+{
+  "type": "mekanism:irradiating",
+  "input": {
+    "ingredient": {
+      "tag": "forge:ores/tin"
+    }
+  },
+  "output": {
+    "item": "bfr:irradiated_tin_ore"
+  },
+  "ticks": 200
+}

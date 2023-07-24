@@ -16,7 +16,21 @@ public class BfrLangProvider extends BaseLanguageProvider {
     protected void addTranslations() {
         addMisc();
         addBlocks();
+        addOres();
     }
+
+    private void addOres() {
+        for(String ore : BfrBlocks.ORES) {
+            add("block.bfr.irradiated_"+ore+"_ore", "Irradiated "+capitalize(ore)+" Ore");
+        }
+    }
+
+    public static final String capitalize(String str)
+    {
+        if (str == null || str.length() == 0) return str;
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
 
     private void addBlocks() {
         add(BfrBlocks.REACTOR_GLASS, "Reactor Glass");
@@ -67,10 +81,10 @@ public class BfrLangProvider extends BaseLanguageProvider {
         add(BfrLang.DESCRIPTION_REACTOR_REACTIVITY_UP, "Redstone impulse will increase CR by the strength of impulse (1-15)");
 
         add(BfrLang.DESCRIPTION_IRRADIATOR, "Transforms items with power of high energy particles and radiation");
-        add(BfrLang.IRRADIATOR_NO_SOURCE, "No radiation source detected");
-        add(BfrLang.IRRADIATOR_HAS_SOURCE, "Radiation source detected");
+        add(BfrLang.IRRADIATOR_NO_SOURCE, "Radiation source: NOT FOUND");
+        add(BfrLang.IRRADIATOR_HAS_SOURCE, "Radiation source: OK");
         add(BfrLang.IRRADIATOR_SOURCE_GUIDE, "Place Irradiator next to reactor port");
-        add(BfrLang.IRRADIATOR_FLUX, "Radiation Flux: %1$s");
+        add(BfrLang.IRRADIATOR_FLUX, "Radiative Flux: %1$s");
 
     }
 }

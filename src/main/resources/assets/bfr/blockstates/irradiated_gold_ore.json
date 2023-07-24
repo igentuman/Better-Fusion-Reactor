@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "bfr:block/ore/irradiated_gold_ore"
+    }
+  }
+}

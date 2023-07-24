@@ -1,6 +1,18 @@
-// 1.19.2	2023-07-22T14:49:52.4576946	Recipes: bfr
-aad22fc7105ee31908fcb9d161808c381e67d26f data/bfr/recipes/irradiating/charcoal_dust.json
-3895d7f18164eaca3b0d4e77f7a76c5abc3e12b8 data/bfr/recipes/irradiating/coal_dust.json
+// 1.19.2	2023-07-24T03:41:39.0308372	Recipes: bfr
+fae370a24e4a4a31861425ba229d8fb9774cdb4f data/bfr/recipes/irradiating/copper.json
+1714a434fad7286e4b748d12a56e08b50f2911b4 data/bfr/recipes/irradiating/gold.json
+cfce11c7877c71553842808b6dc75cd6df59c69e data/bfr/recipes/irradiating/iron.json
+7c98937a6e94f9e6d0a4dbc210ab95be0179becd data/bfr/recipes/irradiating/lead.json
+7525341f05b5841124da239611d6e4de0ec99acb data/bfr/recipes/irradiating/osmium.json
+4816ced29cabedafae51c488ff3d4d16399dfe85 data/bfr/recipes/irradiating/slurry/dirty/from_copperirradiated_ore.json
+b55d62a97c2f4a12eeccd3aee07e02ffaef0e863 data/bfr/recipes/irradiating/slurry/dirty/from_goldirradiated_ore.json
+b116d85efeb67493fbe7169350858e70c47d8449 data/bfr/recipes/irradiating/slurry/dirty/from_ironirradiated_ore.json
+22979c6f598d2ce655978a5f3b5f0bd965625095 data/bfr/recipes/irradiating/slurry/dirty/from_leadirradiated_ore.json
+4bb28512b8ebda6d05037688256f8a2ad70bd8ba data/bfr/recipes/irradiating/slurry/dirty/from_osmiumirradiated_ore.json
+094058a8c8b081dbba36a45b0de43b88a334f081 data/bfr/recipes/irradiating/slurry/dirty/from_tinirradiated_ore.json
+c641b46578edd014fc993f2fe247e4ee8a893d4e data/bfr/recipes/irradiating/slurry/dirty/from_uraniumirradiated_ore.json
+f2937755f0fb84a34b7a909b89b4b214f792bec0 data/bfr/recipes/irradiating/tin.json
+8ec207962a48b4859532e91d2e0dde22410ade7c data/bfr/recipes/irradiating/uranium.json
 f31a2ee84c7b7573524629a3f1a73e2e25d50ac6 data/bfr/recipes/irradiator.json
 ea37680bfd74f7dc589ca2943897eeb0f0e41f13 data/bfr/recipes/laser_focus_matrix.json
 b0ab5835291fe0e90b863e80c9323909ac86db95 data/bfr/recipes/reactor/controller.json

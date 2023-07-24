@@ -2,11 +2,11 @@
   "type": "mekanism:irradiating",
   "input": {
     "ingredient": {
-      "item": "minecraft:coal"
+      "tag": "forge:ores/uranium"
     }
   },
   "output": {
-    "item": "mekanism:dust_coal"
+    "item": "bfr:irradiated_uranium_ore"
   },
-  "ticks": 500
+  "ticks": 200
 }

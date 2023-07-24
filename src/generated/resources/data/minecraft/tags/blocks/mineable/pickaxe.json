@@ -6,6 +6,13 @@
     "bfr:fusion_reactor_frame",
     "bfr:fusion_reactor_port",
     "bfr:fusion_reactor_logic_adapter",
-    "bfr:irradiator"
+    "bfr:irradiator",
+    "bfr:irradiated_gold_ore",
+    "bfr:irradiated_tin_ore",
+    "bfr:irradiated_osmium_ore",
+    "bfr:irradiated_iron_ore",
+    "bfr:irradiated_copper_ore",
+    "bfr:irradiated_uranium_ore",
+    "bfr:irradiated_lead_ore"
   ]
 }

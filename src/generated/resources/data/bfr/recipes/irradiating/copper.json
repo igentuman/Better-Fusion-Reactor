@@ -1,0 +1,12 @@
+{
+  "type": "mekanism:irradiating",
+  "input": {
+    "ingredient": {
+      "tag": "forge:ores/copper"
+    }
+  },
+  "output": {
+    "item": "bfr:irradiated_copper_ore"
+  },
+  "ticks": 200
+}

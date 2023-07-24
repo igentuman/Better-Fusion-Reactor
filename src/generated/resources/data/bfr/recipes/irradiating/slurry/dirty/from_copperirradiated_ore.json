@@ -1,0 +1,17 @@
+{
+  "type": "mekanism:dissolution",
+  "gasInput": {
+    "amount": 1,
+    "gas": "mekanism:sulfuric_acid"
+  },
+  "itemInput": {
+    "ingredient": {
+      "item": "bfr:irradiated_copper_ore"
+    }
+  },
+  "output": {
+    "amount": 1200,
+    "chemicalType": "slurry",
+    "slurry": "mekanism:dirty_copper"
+  }
+}
