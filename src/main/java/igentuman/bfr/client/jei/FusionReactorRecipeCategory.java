@@ -83,22 +83,6 @@ public class FusionReactorRecipeCategory extends BaseRecipeCategory<FusionJEIRec
         initChemical(builder, MekanismJEI.TYPE_GAS, RecipeIngredientRole.OUTPUT, heatedCoolantTank, Collections.singletonList(recipe.outputCoolant()));
     }
 
-    private static FluidStack resolveFluidIgredient(String name, int amount)
-    {
-        CompoundTag tag = new CompoundTag();
-        tag.putString("FluidName", name);
-        tag.putInt("Amount", amount);
-        return FluidStack.loadFluidStackFromNBT(tag);
-    }
-
-    private static GasStack resolveGasIgredient(String name, long amount)
-    {
-        CompoundTag tag = new CompoundTag();
-        tag.putString("gasName", name);
-        tag.putLong(NBTConstants.AMOUNT, amount);
-        return GasStack.readFromNBT(tag);
-    }
-
     public static List<FusionJEIRecipe> getFusionRecipes() {
          List<FusionJEIRecipe> recipes = new ArrayList<>();
         double energyPerFuel = MekanismGeneratorsConfig.generators.energyPerFusionFuel.get().doubleValue();
@@ -106,13 +90,14 @@ public class FusionReactorRecipeCategory extends BaseRecipeCategory<FusionJEIRec
         long coolantAmount = Math.round(energyPerFuel * HeatUtils.getSteamEnergyEfficiency() / HeatUtils.getWaterThermalEnthalpy());
         for(Gas hot: BetterFusionReactorConfig.bfr.coolantMap.keySet()) {
             GasStack outputGas = new GasStack(hot, coolantAmount);
-            if(BetterFusionReactorConfig.bfr.coolantMap.get(hot) instanceof Fluid) {
+            Object cold = BetterFusionReactorConfig.bfr.coolantMap.get(hot);
+            if(cold instanceof Fluid) {
                 FluidStack inputFluid = new FluidStack((Fluid) BetterFusionReactorConfig.bfr.coolantMap.get(hot), (int)coolantAmount);
                 recipes.add(new FusionJEIRecipe(IngredientCreatorAccess.fluid().from(inputFluid), IngredientCreatorAccess.gas().from(GeneratorsGases.FUSION_FUEL, 1),
                         outputGas));
                 continue;
             }
-            GasStack inputGas = new GasStack(hot, coolantAmount);
+            GasStack inputGas = new GasStack((Gas) cold, coolantAmount);
             recipes.add(new FusionJEIRecipe(IngredientCreatorAccess.gas().from(inputGas), IngredientCreatorAccess.gas().from(GeneratorsGases.FUSION_FUEL, 1),
                     outputGas));
         }

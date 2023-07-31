@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import igentuman.bfr.common.tile.TileEntityIrradiator;
-import mekanism.common.block.BlockOre;
 import mekanism.common.block.basic.BlockStructuralGlass;
 import mekanism.common.block.interfaces.IHasDescription;
 import mekanism.common.block.prefab.BlockBasicMultiblock;
@@ -15,7 +14,6 @@ import mekanism.common.item.block.ItemBlockTooltip;
 import mekanism.common.item.block.machine.ItemBlockMachine;
 import mekanism.common.registration.impl.BlockDeferredRegister;
 import mekanism.common.registration.impl.BlockRegistryObject;
-import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.block.fusion.BlockLaserFocusMatrix;
 import igentuman.bfr.common.tile.TileEntityReactorGlass;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorBlock;
@@ -31,6 +29,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import igentuman.bfr.common.block.IrradiatorBlock;
 
 import static igentuman.bfr.common.BetterFusionReactor.MODID;
 
@@ -44,7 +43,7 @@ public class BfrBlocks {
 
     public static final BlockDeferredRegister BLOCKS = new BlockDeferredRegister(MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
-    public static final BlockRegistryObject<BlockTile.BlockTileModel<TileEntityIrradiator, Machine<TileEntityIrradiator>>, ItemBlockMachine> IRRADIATOR = BLOCKS.register("irradiator", () -> new BlockTile.BlockTileModel<>(BfrBlockTypes.IRRADIATOR), ItemBlockMachine::new);
+    public static final BlockRegistryObject<BlockTile.BlockTileModel<TileEntityIrradiator, Machine<TileEntityIrradiator>>, ItemBlockMachine> IRRADIATOR = BLOCKS.register("irradiator", () -> new BlockTile.BlockTileModel<>(BfrBlockTypes.IRRADIATOR), IrradiatorBlock::new);
 
     public static final BlockRegistryObject<BlockStructuralGlass<TileEntityReactorGlass>, ItemBlockTooltip<BlockStructuralGlass<TileEntityReactorGlass>>> REACTOR_GLASS = registerTooltipBlock("reactor_glass", () -> new BlockStructuralGlass<>(BfrBlockTypes.REACTOR_GLASS));
 

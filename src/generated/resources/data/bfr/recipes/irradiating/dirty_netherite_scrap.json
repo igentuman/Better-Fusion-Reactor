@@ -1,13 +1,12 @@
 {
   "type": "mekanism:irradiating",
   "input": {
-    "amount": 7,
     "ingredient": {
-      "item": "bfr:solidified_waste"
+      "tag": "forge:dyes/brown"
     }
   },
   "output": {
-    "item": "mekanism:pellet_polonium"
+    "item": "mekanism:dirty_netherite_scrap"
   },
   "ticks": 2000
 }

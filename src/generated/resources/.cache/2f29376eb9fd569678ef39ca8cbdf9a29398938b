@@ -1,12 +1,17 @@
-// 1.19.2	2023-07-24T17:43:17.4496957	Recipes: bfr
+// 1.19.2	2023-07-31T05:06:11.9418652	Recipes: bfr
 fae370a24e4a4a31861425ba229d8fb9774cdb4f data/bfr/recipes/irradiating/copper.json
+856dbb99e41823ac5f483e2d06671fcfd0e21126 data/bfr/recipes/irradiating/dirty_netherite_scrap.json
 1714a434fad7286e4b748d12a56e08b50f2911b4 data/bfr/recipes/irradiating/gold.json
 cfce11c7877c71553842808b6dc75cd6df59c69e data/bfr/recipes/irradiating/iron.json
 7c98937a6e94f9e6d0a4dbc210ab95be0179becd data/bfr/recipes/irradiating/lead.json
 7525341f05b5841124da239611d6e4de0ec99acb data/bfr/recipes/irradiating/osmium.json
-2e1849649482f954d8778da1af9e4d9be2bfeb8c data/bfr/recipes/irradiating/polonium_from_waste.json
+ab98b99683525abbffa8d1c24cee64ba008223f5 data/bfr/recipes/irradiating/polonium_from_waste.json
+932b8afb3e0f28ad0483fce96440a98d85604fee data/bfr/recipes/irradiating/quartz_dust.json
+3dd3b0cf98c12ca5426e2888a31fef8e3249139c data/bfr/recipes/irradiating/skeleton_skull.json
+38f16a801f806c3b5c06132afdb2aaa5b33fe513 data/bfr/recipes/irradiating/soul_soil.json
 f2937755f0fb84a34b7a909b89b4b214f792bec0 data/bfr/recipes/irradiating/tin.json
 8ec207962a48b4859532e91d2e0dde22410ade7c data/bfr/recipes/irradiating/uranium.json
+8a36aaf7bc58f627f1ff4b203da6c2fdabdf1af9 data/bfr/recipes/irradiating/wither_rose.json
 f31a2ee84c7b7573524629a3f1a73e2e25d50ac6 data/bfr/recipes/irradiator.json
 ea37680bfd74f7dc589ca2943897eeb0f0e41f13 data/bfr/recipes/laser_focus_matrix.json
 b0ab5835291fe0e90b863e80c9323909ac86db95 data/bfr/recipes/reactor/controller.json

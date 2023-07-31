@@ -72,6 +72,12 @@ public class BfrLangProvider extends BaseLanguageProvider {
         add(BfrLang.REACTOR_LOGIC_HELP2, "Output signal strength represents value divided by 15");
         add(BfrLang.REACTOR_LOGIC_HELP3, "CR adjustments uses input signal strength value");
         add(BfrLang.REACTOR_LOGIC_HELP4, "Use computers for accurate automation");
+        add(BfrLang.EFFICIENCY_GOOD, "Reaction Efficiency is good");
+        add(BfrLang.EFFICIENCY_BAD, "Reaction Efficiency is bad");
+        add(BfrLang.MIGHT_EXPLODE, "Reactor might explode!");
+        add(BfrLang.MIGHT_TURNOFF, "Reactor might turn off!");
+
+        add(BfrLang.IRRADIATOR_DESCRIPTION, "Uses High Energy Particles and Radiation to transform items");
 
         add(BfrLang.REACTOR_ACTIVE, "Liquid-Cooled");
         add(BfrLang.REACTOR_LOGIC_REACTIVITY_UP, "+ Reactivity");
@@ -88,7 +94,6 @@ public class BfrLangProvider extends BaseLanguageProvider {
         add(BfrLang.DESCRIPTION_REACTOR_REACTIVITY_DOWN, "Redstone impulse will decrease CR by the strength of impulse (1-15)");
         add(BfrLang.DESCRIPTION_REACTOR_REACTIVITY_UP, "Redstone impulse will increase CR by the strength of impulse (1-15)");
 
-        add(BfrLang.DESCRIPTION_IRRADIATOR, "Transforms items with power of high energy particles and radiation");
         add(BfrLang.IRRADIATOR_NO_SOURCE, "Radiation source: NOT FOUND");
         add(BfrLang.IRRADIATOR_HAS_SOURCE, "Radiation source: OK");
         add(BfrLang.IRRADIATOR_SOURCE_GUIDE, "Place Irradiator next to reactor port");

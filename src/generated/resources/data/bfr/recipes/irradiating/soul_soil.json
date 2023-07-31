@@ -1,0 +1,12 @@
+{
+  "type": "mekanism:irradiating",
+  "input": {
+    "ingredient": {
+      "item": "minecraft:dirt"
+    }
+  },
+  "output": {
+    "item": "minecraft:soul_soil"
+  },
+  "ticks": 700
+}

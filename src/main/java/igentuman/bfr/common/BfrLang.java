@@ -5,7 +5,6 @@ import net.minecraft.Util;
 
 public enum BfrLang implements ILangEntry {
     SOLIDIFIED_WASTE("item", "solidified_waste"),
-    DESCRIPTION_IRRADIATOR("irradiator", "irradiator_desc"),
     IRRADIATOR_NO_SOURCE("irradiator", "no_source"),
     IRRADIATOR_HAS_SOURCE("irradiator", "has_source"),
     IRRADIATOR_FLUX("irradiator", "flux"),
@@ -17,6 +16,10 @@ public enum BfrLang implements ILangEntry {
     REACTOR_HELP_HEAT_MULTIPLIER1("reactor", "reactor_help_heat_multiplier1"),
     REACTOR_HELP_HEAT_MULTIPLIER2("reactor", "reactor_help_heat_multiplier2"),
     REACTOR_HELP_HEAT_MULTIPLIER3("reactor", "reactor_help_heat_multiplier3"),
+    EFFICIENCY_GOOD("reactor", "efficiency_good"),
+    EFFICIENCY_BAD("reactor", "efficiency_bad"),
+    MIGHT_EXPLODE("reactor", "might_explode"),
+    MIGHT_TURNOFF("reactor", "might_turnoff"),
     REACTOR_HELP1("reactor", "reactor_help1"),
     REACTOR_HELP2("reactor", "reactor_helps2"),
     REACTOR_HELP3("reactor", "reactor_help3"),
@@ -53,15 +56,13 @@ public enum BfrLang implements ILangEntry {
     REACTOR_LOGIC_DEPLETED("reactor", "logic.depleted"),
 
     //Descriptions
+    IRRADIATOR_DESCRIPTION("description", "irradiator"),
     DESCRIPTION_REACTOR_INJECTION_DOWN("description", "reactor.logic.injection_down"),
     DESCRIPTION_REACTOR_REACTIVITY_DOWN("description", "reactor.logic.reactivity_down"),
     DESCRIPTION_REACTOR_REACTIVITY_UP("description", "reactor.logic.reactivity_up"),
     DESCRIPTION_REACTOR_INJECTION_UP("description", "reactor.logic.injection_up"),
     DESCRIPTION_REACTOR_ERROR_LEVEL("description", "reactor.logic.error_level"),
-    DESCRIPTION_REACTOR_EFFICIENCY("description", "reactor.logic.efficiency"),
-    DESCRIPTION_REACTOR_READY("description", "reactor.logic.ready"),
-    DESCRIPTION_REACTOR_CAPACITY("description", "reactor.logic.capacity"),
-    DESCRIPTION_REACTOR_DEPLETED("description", "reactor.logic.depleted");
+    DESCRIPTION_REACTOR_EFFICIENCY("description", "reactor.logic.efficiency");
 
     private final String key;
 

@@ -1,0 +1,12 @@
+{
+  "type": "mekanism:irradiating",
+  "input": {
+    "ingredient": {
+      "item": "minecraft:zombie_head"
+    }
+  },
+  "output": {
+    "item": "minecraft:skeleton_skull"
+  },
+  "ticks": 1000
+}

@@ -80,5 +80,35 @@ public class IrradiatorRecipeProvider implements ISubRecipeProvider {
                 MekanismItems.POLONIUM_PELLET.getItemStack(),
                 2000
         ).build(consumer, BetterFusionReactor.rl(basePath + "polonium_from_waste"));
+
+        ItemStackToItemStackWithTimeRecipeBuilder.irradiating(
+                IngredientCreatorAccess.item().from(Tags.Items.SAND),
+                MekanismItems.QUARTZ_DUST.getItemStack(),
+                500
+        ).build(consumer, BetterFusionReactor.rl(basePath + "quartz_dust"));
+
+        ItemStackToItemStackWithTimeRecipeBuilder.irradiating(
+                IngredientCreatorAccess.item().from(Items.ROSE_BUSH),
+                new ItemStack(Items.WITHER_ROSE),
+                1000
+        ).build(consumer, BetterFusionReactor.rl(basePath + "wither_rose"));
+
+        ItemStackToItemStackWithTimeRecipeBuilder.irradiating(
+                IngredientCreatorAccess.item().from(Items.ZOMBIE_HEAD),
+                new ItemStack(Items.SKELETON_SKULL),
+                1000
+        ).build(consumer, BetterFusionReactor.rl(basePath + "skeleton_skull"));
+
+        ItemStackToItemStackWithTimeRecipeBuilder.irradiating(
+                IngredientCreatorAccess.item().from(Tags.Items.DYES_BROWN),
+                MekanismItems.DIRTY_NETHERITE_SCRAP.getItemStack(),
+                2000
+        ).build(consumer, BetterFusionReactor.rl(basePath + "dirty_netherite_scrap"));
+
+        ItemStackToItemStackWithTimeRecipeBuilder.irradiating(
+                IngredientCreatorAccess.item().from(Items.DIRT),
+                new ItemStack(Items.SOUL_SOIL),
+                700
+        ).build(consumer, BetterFusionReactor.rl(basePath + "soul_soil"));
     }
 }

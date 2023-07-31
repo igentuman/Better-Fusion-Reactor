@@ -5,6 +5,7 @@ import java.util.Arrays;
 import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import igentuman.bfr.common.config.BetterFusionReactorConfig;
 import mekanism.client.gui.GuiMekanismTile;
 import mekanism.client.gui.element.tab.GuiEnergyTab;
 import mekanism.common.MekanismLang;
@@ -47,6 +48,18 @@ public class GuiFusionReactorController extends GuiMekanismTile<TileEntityFusion
     protected void drawForegroundText(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
         drawTitleText(matrix, GeneratorsLang.FUSION_REACTOR.translate(), titleLabelY);
         drawString(matrix, MekanismLang.MULTIBLOCK_FORMED.translate(), 8, 16, titleTextColor());
+        if(tile.getMultiblock().isBurning()) {
+            if(tile.getMultiblock().getEfficiency() >= 80) {
+                drawString(matrix, BfrLang.EFFICIENCY_GOOD.translate(), 8, 70, 0x097969);
+            } else {
+                drawString(matrix, BfrLang.EFFICIENCY_BAD.translate(), 8, 60, 0xC70039);
+                if(BetterFusionReactorConfig.bfr.reactorMeltdown.get() && BetterFusionReactorConfig.bfr.reactorExplosionRadius.get() > 0) {
+                    drawString(matrix, BfrLang.MIGHT_EXPLODE.translate(), 8, 70, 0xC70039);
+                } else {
+                    drawString(matrix, BfrLang.MIGHT_TURNOFF.translate(), 8, 70, 0xC70039);
+                }
+            }
+        }
         super.drawForegroundText(matrix, mouseX, mouseY);
     }
 }
