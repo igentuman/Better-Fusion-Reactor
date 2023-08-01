@@ -27,6 +27,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -82,12 +83,12 @@ public class IrradiatorRecipeCategory extends BaseRecipeCategory<IrradiatingIRec
         return Minecraft.getInstance().level;
     }
 
+
     @Override
-    public void draw(IrradiatingIRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX,
-                     double mouseY) {
-        super.draw(recipe, recipeSlotsView, stack, mouseX, mouseY);
+    public void draw(IrradiatingIRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
         if(progressArrow.containsKey(recipe.getTicks())) {
-            progressArrow.get(recipe.getTicks()).draw(stack, 46, 19);
+            progressArrow.get(recipe.getTicks()).draw(guiGraphics, 46, 19);
         }
     }
 }

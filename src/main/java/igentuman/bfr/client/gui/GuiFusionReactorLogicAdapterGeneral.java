@@ -18,6 +18,7 @@ import mekanism.common.util.text.BooleanStateDisplay.OnOff;
 import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
 import mekanism.generators.common.GeneratorsLang;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -56,7 +57,7 @@ public class GuiFusionReactorLogicAdapterGeneral extends GuiMekanismTile<TileEnt
     }
 
     @Override
-    protected void drawForegroundText(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+    protected void drawForegroundText(@Nonnull GuiGraphics matrix, int mouseX, int mouseY) {
         renderTitleText(matrix);
         drawTextScaledBound(matrix, BfrLang.REACTOR_LOGIC_HELP1.translate(), 10, 45, titleTextColor(), 150);
         drawTextScaledBound(matrix, BfrLang.REACTOR_LOGIC_HELP2.translate(), 10, 55, titleTextColor(), 150);

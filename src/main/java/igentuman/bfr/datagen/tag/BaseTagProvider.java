@@ -1,11 +1,11 @@
 package igentuman.bfr.datagen.tag;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import mekanism.api.chemical.Chemical;
 import mekanism.api.chemical.gas.Gas;
 import mekanism.api.chemical.infuse.InfuseType;
@@ -22,10 +22,13 @@ import mekanism.common.registration.impl.FluidRegistryObject;
 import mekanism.common.registration.impl.GameEventRegistryObject;
 import mekanism.common.registration.impl.TileEntityTypeRegistryObject;
 import mekanism.common.util.RegistryUtils;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -36,32 +39,23 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.ForgeRegistryTagsProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BaseTagProvider implements DataProvider {
 
-    private final Map<TagType<?>, Map<TagKey<?>, TagBuilder>> supportedTagTypes = new Object2ObjectLinkedOpenHashMap<>();
-    private final Set<Block> knownHarvestRequirements = new HashSet<>();
+    private final Map<ResourceKey<? extends Registry<?>>, Map<TagKey<?>, TagBuilder>> supportedTagTypes = new Object2ObjectLinkedOpenHashMap<>();
+    private final Set<Block> knownHarvestRequirements = new ReferenceOpenHashSet<>();
+    private final CompletableFuture<HolderLookup.Provider> lookupProvider;
     private final ExistingFileHelper existingFileHelper;
-    private final DataGenerator gen;
+    private final PackOutput output;
     private final String modid;
 
-    protected BaseTagProvider(DataGenerator gen, String modid, @Nullable ExistingFileHelper existingFileHelper) {
-        this.gen = gen;
+    protected BaseTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, String modid, @Nullable ExistingFileHelper existingFileHelper) {
         this.modid = modid;
+        this.output = output;
+        this.lookupProvider = lookupProvider;
         this.existingFileHelper = existingFileHelper;
-        addTagType(TagType.ITEM);
-        addTagType(TagType.BLOCK);
-        addTagType(TagType.ENTITY_TYPE);
-        addTagType(TagType.FLUID);
-        addTagType(TagType.BLOCK_ENTITY_TYPE);
-        addTagType(TagType.GAME_EVENT);
-        addTagType(TagType.GAS);
-        addTagType(TagType.INFUSE_TYPE);
-        addTagType(TagType.PIGMENT);
-        addTagType(TagType.SLURRY);
     }
 
     @NotNull
@@ -70,12 +64,7 @@ public abstract class BaseTagProvider implements DataProvider {
         return "Tags: " + modid;
     }
 
-    //Protected to allow for extensions to add their own supported types if they have one
-    protected <TYPE> void addTagType(TagType<TYPE> tagType) {
-        supportedTagTypes.computeIfAbsent(tagType, type -> new Object2ObjectLinkedOpenHashMap<>());
-    }
-
-    protected abstract void registerTags();
+    protected abstract void registerTags(HolderLookup.Provider registries);
 
     protected List<IBlockProvider> getAllBlocks() {
         return Collections.emptyList();
@@ -85,48 +74,35 @@ public abstract class BaseTagProvider implements DataProvider {
         knownHarvestRequirements.add(block);
     }
 
+    @NotNull
     @Override
-    public void run(@NotNull CachedOutput cache) {
-        supportedTagTypes.values().forEach(Map::clear);
-        registerTags();
-        for (IBlockProvider blockProvider : getAllBlocks()) {
-            Block block = blockProvider.getBlock();
-            if (block.defaultBlockState().requiresCorrectToolForDrops() && !knownHarvestRequirements.contains(block)) {
-                throw new IllegalStateException("Missing harvest tool type for block '" + RegistryUtils.getName(block) + "' that requires the correct tool for drops.");
+    public CompletableFuture<?> run(@NotNull CachedOutput cache) {
+        return this.lookupProvider.thenApply(registries -> {
+            supportedTagTypes.values().forEach(Map::clear);
+            registerTags(registries);
+            return registries;
+        }).thenCompose(registries -> {
+            for (IBlockProvider blockProvider : getAllBlocks()) {
+                Block block = blockProvider.getBlock();
+                if (block.defaultBlockState().requiresCorrectToolForDrops() && !knownHarvestRequirements.contains(block)) {
+                    throw new IllegalStateException("Missing harvest tool type for block '" + RegistryUtils.getName(block) + "' that requires the correct tool for drops.");
+                }
             }
-        }
-        supportedTagTypes.forEach((tagType, tagTypeMap) -> act(cache, tagType, tagTypeMap));
-    }
-
-    private <TYPE> void act(@NotNull CachedOutput cache, TagType<TYPE> tagType, Map<TagKey<?>, TagBuilder> tagTypeMap) {
-        if (!tagTypeMap.isEmpty()) {
-            //Create a dummy provider and pass all our collected data through to it
-            tagType.getRegistry().map(forgeRegistry -> new ForgeRegistryTagsProvider<>(gen, forgeRegistry, modid, existingFileHelper) {
-                @Override
-                protected void addTags() {
-                    //Add each tag builder to the wrapped provider's builder
-                    tagTypeMap.forEach((tag, tagBuilder) -> builders.put(tag.location(), tagBuilder));
+            List<CompletableFuture<?>> futures = new ArrayList<>();
+            supportedTagTypes.forEach((registry, tagTypeMap) -> {
+                if (!tagTypeMap.isEmpty()) {
+                    //Create a dummy provider and pass all our collected data through to it
+                    futures.add(new TagsProvider(output, registry, lookupProvider, modid, existingFileHelper) {
+                        @Override
+                        protected void addTags(@NotNull HolderLookup.Provider lookupProvider) {
+                            //Add each tag builder to the wrapped provider's builder
+                            tagTypeMap.forEach((tag, tagBuilder) -> builders.put(tag.location(), tagBuilder));
+                        }
+                    }.run(cache));
                 }
-
-                @NotNull
-                @Override
-                public String getName() {
-                    return tagType.name() + " Tags: " + modid;
-                }
-            }, vanillaRegistry -> new TagsProvider<>(gen, vanillaRegistry, modid, existingFileHelper) {
-                @Override
-                protected void addTags() {
-                    //Add each tag builder to the wrapped provider's builder
-                    tagTypeMap.forEach((tag, tagBuilder) -> builders.put(tag.location(), tagBuilder));
-                }
-
-                @NotNull
-                @Override
-                public String getName() {
-                    return tagType.name() + " Tags: " + modid;
-                }
-            }).run(cache);
-        }
+            });
+            return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
+        });
     }
 
     //Protected to allow for extensions to add retrieve their own supported types if they have any
@@ -152,10 +128,6 @@ public abstract class BaseTagProvider implements DataProvider {
 
     protected ForgeRegistryTagBuilder<BlockEntityType<?>> getTileEntityTypeBuilder(TagKey<BlockEntityType<?>> tag) {
         return getBuilder(TagType.BLOCK_ENTITY_TYPE, tag);
-    }
-
-    protected ForgeRegistryTagBuilder<GameEvent> getGameEventBuilder(TagKey<GameEvent> tag) {
-        return getBuilder(TagType.GAME_EVENT, tag);
     }
 
     protected ForgeRegistryTagBuilder<Gas> getGasBuilder(TagKey<Gas> tag) {
@@ -220,10 +192,6 @@ public abstract class BaseTagProvider implements DataProvider {
             itemTagBuilder.add(blockProvider.asItem());
             blockTagBuilder.add(blockProvider.getBlock());
         }
-    }
-
-    protected void addToTag(TagKey<GameEvent> tag, GameEventRegistryObject<?>... gameEventROs) {
-        getGameEventBuilder(tag).addTyped(GameEventRegistryObject::get, gameEventROs);
     }
 
     protected void addToTag(TagKey<EntityType<?>> tag, IEntityTypeProvider... entityTypeProviders) {

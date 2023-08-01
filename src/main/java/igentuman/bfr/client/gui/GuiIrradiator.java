@@ -30,6 +30,7 @@ import mekanism.common.tile.component.config.DataType;
 import mekanism.common.tile.machine.TileEntityCombiner;
 import mekanism.common.util.MekanismUtils;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
@@ -125,7 +126,7 @@ public class GuiIrradiator extends GuiConfigurableTile<TileEntityIrradiator, Mek
     }
 
     @Override
-    protected void drawForegroundText(@NotNull PoseStack matrix, int mouseX, int mouseY) {
+    protected void drawForegroundText(@NotNull GuiGraphics matrix, int mouseX, int mouseY) {
         renderTitleText(matrix);
         drawString(matrix, playerInventoryTitle, inventoryLabelX, inventoryLabelY, titleTextColor());
         super.drawForegroundText(matrix, mouseX, mouseY);

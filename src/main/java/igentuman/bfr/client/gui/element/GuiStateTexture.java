@@ -9,6 +9,7 @@ import mekanism.client.gui.IGuiWrapper;
 import mekanism.client.gui.element.GuiTexturedElement;
 import mekanism.common.util.MekanismUtils.ResourceType;
 import igentuman.bfr.common.BetterFusionReactor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
 public class GuiStateTexture extends GuiTexturedElement {
@@ -27,10 +28,12 @@ public class GuiStateTexture extends GuiTexturedElement {
     }
 
     @Override
-    public void drawBackground(@Nonnull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void drawBackground(@Nonnull GuiGraphics matrix, int mouseX, int mouseY, float partialTicks) {
         RenderSystem.setShaderTexture(0, getResource());
-        blit(matrix, x, y, 0, 0, width, height, width, height);
+        int x = getButtonX();
+        int y = getButtonY();
+        matrix.blit(stateHolder, x, y, 0, 0, width, height, width, height);
         RenderSystem.setShaderTexture(0, onSupplier.getAsBoolean() ? onTexture : offTexture);
-        blit(matrix, x + 2, y + 2, 0, 0, width - 4, height - 4, width - 4, height - 4);
+        matrix.blit(stateHolder, x + 2, y + 2, 0, 0, width - 4, height - 4, width - 4, height - 4);
     }
 }

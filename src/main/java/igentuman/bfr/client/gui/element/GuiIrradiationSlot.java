@@ -4,6 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mekanism.api.text.EnumColor;
 import mekanism.client.gui.IGuiWrapper;
+import mekanism.client.gui.VirtualSlotContainerScreen;
+import mekanism.client.gui.element.GuiElement;
 import mekanism.client.gui.element.GuiTexturedElement;
 import mekanism.client.gui.element.slot.GuiSlot;
 import mekanism.client.gui.element.slot.SlotType;
@@ -12,6 +14,8 @@ import mekanism.client.render.MekanismRenderer;
 import mekanism.common.inventory.container.slot.SlotOverlay;
 import mekanism.common.inventory.warning.ISupportsWarning;
 import mekanism.common.inventory.warning.WarningTracker.WarningType;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvent;
@@ -81,18 +85,18 @@ public class GuiIrradiationSlot extends GuiSlot {
         return this;
     }
 
-    public GuiIrradiationSlot click(IClickable onClick) {
+    public GuiSlot click(IClickable onClick) {
         //Use default click sound
         return click(onClick, SoundEvents.UI_BUTTON_CLICK);
     }
 
-    public GuiIrradiationSlot click(IClickable onClick, @Nullable SoundEvent clickSound) {
+    public GuiSlot click(IClickable onClick, @Nullable Supplier<SoundEvent> clickSound) {
         this.clickSound = clickSound;
         this.onClick = onClick;
         return this;
     }
 
-    public GuiIrradiationSlot with(SlotOverlay overlay) {
+    public GuiSlot with(SlotOverlay overlay) {
         this.overlay = overlay;
         return this;
     }
@@ -123,79 +127,73 @@ public class GuiIrradiationSlot extends GuiSlot {
     }
 
     @Override
-    public void renderButton(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         if (!renderAboveSlots) {
-            draw(matrix);
+            draw(guiGraphics);
         }
     }
 
     @Override
-    public void drawBackground(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void drawBackground(@NotNull GuiGraphics matrix, int mouseX, int mouseY, float partialTicks) {
         if (renderAboveSlots) {
             draw(matrix);
         }
     }
 
-    private void draw(@NotNull PoseStack matrix) {
+    private void draw(@NotNull GuiGraphics matrix) {
         if (warningSupplier != null && warningSupplier.getAsBoolean()) {
             RenderSystem.setShaderTexture(0, slotType.getWarningTexture());
         } else {
             RenderSystem.setShaderTexture(0, getResource());
         }
-        blit(matrix, x, y, 0, 0, width, height, width, height);
+        matrix.blit(slotType.getWarningTexture(), getButtonX(), getButtonY(), 0, 0, width, height, width, height);
         if (overlaySupplier != null) {
             overlay = overlaySupplier.get();
         }
         if (overlay != null) {
             RenderSystem.setShaderTexture(0, overlay.getTexture());
-            blit(matrix, x, y, 0, 0, overlay.getWidth(), overlay.getHeight(), overlay.getWidth(), overlay.getHeight());
+            matrix.blit(overlay.getTexture(), getButtonX(), getButtonY(), 0, 0, overlay.getWidth(), overlay.getHeight(), overlay.getWidth(), overlay.getHeight());
         }
         drawContents(matrix);
     }
 
-    protected void drawContents(@NotNull PoseStack matrix) {
+    protected void drawContents(@NotNull GuiGraphics guiGraphics) {
         if (validityCheck != null) {
             ItemStack invalid = validityCheck.get();
             if (!invalid.isEmpty()) {
-                int xPos = x + 1;
-                int yPos = y + 1;
-                fill(matrix, xPos, yPos, xPos + 16, yPos + 16, INVALID_SLOT_COLOR);
-                MekanismRenderer.resetColor();
-                gui().renderItem(matrix, invalid, xPos, yPos);
+                int xPos = relativeX + 1;
+                int yPos = relativeY + 1;
+                guiGraphics.fill(xPos, yPos, xPos + 16, yPos + 16, INVALID_SLOT_COLOR);
+                gui().renderItem(guiGraphics, invalid, xPos, yPos);
             }
         } else if (storedStackSupplier != null) {
             ItemStack stored = storedStackSupplier.get();
             if (!stored.isEmpty()) {
-                gui().renderItem(matrix, stored, x + 1, y + 1);
+                gui().renderItem(guiGraphics, stored, relativeX + 1, relativeY + 1);
             }
         }
     }
 
-    @Override
-    public void renderForeground(PoseStack matrix, int mouseX, int mouseY) {
-        if (renderHover && isHoveredOrFocused()) {
+    public void renderForeground(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        boolean hovered = checkWindows(mouseX, mouseY, isHoveredOrFocused());
+        if (renderHover && hovered) {
             int xPos = relativeX + 1;
             int yPos = relativeY + 1;
-            fill(matrix, xPos, yPos, xPos + 16, yPos + 16, DEFAULT_HOVER_COLOR);
-            MekanismRenderer.resetColor();
+            guiGraphics.fill(RenderType.guiOverlay(), xPos, yPos, xPos + 16, yPos + 16, DEFAULT_HOVER_COLOR);
         }
         if (overlayColorSupplier != null) {
-            matrix.pushPose();
-            matrix.translate(0, 0, 10);
             int xPos = relativeX + 1;
             int yPos = relativeY + 1;
-            fill(matrix, xPos, yPos, xPos + 16, yPos + 16, overlayColorSupplier.getAsInt());
-            matrix.popPose();
-            MekanismRenderer.resetColor();
+            guiGraphics.fill(RenderType.guiOverlay(), xPos, yPos, xPos + 16, yPos + 16, overlayColorSupplier.getAsInt());
         }
-        if (isHoveredOrFocused()) {
+        if (hovered) {
             //TODO: Should it pass it the proper mouseX and mouseY. Probably, though buttons may have to be redone slightly then
-            renderToolTip(matrix, mouseX - getGuiLeft(), mouseY - getGuiTop());
+            renderToolTip(guiGraphics, mouseX - getGuiLeft(), mouseY - getGuiTop());
         }
     }
 
     @Override
-    public void renderToolTip(@NotNull PoseStack matrix, int mouseX, int mouseY) {
+    public void renderToolTip(@NotNull GuiGraphics matrix, int mouseX, int mouseY) {
         super.renderToolTip(matrix, mouseX, mouseY);
         displayTooltips(matrix, mouseX, mouseY, tooltip);
         if (onHover != null) {
@@ -203,18 +201,18 @@ public class GuiIrradiationSlot extends GuiSlot {
         }
     }
 
+    @Nullable
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public GuiElement mouseClickedNested(double mouseX, double mouseY, int button) {
         if (onClick != null && isValidClickButton(button)) {
-            if (mouseX >= x + borderSize() && mouseY >= y + borderSize() && mouseX < x + width - borderSize() && mouseY < y + height - borderSize()) {
+            if (mouseX >= getX() + borderSize() && mouseY >= getY() + borderSize() && mouseX < getX() + width - borderSize() && mouseY < getY() + height - borderSize()) {
                 if (onClick.onClick(this, (int) mouseX, (int) mouseY)) {
                     playDownSound(minecraft.getSoundManager());
-                    return true;
+                    return this;
                 }
-                //If clicking the slot fails check super as maybe it has children that can handle clicks
             }
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClickedNested(mouseX, mouseY, button);
     }
 
     @Nullable

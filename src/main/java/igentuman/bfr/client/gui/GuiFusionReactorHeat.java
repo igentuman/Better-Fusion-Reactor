@@ -25,6 +25,7 @@ import igentuman.bfr.client.gui.element.GuiFusionReactorTab.FusionReactorTab;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
 import mekanism.generators.common.GeneratorsLang;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -108,7 +109,7 @@ public class GuiFusionReactorHeat extends GuiFusionReactorInfo {
     }
 
     @Override
-    protected void drawForegroundText(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+    protected void drawForegroundText(@Nonnull GuiGraphics matrix, int mouseX, int mouseY) {
         drawTitleText(matrix, GeneratorsLang.FUSION_REACTOR.translate(), titleLabelY);
         super.drawForegroundText(matrix, mouseX, mouseY);
     }

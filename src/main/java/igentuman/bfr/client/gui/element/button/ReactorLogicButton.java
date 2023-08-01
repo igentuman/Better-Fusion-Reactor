@@ -18,6 +18,7 @@ import mekanism.client.render.MekanismRenderer;
 import mekanism.common.util.MekanismUtils.ResourceType;
 
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -61,18 +62,18 @@ public class ReactorLogicButton<TYPE extends Enum<TYPE> & IReactorLogicMode<TYPE
 
 
     @Override
-    public void drawBackground(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void drawBackground(@NotNull GuiGraphics matrix, int mouseX, int mouseY, float partialTicks) {
         TYPE mode = modeSupplier.get();
         if (mode != null) {
             RenderSystem.setShaderTexture(0, TEXTURE);
-            MekanismRenderer.color(mode.getColor());
-            blit(matrix, x, y, 0, mode == tile.getMode() ? 22 : 0, width, height, 128, 44);
-            MekanismRenderer.resetColor();
+            MekanismRenderer.color(matrix, mode.getColor());
+            matrix.blit(TEXTURE, getButtonX(), getButtonY(), 0, mode == tile.getMode() ? 22 : 0, width, height, 128, 44);
+            MekanismRenderer.resetColor(matrix);
         }
     }
 
     @Override
-    public void renderForeground(PoseStack matrix, int mouseX, int mouseY) {
+    public void renderForeground(GuiGraphics matrix, int mouseX, int mouseY) {
         TYPE mode = modeSupplier.get();
         if (mode != null) {
             gui().renderItem(matrix, mode.getRenderStack(), 20, 35 + typeOffset);

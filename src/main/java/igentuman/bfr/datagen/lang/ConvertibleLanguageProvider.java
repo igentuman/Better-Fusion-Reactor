@@ -1,13 +1,14 @@
 package igentuman.bfr.datagen.lang;
 
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import java.util.List;
 
 public abstract class ConvertibleLanguageProvider extends LanguageProvider {
 
-    public ConvertibleLanguageProvider(DataGenerator gen, String modid, String locale) {
+    public ConvertibleLanguageProvider(PackOutput gen, String modid, String locale) {
         super(gen, modid, locale);
     }
 

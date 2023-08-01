@@ -4,10 +4,12 @@ package igentuman.bfr.datagen.lang;
 import mekanism.common.Mekanism;
 
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
+import net.minecraft.server.packs.repository.Pack;
 
 public class MekanismLangProvider extends BaseLanguageProvider {
 
-    public MekanismLangProvider(DataGenerator gen) {
+    public MekanismLangProvider(PackOutput gen) {
         super(gen, Mekanism.MODID);
     }
 

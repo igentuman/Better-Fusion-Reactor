@@ -1,5 +1,6 @@
 package igentuman.bfr.datagen;
 
+import java.io.DataOutput;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -26,6 +27,7 @@ import mekanism.generators.common.MekanismGenerators;
 import mekanism.generators.common.registries.GeneratorsBlocks;
 import mekanism.generators.common.registries.GeneratorsItems;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
@@ -38,7 +40,7 @@ public class BfrRecipeProvider extends BaseRecipeProvider {
     private static final char GLASS_CHAR = 'G';
     private static final char FRAME_CHAR = 'F';
 
-    public BfrRecipeProvider(DataGenerator gen, ExistingFileHelper existingFileHelper) {
+    public BfrRecipeProvider(PackOutput gen, ExistingFileHelper existingFileHelper) {
         super(gen, existingFileHelper, BetterFusionReactor.MODID);
     }
 

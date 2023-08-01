@@ -5,10 +5,11 @@ import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.datagen.lang.BaseLanguageProvider;
 import igentuman.bfr.common.registries.*;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 
 public class BfrLangProvider extends BaseLanguageProvider {
 
-    public BfrLangProvider(DataGenerator gen) {
+    public BfrLangProvider(PackOutput gen) {
         super(gen, BetterFusionReactor.MODID);
     }
 

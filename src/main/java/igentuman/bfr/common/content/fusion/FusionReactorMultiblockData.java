@@ -461,7 +461,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
         List<Entity> entitiesToDie = getWorld().getEntitiesOfClass(Entity.class, deathZone);
 
         for (Entity entity : entitiesToDie) {
-            entity.hurt(DamageSource.MAGIC, 50_000F);
+            entity.hurt(entity.damageSources().magic(), 50_000F);
         }
     }
 

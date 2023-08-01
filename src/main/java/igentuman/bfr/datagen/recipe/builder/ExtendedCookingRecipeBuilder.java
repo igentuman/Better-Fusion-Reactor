@@ -27,38 +27,6 @@ public class ExtendedCookingRecipeBuilder extends BaseRecipeBuilder<ExtendedCook
         this.cookingTime = cookingTime;
     }
 
-    public static ExtendedCookingRecipeBuilder blasting(ItemLike result, Ingredient ingredient, int cookingTime) {
-        return blasting(result, 1, ingredient, cookingTime);
-    }
-
-    public static ExtendedCookingRecipeBuilder blasting(ItemLike result, int count, Ingredient ingredient, int cookingTime) {
-        return new ExtendedCookingRecipeBuilder(RecipeSerializer.BLASTING_RECIPE, result, count, ingredient, cookingTime);
-    }
-
-    public static ExtendedCookingRecipeBuilder campfire(ItemLike result, Ingredient ingredient, int cookingTime) {
-        return campfire(result, 1, ingredient, cookingTime);
-    }
-
-    public static ExtendedCookingRecipeBuilder campfire(ItemLike result, int count, Ingredient ingredient, int cookingTime) {
-        return new ExtendedCookingRecipeBuilder(RecipeSerializer.CAMPFIRE_COOKING_RECIPE, result, count, ingredient, cookingTime);
-    }
-
-    public static ExtendedCookingRecipeBuilder smelting(ItemLike result, Ingredient ingredient, int cookingTime) {
-        return smelting(result, 1, ingredient, cookingTime);
-    }
-
-    public static ExtendedCookingRecipeBuilder smelting(ItemLike result, int count, Ingredient ingredient, int cookingTime) {
-        return new ExtendedCookingRecipeBuilder(RecipeSerializer.SMELTING_RECIPE, result, count, ingredient, cookingTime);
-    }
-
-    public static ExtendedCookingRecipeBuilder smoking(ItemLike result, Ingredient ingredient, int cookingTime) {
-        return smoking(result, 1, ingredient, cookingTime);
-    }
-
-    public static ExtendedCookingRecipeBuilder smoking(ItemLike result, int count, Ingredient ingredient, int cookingTime) {
-        return new ExtendedCookingRecipeBuilder(RecipeSerializer.SMOKING_RECIPE, result, count, ingredient, cookingTime);
-    }
-
     public ExtendedCookingRecipeBuilder experience(float experience) {
         if (experience < 0) {
             throw new IllegalArgumentException("Experience cannot be negative.");

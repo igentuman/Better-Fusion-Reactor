@@ -17,6 +17,7 @@ import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
 import mekanism.generators.common.GeneratorsLang;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -45,7 +46,7 @@ public class GuiFusionReactorController extends GuiMekanismTile<TileEntityFusion
     }
 
     @Override
-    protected void drawForegroundText(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+    protected void drawForegroundText(@Nonnull GuiGraphics matrix, int mouseX, int mouseY) {
         drawTitleText(matrix, GeneratorsLang.FUSION_REACTOR.translate(), titleLabelY);
         drawString(matrix, MekanismLang.MULTIBLOCK_FORMED.translate(), 8, 16, titleTextColor());
         if(tile.getMultiblock().isBurning()) {

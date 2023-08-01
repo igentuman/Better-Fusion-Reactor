@@ -17,5 +17,6 @@
       "name": "main",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "bfr:blocks/irradiated_lead_ore"
 }

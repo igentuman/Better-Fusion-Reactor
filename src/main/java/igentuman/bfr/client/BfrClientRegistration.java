@@ -6,9 +6,7 @@ import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.registries.BfrContainerTypes;
 import igentuman.bfr.common.registries.BfrTileEntityTypes;
 import mekanism.client.ClientRegistrationUtil;
-import mekanism.client.gui.machine.GuiCombiner;
-import mekanism.common.registries.MekanismContainerTypes;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -35,7 +33,7 @@ public class BfrClientRegistration {
     @SuppressWarnings("Convert2MethodRef")
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void registerContainers(RegisterEvent event) {
-        event.register(Registry.MENU_REGISTRY, helper -> {
+        event.register(Registries.MENU, helper -> {
             ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_CONTROLLER, GuiFusionReactorController::new);
             ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_FUEL, GuiFusionReactorFuel::new);
             ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_HEAT, GuiFusionReactorHeat::new);

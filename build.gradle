@@ -1,13 +1,17 @@
 plugins {
+    id 'org.ajoberstar.grgit.service' version '5.2.0'
+    id 'java'
     id 'eclipse'
+    id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'net.darkhax.curseforgegradle' version '1.1.16'
+    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
-wrapper {
+tasks.named('wrapper', Wrapper).configure {
     //Define wrapper values here so as to not have to always do so when updating gradlew.properties
-    gradleVersion = '7.5.1'
+    gradleVersion = '8.2.1'
     distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -22,7 +26,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 minecraft {
-    mappings channel: 'parchment', version: '2022.09.18-1.19.2'
+    mappings channel: 'parchment', version: '2023.07.09-1.20.1'
     accessTransformers.from(file('src/main/resources/META-INF/accesstransformer.cfg'))
     runs {
         client {
@@ -63,6 +67,7 @@ minecraft {
 
 
 repositories {
+    flatDir { dirs 'libs' }
     maven {
         name 'prog'
         url 'https://dvs1.progwml6.com/files/maven'
@@ -111,23 +116,24 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    minecraft "net.neoforged:forge:${minecraft_version}-${forge_version}"
+    implementation fg.deobf("com.github.mekanism.mekanism:Mekanism:1.20.1-10.3.9.homebaked-all")
+    implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+   // implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
+    //implementation fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
 
-    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
-    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+    //implementation(fg.deobf("curse.maven:cc-tweaked-282001:${cc_tweaked_id}"))
 
-    implementation(fg.deobf("curse.maven:cc-tweaked-282001:${cc_tweaked_id}"))
-
-    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
-    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
+   // compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
+    //compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
     // at runtime, use the full JEI jar for Forge
-    runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
-    compileOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}:api") {
-        transitive = false
-    }
-    runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}") {
-        transitive = false
-    }
+   // runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
+   // compileOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}:api") {
+  //      transitive = false
+  //  }
+  //  runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}") {
+  //      transitive = false
+  //  }
 }
 
 jar {

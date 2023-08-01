@@ -8,6 +8,7 @@ import mekanism.client.gui.element.GuiInnerScreen;
 import mekanism.client.gui.element.GuiTexturedElement;
 import mekanism.common.util.MekanismUtils;
 import mekanism.common.util.MekanismUtils.ResourceType;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -16,21 +17,21 @@ import java.util.function.Supplier;
 
 public class GuiRadiationIcon extends GuiTexturedElement {
 
-    private static final ResourceLocation ARROW = MekanismUtils.getResource(ResourceType.GUI, "radioactive.png");
+    private static final ResourceLocation ICON = MekanismUtils.getResource(ResourceType.GUI, "radioactive.png");
 
     public GuiRadiationIcon(IGuiWrapper gui, int x, int y) {
-        super(ARROW, gui, x, y, 18, 18);
+        super(ICON, gui, x, y, 18, 18);
     }
 
     @Override
     public boolean isMouseOver(double xAxis, double yAxis) {
-        return this.active && this.visible && xAxis >= x + 16 && xAxis < x + width - 1 && yAxis >= y + 1 && yAxis < y + height - 1;
+        return this.active && this.visible && xAxis >= getButtonX() + 16 && xAxis < getButtonX() + width - 1 && yAxis >= getButtonY() + 1 && yAxis < getButtonY() + height - 1;
     }
 
     @Override
-    public void drawBackground(@NotNull PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+    public void drawBackground(@NotNull GuiGraphics matrix, int mouseX, int mouseY, float partialTicks) {
         super.drawBackground(matrix, mouseX, mouseY, partialTicks);
         RenderSystem.setShaderTexture(0, getResource());
-        blit(matrix, x, y, 0, 0, width, height, width, height);
+        matrix.blit(ICON, getButtonX(), getButtonY(), 0, 0, width, height, width, height);
     }
 }

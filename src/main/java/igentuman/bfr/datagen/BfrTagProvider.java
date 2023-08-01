@@ -9,23 +9,27 @@ import mekanism.api.providers.IBlockProvider;
 import mekanism.common.registration.impl.BlockDeferredRegister;
 import mekanism.common.registration.impl.BlockRegistryObject;
 import mekanism.generators.common.registries.GeneratorsBlocks;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import java.util.concurrent.CompletableFuture;
+
 public class BfrTagProvider extends BaseTagProvider {
 
-    public BfrTagProvider(DataGenerator gen, @Nullable ExistingFileHelper existingFileHelper) {
-        super(gen, BetterFusionReactor.MODID, existingFileHelper);
+    public BfrTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
+        super(output, lookupProvider, BetterFusionReactor.MODID, existingFileHelper);
     }
 
     @Override
-    protected void registerTags() {
-        addEndermanBlacklist();
-        addHarvestRequirements();
+    protected void registerTags(HolderLookup.Provider registries) {
+        //addEndermanBlacklist();
+        //addHarvestRequirements();
     }
 
 

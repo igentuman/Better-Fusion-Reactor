@@ -11,6 +11,7 @@ import mekanism.client.gui.element.GuiElementHolder;
 import mekanism.client.gui.element.scroll.GuiScrollBar;
 import mekanism.client.gui.element.tab.GuiRedstoneControlTab;
 import mekanism.common.inventory.container.tile.EmptyTileContainer;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -59,7 +60,7 @@ public class GuiFusionReactorLogicAdapterOutput extends GuiMekanismTile<TileEnti
     }
 
     @Override
-    protected void drawForegroundText(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+    protected void drawForegroundText(@Nonnull GuiGraphics matrix, int mouseX, int mouseY) {
         renderTitleText(matrix);
          super.drawForegroundText(matrix, mouseX, mouseY);
     }

@@ -109,7 +109,7 @@ public class BetterFusionReactor implements IModModule {
         ModConfig config = configEvent.getConfig();
         //Make sure it is for the same modid as us
         if (config.getModId().equals(MODID) && config instanceof MekanismModConfig) {
-            ((MekanismModConfig) config).clearCache();
+            ((MekanismModConfig) config).clearCache(configEvent);
         }
     }
 }

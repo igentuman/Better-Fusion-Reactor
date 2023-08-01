@@ -2,24 +2,17 @@ package igentuman.bfr.client.jei;
 
 import javax.annotation.Nonnull;
 
-import igentuman.bfr.common.registries.BfrRecipes;
 import mekanism.client.jei.CatalystRegistryHelper;
 import mekanism.client.jei.MekanismJEI;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.registries.BfrBlocks;
-import mekanism.client.jei.MekanismJEIRecipeType;
 import mekanism.client.jei.RecipeRegistryHelper;
-import mekanism.client.jei.machine.ItemStackToItemStackRecipeCategory;
-import mekanism.common.recipe.MekanismRecipeType;
-import mekanism.common.registries.MekanismBlocks;
 import mekanism.generators.common.registries.GeneratorsBlocks;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.registration.*;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 

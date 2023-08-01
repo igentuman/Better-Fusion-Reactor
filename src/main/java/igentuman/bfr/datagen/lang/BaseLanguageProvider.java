@@ -11,6 +11,7 @@ import mekanism.common.util.RegistryUtils;
 import net.minecraft.Util;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.LanguageProvider;
 import org.jetbrains.annotations.NotNull;
@@ -18,13 +19,14 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class BaseLanguageProvider extends LanguageProvider {
 
     private final ConvertibleLanguageProvider[] altProviders;
     private final String modid;
 
-    public BaseLanguageProvider(DataGenerator gen, String modid) {
+    public BaseLanguageProvider(PackOutput gen, String modid) {
         super(gen, modid, "en_us");
         this.modid = modid;
         altProviders = new ConvertibleLanguageProvider[]{
@@ -83,13 +85,18 @@ public abstract class BaseLanguageProvider extends LanguageProvider {
         }
     }
 
+    @NotNull
     @Override
-    public void run(@NotNull CachedOutput cache) throws IOException {
-        super.run(cache);
+    public CompletableFuture<?> run(@NotNull CachedOutput cache) {
+        CompletableFuture<?> future = super.run(cache);
         if (altProviders.length > 0) {
-            for (ConvertibleLanguageProvider provider : altProviders) {
-                provider.run(cache);
+            CompletableFuture<?>[] futures = new CompletableFuture[altProviders.length + 1];
+            futures[0] = future;
+            for (int i = 0; i < altProviders.length; i++) {
+                futures[i + 1] = altProviders[i].run(cache);
             }
+            return CompletableFuture.allOf(futures);
         }
+        return future;
     }
 }

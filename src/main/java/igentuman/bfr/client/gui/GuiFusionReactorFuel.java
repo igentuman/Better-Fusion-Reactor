@@ -21,6 +21,7 @@ import igentuman.bfr.common.content.fusion.FusionReactorMultiblockData;
 import igentuman.bfr.common.network.to_server.PacketBfrGuiInteract;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
 import mekanism.generators.common.GeneratorsLang;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -50,14 +51,14 @@ public class GuiFusionReactorFuel extends GuiFusionReactorInfo {
         addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.EFFICIENCY));
 
         injectionRateField = addRenderableWidget(new GuiTextField(this, 98, 115, 26, 11));
-        injectionRateField.changeFocus(true);
+        injectionRateField.setFocused(true);
         injectionRateField.setInputValidator(InputValidator.DIGIT);
         injectionRateField.setEnterHandler(this::setInjection);
         injectionRateField.setMaxLength(3);
     }
 
     @Override
-    protected void drawForegroundText(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+    protected void drawForegroundText(@Nonnull GuiGraphics matrix, int mouseX, int mouseY) {
         drawTitleText(matrix, GeneratorsLang.FUSION_REACTOR.translate(), titleLabelY);
         drawCenteredText(matrix, GeneratorsLang.REACTOR_INJECTION_RATE.translate(tile.getMultiblock().getInjectionRate()), 0, imageWidth, 35, titleTextColor());
         drawString(matrix, GeneratorsLang.REACTOR_EDIT_RATE.translate(), 50, 117, titleTextColor());

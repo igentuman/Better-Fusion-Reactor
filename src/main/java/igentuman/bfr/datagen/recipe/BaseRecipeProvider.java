@@ -1,6 +1,7 @@
 package igentuman.bfr.datagen.recipe;
 
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.server.packs.PackType;
@@ -27,22 +28,16 @@ public abstract class BaseRecipeProvider extends RecipeProvider {
     private final ExistingFileHelper existingFileHelper;
     private final String modid;
 
-    protected BaseRecipeProvider(DataGenerator gen, ExistingFileHelper existingFileHelper, String modid) {
+    protected BaseRecipeProvider(PackOutput gen, ExistingFileHelper existingFileHelper, String modid) {
         super(gen);
         this.existingFileHelper = existingFileHelper;
         this.modid = modid;
     }
 
-    @Nonnull
     @Override
-    public String getName() {
-        return super.getName() + ": " + modid;
-    }
-
-    @Override
-    protected final void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
+    protected final void buildRecipes(Consumer<FinishedRecipe> consumer) {
         Consumer<FinishedRecipe> trackingConsumer = consumer.andThen(recipe ->
-              existingFileHelper.trackGenerated(recipe.getId(), PackType.SERVER_DATA, ".json", "recipes"));
+                existingFileHelper.trackGenerated(recipe.getId(), PackType.SERVER_DATA, ".json", "recipes"));
         addRecipes(trackingConsumer);
         getSubRecipeProviders().forEach(subRecipeProvider -> subRecipeProvider.addRecipes(trackingConsumer));
     }

@@ -24,6 +24,7 @@ import mekanism.common.inventory.container.tile.EmptyTileContainer;
 import mekanism.common.util.MekanismUtils;
 import mekanism.common.util.text.EnergyDisplay;
 import mekanism.generators.common.GeneratorsLang;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -132,7 +133,7 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
     }
 
     @Override
-    protected void drawForegroundText(@Nonnull PoseStack matrix, int mouseX, int mouseY) {
+    protected void drawForegroundText(@Nonnull GuiGraphics matrix, int mouseX, int mouseY) {
         drawTitleText(matrix, GeneratorsLang.FUSION_REACTOR.translate(), titleLabelY);
         FusionReactorMultiblockData multiblock = tile.getMultiblock();
 
