@@ -28,8 +28,8 @@ public class BfrTagProvider extends BaseTagProvider {
 
     @Override
     protected void registerTags(HolderLookup.Provider registries) {
-        //addEndermanBlacklist();
-        //addHarvestRequirements();
+        addEndermanBlacklist();
+        addHarvestRequirements();
     }
 
 
