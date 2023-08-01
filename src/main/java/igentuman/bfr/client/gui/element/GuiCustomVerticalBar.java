@@ -57,7 +57,7 @@ public class GuiCustomVerticalBar extends GuiBar<IBarInfoHandler> {
         int displayInt = (int) (handlerLevel * texHeight);
         if (displayInt > 0) {
             int scaled = calculateScaled(heightScale, displayInt);
-            matrix.blit(ENERGY_BAR, getX() + 1, getY() + height - 1 - scaled, texWidth, scaled, 0, 0, texWidth, displayInt, texWidth, texHeight);
+            matrix.blit(ENERGY_BAR, getRelativeX() + 1, getRelativeY() + height - 1 - scaled, texWidth, scaled, 0, 0, texWidth, displayInt, texWidth, texHeight);
         }
     }
 }

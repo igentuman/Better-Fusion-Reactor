@@ -21,7 +21,7 @@ public class HeatMultiplierButton extends MekanismButton {
 
     @Override
     public boolean isMouseOver(double pMouseX, double pMouseY) {
-        return this.visible && pMouseX >= (double)this.getButtonX() && pMouseY >= (double)this.getButtonY() && pMouseX < (double)(this.getButtonX() + this.width) && pMouseY < (double)(this.getButtonY() + this.height);
+        return this.visible && pMouseX >= (double)this.getX() && pMouseY >= (double)this.getY() && pMouseX < (double)(this.getX() + this.width) && pMouseY < (double)(this.getY() + this.height);
     }
 
     @Override
@@ -30,11 +30,4 @@ public class HeatMultiplierButton extends MekanismButton {
         displayTooltips(matrix, mouseX, mouseY, BfrLang.REACTOR_HELP_HEAT_MULTIPLIER1.translate(),BfrLang.REACTOR_HELP_HEAT_MULTIPLIER2.translate(),BfrLang.REACTOR_HELP_HEAT_MULTIPLIER3.translate());
     }
 
-
-
-    @Override
-    public void renderForeground(GuiGraphics matrix, int mouseX, int mouseY) {
-        drawString(matrix, TextComponentUtil.getString("?"), getButtonX(), getButtonY(), SpecialColors.TAB_ENERGY_CONFIG.argb());
-        super.renderForeground(matrix, mouseX, mouseY);
-    }
 }

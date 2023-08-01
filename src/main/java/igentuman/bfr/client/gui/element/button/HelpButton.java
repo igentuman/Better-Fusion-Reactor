@@ -12,6 +12,7 @@ import mekanism.common.MekanismLang;
 import mekanism.common.util.text.EnergyDisplay;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 
 import javax.annotation.Nonnull;
 
@@ -26,20 +27,12 @@ public class HelpButton extends MekanismButton {
 
     @Override
     public boolean isMouseOver(double pMouseX, double pMouseY) {
-        return this.visible && pMouseX >= (double)getButtonX() && pMouseY >= (double)getButtonY() && pMouseX < (double)(getButtonX() + this.width) && pMouseY < (double)(getButtonY() + this.height);
+        return this.visible && pMouseX >= (double)getX() && pMouseY >= (double)getY() && pMouseX < (double)(getX() + this.width) && pMouseY < (double)(getY() + this.height);
     }
 
     @Override
     public void renderToolTip(@Nonnull GuiGraphics matrix, int mouseX, int mouseY) {
         super.renderToolTip(matrix, mouseX, mouseY);
         displayTooltips(matrix, mouseX, mouseY, BfrLang.REACTOR_HELP1.translate(),BfrLang.REACTOR_HELP2.translate(), BfrLang.REACTOR_HELP3.translate());
-    }
-
-
-
-    @Override
-    public void renderForeground(GuiGraphics matrix, int mouseX, int mouseY) {
-        drawString(matrix, TextComponentUtil.getString("?"), getButtonX(), getButtonY(), SpecialColors.TAB_ENERGY_CONFIG.argb());
-        super.renderForeground(matrix, mouseX, mouseY);
     }
 }

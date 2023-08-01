@@ -23,7 +23,7 @@ public class LaserReadyButton extends MekanismButton {
 
     @Override
     public boolean isMouseOver(double pMouseX, double pMouseY) {
-        return this.visible && pMouseX >= (double)this.getButtonX() && pMouseY >= (double)this.getButtonY() && pMouseX < (double)(this.getButtonX() + this.width) && pMouseY < (double)(this.getButtonY() + this.height);
+        return this.visible && pMouseX >= (double)this.getX() && pMouseY >= (double)this.getY() && pMouseX < (double)(this.getX() + this.width) && pMouseY < (double)(this.getY() + this.height);
     }
 
     @Override
@@ -32,11 +32,4 @@ public class LaserReadyButton extends MekanismButton {
         displayTooltips(matrix, mouseX, mouseY, BfrLang.REACTOR_LASER_MIN_ENERGY.translate(EnergyDisplay.of(FloatingLong.create(500000000))),BfrLang.REACTOR_LASER_MIN_ENERGY_DESCR.translate());
     }
 
-
-
-    @Override
-    public void renderForeground(GuiGraphics matrix, int mouseX, int mouseY) {
-        drawString(matrix, BfrLang.REACTOR_LASER_READY_BUTTON.translate(), getButtonX(), getButtonY(), SpecialColors.TAB_ENERGY_CONFIG.argb());
-        super.renderForeground(matrix, mouseX, mouseY);
-    }
 }

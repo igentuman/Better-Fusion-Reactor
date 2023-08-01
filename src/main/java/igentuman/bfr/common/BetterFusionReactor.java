@@ -55,6 +55,7 @@ public class BetterFusionReactor implements IModModule {
         modEventBus.addListener(this::imcQueue);
         BfrBlocks.BLOCKS.register(modEventBus);
         BfrItems.ITEMS.register(modEventBus);
+        BfrCreativeTabs.BFR_TAB.register(modEventBus);
         BfrContainerTypes.CONTAINER_TYPES.register(modEventBus);
         BfrTileEntityTypes.TILE_ENTITY_TYPES.register(modEventBus);
         BfrModules.MODULES.register(modEventBus);
