@@ -27,7 +27,6 @@ public class BfrRecipes {
             register.setAccessible(true);
             IRRADIATING = (RecipeTypeRegistryObject<ItemStackToItemStackRecipe, InputRecipeCache.SingleItem<ItemStackToItemStackRecipe>>) register
                     .invoke(null, "irradiating", (Function<MekanismRecipeType<ItemStackToItemStackRecipe, InputRecipeCache.SingleItem<ItemStackToItemStackWithTimeModRecipe>>, InputRecipeCache.SingleItem<ItemStackToItemStackRecipe>>) recipeType -> new InputRecipeCache.SingleItem<>(recipeType, ItemStackToItemStackRecipe::getInput));
-
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }

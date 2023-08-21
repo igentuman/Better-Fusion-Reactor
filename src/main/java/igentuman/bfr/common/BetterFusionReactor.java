@@ -1,7 +1,9 @@
 package igentuman.bfr.common;
 
+import igentuman.bfr.common.events.RadiationEvents;
 import igentuman.bfr.common.registries.*;
 import mekanism.api.recipes.ItemStackToItemStackRecipe;
+import mekanism.common.CommonPlayerTracker;
 import mekanism.common.Mekanism;
 import mekanism.common.base.IModModule;
 import mekanism.common.command.builders.BuildCommand;
@@ -19,6 +21,7 @@ import mekanism.common.recipe.lookup.cache.InputRecipeCache;
 import mekanism.common.registration.impl.RecipeTypeRegistryObject;
 import mekanism.generators.common.GeneratorsLang;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -45,7 +48,6 @@ public class BetterFusionReactor implements IModModule {
     private final BfrPacketHandler packetHandler;
 
     public static final MultiblockManager<FusionReactorMultiblockData> fusionReactorManager = new MultiblockManager<>("fusionReactor", FusionReactorCache::new, FusionReactorValidator::new);
-
     public BetterFusionReactor() {
         Mekanism.modulesLoaded.add(instance = this);
         BetterFusionReactorConfig.registerConfigs(ModLoadingContext.get());
@@ -60,6 +62,7 @@ public class BetterFusionReactor implements IModModule {
         BfrTileEntityTypes.TILE_ENTITY_TYPES.register(modEventBus);
         BfrModules.MODULES.register(modEventBus);
         BfrRecipes.init();
+
         //Set our version number to match the mods.toml file, which matches the one in our build.gradle
         versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
         packetHandler = new BfrPacketHandler();
@@ -75,7 +78,7 @@ public class BetterFusionReactor implements IModModule {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         packetHandler.initialize();
-
+        MinecraftForge.EVENT_BUS.register(new RadiationEvents());
         event.enqueueWork(() -> {
             BuildCommand.register("fusion", GeneratorsLang.FUSION_REACTOR, new FusionReactorBuilder());
         });

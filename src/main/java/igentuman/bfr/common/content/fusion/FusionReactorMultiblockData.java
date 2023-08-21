@@ -287,6 +287,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
         if(reactivityUpdateTicksScaled() < currentReactivityTick) {
             currentReactivityTick = 0;
             setTargetReactivity(low + new Random().nextFloat() * (high - low));
+            setCurrentReactivity((low + new Random().nextFloat() * (high - low) + currentReactivity*3)/4);
         }
     }
     protected boolean isActiveCooled()

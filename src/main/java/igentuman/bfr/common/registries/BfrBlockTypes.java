@@ -59,11 +59,11 @@ public class BfrBlockTypes {
     public static final BlockTypeTile<TileEntityFusionReactorLogicAdapter> FUSION_REACTOR_LOGIC_ADAPTER = BlockTileBuilder
           .createBlock(() -> BfrTileEntityTypes.FUSION_REACTOR_LOGIC_ADAPTER, GeneratorsLang.DESCRIPTION_FUSION_REACTOR_LOGIC_ADAPTER)
           .withGui(() -> BfrContainerTypes.FUSION_REACTOR_LOGIC_ADAPTER)
-          .with(new AttributeRedstoneEmitter<>(tile -> tile.getRedstoneLevel()))
-           .with(Attributes.REDSTONE)
+          .with(new AttributeRedstoneEmitter<>(TileEntityFusionReactorLogicAdapter::getRedstoneLevel))
+          .with(Attributes.REDSTONE)
           .with(AttributeMobSpawn.WHEN_NOT_FORMED)
           .withComputerSupport("fusionReactorLogicAdapter")
-            .externalMultiblock()
+          .externalMultiblock()
           .build();
     // Laser Focus Matrix
     public static final BlockTypeTile<TileEntityLaserFocusMatrix> LASER_FOCUS_MATRIX = BlockTileBuilder

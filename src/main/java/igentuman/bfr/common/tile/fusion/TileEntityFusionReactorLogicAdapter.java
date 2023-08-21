@@ -21,6 +21,7 @@ import igentuman.bfr.common.registries.BfrBlocks;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter.FusionReactorLogic;
 import mekanism.generators.common.GeneratorsLang;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -85,7 +86,7 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
 
     protected int prevRedstoneLevel;
 
-    public int getRedstoneLevel()
+    public int getRedstoneLevel(Direction side)
     {
         if (isRemote()) {
             return prevRedstoneLevel;
