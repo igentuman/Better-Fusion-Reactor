@@ -65,7 +65,7 @@ public class GuiFusionReactorLogicAdapterGeneral extends GuiMekanismTile<TileEnt
         drawTextScaledBound(matrix, BfrLang.REACTOR_LOGIC_HELP4.translate(), 10, 75, titleTextColor(), 150);
         drawTextScaledBound(matrix, GeneratorsLang.REACTOR_LOGIC_ACTIVE_COOLING.translate(EnumColor.RED, OnOff.of(tile.isActiveCooled())), 29, 20, titleTextColor(), 117);
         drawTextScaledBound(matrix, GeneratorsLang.REACTOR_LOGIC_REDSTONE_MODE.translate(EnumColor.RED, tile.logicType), 16, 123, titleTextColor(), 144);
-        drawCenteredText(matrix, MekanismLang.STATUS.translate(EnumColor.RED, tile.getRedstoneLevel() > 0 ? GeneratorsLang.REACTOR_LOGIC_OUTPUTTING : MekanismLang.IDLE),
+        drawCenteredText(matrix, MekanismLang.STATUS.translate(EnumColor.RED, tile.checkMode() > 0 ? GeneratorsLang.REACTOR_LOGIC_OUTPUTTING : MekanismLang.IDLE),
               0, imageWidth, 136, titleTextColor());
         super.drawForegroundText(matrix, mouseX, mouseY);
     }

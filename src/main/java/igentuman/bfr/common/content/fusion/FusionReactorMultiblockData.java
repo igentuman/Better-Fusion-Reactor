@@ -57,6 +57,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fluids.FluidType;
 
+import static mekanism.generators.common.content.fusion.FusionReactorMultiblockData.FUEL_TAB;
+
 public class FusionReactorMultiblockData extends MultiblockData {
 
     private static final FloatingLong MAX_ENERGY = FloatingLong.createConst(1_000_000_000);
@@ -77,7 +79,7 @@ public class FusionReactorMultiblockData extends MultiblockData {
 
     private final Set<ITileHeatHandler> heatHandlers = new ObjectOpenHashSet<>();
     @ContainerSync(tags = "heat")
-    @WrappingComputerMethod(wrapper = ComputerFluidTankWrapper.class, methodNames = {"getCoolant", "getCoolantCapacity", "getCoolantNeeded", "getCoolantFilledPercentage"})
+    @WrappingComputerMethod(wrapper = ComputerFluidTankWrapper.class, methodNames = {"getCoolant", "getCoolantCapacity", "getCoolantNeeded", "getCoolantFilledPercentage"}, docPlaceholder = "coolant tank")
     public IGasTank gasCoolantTank;
 
     @ContainerSync
@@ -88,10 +90,10 @@ public class FusionReactorMultiblockData extends MultiblockData {
     public IHeatCapacitor heatCapacitor;
 
     @ContainerSync(tags = "heat")
-    @WrappingComputerMethod(wrapper = ComputerFluidTankWrapper.class, methodNames = {"getCoolant", "getCoolantCapacity", "getCoolantNeeded", "getCoolantFilledPercentage"})
+    @WrappingComputerMethod(wrapper = ComputerFluidTankWrapper.class, methodNames = {"getCoolant", "getCoolantCapacity", "getCoolantNeeded", "getCoolantFilledPercentage"}, docPlaceholder = "cold coolant tank")
     public IExtendedFluidTank liquidCoolantTank;
     @ContainerSync(tags = "heat")
-    @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getSteam", "getSteamCapacity", "getSteamNeeded", "getSteamFilledPercentage"})
+    @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getSteam", "getSteamCapacity", "getSteamNeeded", "getSteamFilledPercentage"}, docPlaceholder = "hot coolant tank")
     public IGasTank hotCoolantTank;
 
     private double biomeAmbientTemp;
@@ -102,23 +104,23 @@ public class FusionReactorMultiblockData extends MultiblockData {
     @SyntheticComputerMethod(getter = "getCaseTemperature")
     private double lastCaseTemperature;
 
-    @ContainerSync(tags = "fuel")
+    @ContainerSync(tags = FUEL_TAB)
     @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getDeuterium", "getDeuteriumCapacity", "getDeuteriumNeeded",
-                                                                                        "getDeuteriumFilledPercentage"})
+            "getDeuteriumFilledPercentage"}, docPlaceholder = "deuterium tank")
     public IGasTank deuteriumTank;
-    @ContainerSync(tags = "fuel")
+    @ContainerSync(tags = FUEL_TAB)
     @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getTritium", "getTritiumCapacity", "getTritiumNeeded",
-                                                                                        "getTritiumFilledPercentage"})
+            "getTritiumFilledPercentage"}, docPlaceholder = "tritium tank")
     public IGasTank tritiumTank;
-    @ContainerSync(tags = "fuel")
-    @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getDTFuel", "getDTFuelCapacity", "getDTFuelNeeded", "getDTFuelFilledPercentage"})
+    @ContainerSync(tags = FUEL_TAB)
+    @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getDTFuel", "getDTFuelCapacity", "getDTFuelNeeded", "getDTFuelFilledPercentage"}, docPlaceholder = "fuel tank")
     public IGasTank fuelTank;
     @ContainerSync(tags = {"fuel", "heat"}, getter = "getInjectionRate", setter = "setInjectionRate")
     private int injectionRate = 2;
 
     public double plasmaTemperature;
 
-    @WrappingComputerMethod(wrapper = ComputerIInventorySlotWrapper.class, methodNames = "getHohlraum")
+    @WrappingComputerMethod(wrapper = ComputerIInventorySlotWrapper.class, methodNames = "getHohlraum", docPlaceholder = "Hohlraum slot")
     private final ReactorInventorySlot reactorSlot;
 
     private boolean clientBurning;

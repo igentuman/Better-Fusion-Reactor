@@ -52,9 +52,9 @@ public abstract class TileEntityMachine extends TileEntityProgressMachine<ItemSt
     protected final IOutputHandler<@NotNull ItemStack> outputHandler;
 
     protected MachineEnergyContainer<TileEntityMachine> energyContainer;
-    @WrappingComputerMethod(wrapper = ComputerIInventorySlotWrapper.class, methodNames = "getInput")
+    @WrappingComputerMethod(wrapper = ComputerIInventorySlotWrapper.class, methodNames = "getInput", docPlaceholder = "input slot")
     protected InputInventorySlot inputSlot;
-    @WrappingComputerMethod(wrapper = ComputerIInventorySlotWrapper.class, methodNames = "getOutput")
+    @WrappingComputerMethod(wrapper = ComputerIInventorySlotWrapper.class, methodNames = "getOutput", docPlaceholder = "output slot")
     protected OutputInventorySlot outputSlot;
     protected EnergyInventorySlot energySlot;
     public TileEntityMachine(IBlockProvider blockProvider, BlockPos pos, BlockState state, int ticksRequired) {

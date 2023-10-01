@@ -28,8 +28,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Objects;
 
 public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactorBlock implements IReactorLogic<FusionReactorLogic>, IHasMode {
@@ -44,11 +46,17 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
     @Override
     protected boolean onUpdateServer(FusionReactorMultiblockData multiblock) {
         boolean needsPacket = super.onUpdateServer(multiblock);
-        int redstone = getRedstoneLevel();
+        int redstone = checkMode();
         if (redstone != prevRedstoneLevel) {
             Level world = getLevel();
             if (world != null) {
-                world.updateNeighborsAt(getBlockPos(), getBlockType());
+                Direction side = multiblock.getOutsideSide(worldPosition);
+                if (side == null) {
+                    //Not formed, just update all sides
+                    world.updateNeighborsAt(getBlockPos(), getBlockType());
+                } else if (!ForgeEventFactory.onNeighborNotify(world, worldPosition, getBlockState(), EnumSet.of(side), false).isCanceled()) {
+                    world.neighborChanged(worldPosition.relative(side), getBlockType(), worldPosition);
+                }
             }
             prevRedstoneLevel = redstone;
         }
@@ -88,6 +96,10 @@ public class TileEntityFusionReactorLogicAdapter extends TileEntityFusionReactor
 
     public int getRedstoneLevel(Direction side)
     {
+       return !isRemote() && getMultiblock().isPositionOutsideBounds(worldPosition.relative(side)) ? checkMode() : 0;
+    }
+
+    public int checkMode() {
         if (isRemote()) {
             return prevRedstoneLevel;
         }
