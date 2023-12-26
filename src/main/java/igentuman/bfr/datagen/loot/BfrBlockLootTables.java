@@ -10,8 +10,7 @@ import static net.minecraft.world.item.Items.*;
 
 public class BfrBlockLootTables extends BaseBlockLootTables {
 
-    @Override
-    protected void addTables() {
+    protected void generate() {
         add(block -> droppingWithFortuneOrRandomly(block, MekanismItems.PROCESSED_RESOURCES.get(ResourceType.RAW, PrimaryResource.TIN), UniformGenerator.between(1, 4)), BfrBlocks.ORE_BLOCKS.get("tin"));
         add(block -> droppingWithFortuneOrRandomly(block, MekanismItems.PROCESSED_RESOURCES.get(ResourceType.RAW, PrimaryResource.OSMIUM), UniformGenerator.between(1, 4)), BfrBlocks.ORE_BLOCKS.get("osmium"));
         add(block -> droppingWithFortuneOrRandomly(block, MekanismItems.PROCESSED_RESOURCES.get(ResourceType.RAW, PrimaryResource.URANIUM), UniformGenerator.between(1, 4)), BfrBlocks.ORE_BLOCKS.get("uranium"));
@@ -19,7 +18,6 @@ public class BfrBlockLootTables extends BaseBlockLootTables {
         add(block -> droppingWithFortuneOrRandomly(block, RAW_GOLD, UniformGenerator.between(1, 4)), BfrBlocks.ORE_BLOCKS.get("gold"));
         add(block -> droppingWithFortuneOrRandomly(block, RAW_IRON, UniformGenerator.between(1, 4)), BfrBlocks.ORE_BLOCKS.get("iron"));
         add(block -> droppingWithFortuneOrRandomly(block, RAW_COPPER, UniformGenerator.between(1, 8)), BfrBlocks.ORE_BLOCKS.get("copper"));
-    protected void generate() {
         dropSelfWithContents(BfrBlocks.BLOCKS.getAllBlocks());
     }
 }
