@@ -30,12 +30,4 @@ public class LaserReadyButton extends MekanismButton {
         super.renderToolTip(matrix, mouseX, mouseY);
         displayTooltips(matrix, mouseX, mouseY, BfrLang.REACTOR_LASER_MIN_ENERGY.translate(EnergyDisplay.of(FloatingLong.create(500000000))),BfrLang.REACTOR_LASER_MIN_ENERGY_DESCR.translate());
     }
-
-
-
-    @Override
-    public void renderForeground(PoseStack matrix, int mouseX, int mouseY) {
-        drawString(matrix, BfrLang.REACTOR_LASER_READY_BUTTON.translate(), x, y, SpecialColors.TAB_ENERGY_CONFIG.argb());
-        super.renderForeground(matrix, mouseX, mouseY);
-    }
 }

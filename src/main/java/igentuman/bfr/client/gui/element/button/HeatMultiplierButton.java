@@ -28,12 +28,4 @@ public class HeatMultiplierButton extends MekanismButton {
         super.renderToolTip(matrix, mouseX, mouseY);
         displayTooltips(matrix, mouseX, mouseY, BfrLang.REACTOR_HELP_HEAT_MULTIPLIER1.translate(),BfrLang.REACTOR_HELP_HEAT_MULTIPLIER2.translate(),BfrLang.REACTOR_HELP_HEAT_MULTIPLIER3.translate());
     }
-
-
-
-    @Override
-    public void renderForeground(PoseStack matrix, int mouseX, int mouseY) {
-        drawString(matrix, TextComponentUtil.getString("?"), x, y, SpecialColors.TAB_ENERGY_CONFIG.argb());
-        super.renderForeground(matrix, mouseX, mouseY);
-    }
 }

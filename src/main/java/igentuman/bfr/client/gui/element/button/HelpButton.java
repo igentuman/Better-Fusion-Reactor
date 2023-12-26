@@ -33,12 +33,4 @@ public class HelpButton extends MekanismButton {
         super.renderToolTip(matrix, mouseX, mouseY);
         displayTooltips(matrix, mouseX, mouseY, BfrLang.REACTOR_HELP1.translate(),BfrLang.REACTOR_HELP2.translate(), BfrLang.REACTOR_HELP3.translate());
     }
-
-
-
-    @Override
-    public void renderForeground(PoseStack matrix, int mouseX, int mouseY) {
-        drawString(matrix, TextComponentUtil.getString("?"), x, y, SpecialColors.TAB_ENERGY_CONFIG.argb());
-        super.renderForeground(matrix, mouseX, mouseY);
-    }
 }

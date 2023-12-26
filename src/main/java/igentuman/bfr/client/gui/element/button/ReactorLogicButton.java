@@ -23,7 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ReactorLogicButton<TYPE extends Enum<TYPE> & IReactorLogicMode<TYPE>> extends MekanismButton {
+public class    ReactorLogicButton<TYPE extends Enum<TYPE> & IReactorLogicMode<TYPE>> extends MekanismButton {
 
     private static final ResourceLocation TEXTURE = BetterFusionReactor.rl(ResourceType.GUI_BUTTON.getPrefix() + "reactor_logic.png");
     @Nonnull
