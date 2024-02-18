@@ -53,10 +53,6 @@ repositories {
         url 'https://maven.tterrag.com/'
     }
     maven {
-        name 'ic2'
-        url 'https://maven.ic2.player.to'
-    }
-    maven {
         name 'BlameJared - Crafttweaker'
         url 'https://maven.blamejared.com/'
     }
@@ -67,6 +63,10 @@ repositories {
     maven {
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
+    }
+    maven {
+        name = "curse.maven"
+        url "https://cursemaven.com"
     }
 }
 
@@ -89,19 +89,20 @@ minecraft {
 }
 
 dependencies {
-    deobfCompile "mekanism:Mekanism:${mekanism_version}"
-    deobfCompile "mekanism-generators:MekanismGenerators:${mekanism_version}"
+    //deobfCompile "mekanism:Mekanism:${mekanism_version}"
+    //deobfCompile "mekanism-generators:MekanismGenerators:${mekanism_version}"
     compileOnly "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
     runtime "mezz.jei:jei_${minecraft_version}:${jei_version}"
     deobfCompile "nuclearcraft-overhauled:NuclearCraft:${nuclearcraft_version}:${minecraft_version}"
     compileOnly "net.darkhax.tesla:Tesla-${minecraft_version}:${tesla_version}"
     compileOnly "inventory-tweaks:InventoryTweaks:${invtweak_version}:api"
     deobfCompile "li.cil.oc:OpenComputers:${oc_version}"
-
+    deobfCompile "curse.maven:mekanism-unofficial-edition-v10-edition-840735:4464199"
     compileOnly "com.mod-buildcraft:buildcraft-api:${buildcraft_version}"
     compileOnly "team.chisel.ctm:CTM:MC${minecraft_version}-${ctm_version}:api"
     runtime "team.chisel.ctm:CTM:MC${minecraft_version}-${ctm_version}"
-    compileOnly "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
+    compileOnly 'net.industrial-craft:industrialcraft-2:2.8.91-ex112'
+
     compileOnly("CraftTweaker2:CraftTweaker2-API:${crafttweaker_version}") {
         exclude module: "asm-debug-all"
     }

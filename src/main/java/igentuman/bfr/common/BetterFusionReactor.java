@@ -8,7 +8,6 @@ import java.util.Set;
 import igentuman.bfr.common.config.BfrConfig;
 import igentuman.bfr.common.recipes.BFRRecipes;
 import igentuman.bfr.common.recipes.ReactorCoolantRecipe;
-import igentuman.bfr.common.recipes.RecipeManager;
 import mekanism.generators.common.item.ItemHohlraum;
 import igentuman.bfr.common.tile.reactor.TileEntityReactorBlock;
 import igentuman.bfr.common.tile.reactor.TileEntityReactorController;
@@ -32,9 +31,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import org.apache.logging.log4j.Level;
 
 public class BetterFusionReactor {
 
@@ -173,6 +172,14 @@ public class BetterFusionReactor {
         }
         return (float) Math.pow((float)(Math.abs(Math.sqrt((float)getPlasmaTemp()/1000000) - 40))/tDevide, 2);
     }
+    public int meltdownCntr = 0;
+    public boolean isBroken()
+    {
+        if(meltdownCntr > 0) {
+            meltdownCntr--;
+        }
+        return meltdownCntr > 0;
+    }
 
     // if efficiency bigger than 80% we reducing chances
     public void updateErrorLevel()
@@ -184,13 +191,14 @@ public class BetterFusionReactor {
             }
             errorLevel += shift;
         } else {
-            errorLevel -= 0.1;
+            errorLevel -= 0.1F;
         }
         errorLevel = Math.min(100, Math.max(0, errorLevel));
         if(errorLevel >= 100) {
             currentReactivity = 0;
             targetReactivity = 0;
             adjustment = 0;
+            meltdownCntr = 400;
             burning = false;
             if(BfrConfig.reactorMeltdown) {
                 controller.getWorld().createExplosion(null, controller.getPos().getX(), controller.getPos().getY() + 1, controller.getPos().getZ(), BfrConfig.explosionRadius, true);
@@ -222,7 +230,7 @@ public class BetterFusionReactor {
             ItemStack hohlraum = controller.inventory.get(0);
             if (!hohlraum.isEmpty() && hohlraum.getItem() instanceof ItemHohlraum) {
                 GasStack gasStack = ((ItemHohlraum) hohlraum.getItem()).getGas(hohlraum);
-                return gasStack != null && gasStack.getGas() == MekanismFluids.FusionFuel && gasStack.amount == ItemHohlraum.MAX_GAS;
+                return gasStack != null && gasStack.getGas() == MekanismFluids.FusionFuel && gasStack.amount >= 10;
             }
         }
         return false;
@@ -241,6 +249,7 @@ public class BetterFusionReactor {
         if(reactivityUpdateTicksScaled() < currentReactivityTick) {
             currentReactivityTick = 0;
             setTargetReactivity(low + new Random().nextFloat() * (high - low));
+            setCurrentReactivity((low + new Random().nextFloat() * (high - low) + currentReactivity) / 2);
         }
     }
 
@@ -256,8 +265,9 @@ public class BetterFusionReactor {
         //Only thermal transfer happens unless we're hot enough to burn.
         if (plasmaTemperature >= burnTemperature) {
             //If we're not burning yet we need a hohlraum to ignite
-            if (!burning && hasHohlraum()) {
+            if (!burning && hasHohlraum() && !isBroken()) {
                 vaporiseHohlraum();
+
                 float low = 0F;
                 float high = 100F;
                 setCurrentReactivity(low + new Random().nextFloat() * (high - low));
@@ -267,7 +277,6 @@ public class BetterFusionReactor {
             //Only inject fuel if we're burning
             if (burning) {
                 laserShootCount();
-                activelyCooled = getWaterTank().getFluidAmount() > 0;
                 updateReactivity();
                 updateAdjustment();
                 injectFuel();
@@ -328,9 +337,11 @@ public class BetterFusionReactor {
 
     public Fluid getFluidOutput()
     {
+        activelyCooled = false;
         if(getWaterTank().getFluid() == null) {
             return null;
         }
+        activelyCooled = true;
         if(cachedInput != null && cachedInput.equals(getWaterTank().getFluid().getFluid())) {
             if(cachedOutput == null) {
                 for(ReactorCoolantRecipe recipe: BFRRecipes.REACTOR_COOLANT.getAll()) {

@@ -51,7 +51,7 @@ public class BfrConfig {
 		reaction_difficulty.setLanguageKey("gui.bfr.config.better_fusion_reactor.reaction_difficulty");
 		reactionDifficulty = reaction_difficulty.getInt();
 
-		Property reactor_meltdown = config.get(BFR_CATEGORY, "reactor_meltdown", false, I18n.translateToLocal("gui.bfr.config.better_fusion_reactor.reactor_meltdown.comment"));
+		Property reactor_meltdown = config.get(BFR_CATEGORY, "reactor_meltdown", true, I18n.translateToLocal("gui.bfr.config.better_fusion_reactor.reactor_meltdown.comment"));
 		reactor_meltdown.setLanguageKey("gui.bfr.config.better_fusion_reactor.reactor_meltdown");
 		reactorMeltdown = reactor_meltdown.getBoolean();
 
