@@ -1,7 +1,6 @@
 package igentuman.bfr.common.config;
 
 import igentuman.bfr.common.BFR;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -43,19 +42,19 @@ public class BfrConfig {
 	{
 		if (loadFromFile) config.load();
 
-		Property gui_max_injection_rate = config.get(BFR_CATEGORY, "gui_max_injection_rate", 998, I18n.translateToLocal("gui.bfr.config.better_fusion_reactor.gui_max_injection_rate.comment"),2,998);
+		Property gui_max_injection_rate = config.get(BFR_CATEGORY, "gui_max_injection_rate", 998, "Max injction rate",2,998);
 		gui_max_injection_rate.setLanguageKey("gui.bfr.config.better_fusion_reactor.gui_max_injection_rate");
 		guiMaxInjectionRate = gui_max_injection_rate.getInt();
 
-		Property reaction_difficulty = config.get(BFR_CATEGORY, "reaction_difficulty", 10, I18n.translateToLocal("gui.bfr.config.better_fusion_reactor.reaction_difficulty.comment"),1,20);
+		Property reaction_difficulty = config.get(BFR_CATEGORY, "reaction_difficulty", 10, "Reaction difficulty",1,20);
 		reaction_difficulty.setLanguageKey("gui.bfr.config.better_fusion_reactor.reaction_difficulty");
 		reactionDifficulty = reaction_difficulty.getInt();
 
-		Property reactor_meltdown = config.get(BFR_CATEGORY, "reactor_meltdown", true, I18n.translateToLocal("gui.bfr.config.better_fusion_reactor.reactor_meltdown.comment"));
+		Property reactor_meltdown = config.get(BFR_CATEGORY, "reactor_meltdown", true, "Reactor meltdown");
 		reactor_meltdown.setLanguageKey("gui.bfr.config.better_fusion_reactor.reactor_meltdown");
 		reactorMeltdown = reactor_meltdown.getBoolean();
 
-		Property explosion_radius = config.get(BFR_CATEGORY, "explosion_radius", 4, I18n.translateToLocal("gui.bfr.config.better_fusion_reactor.explosion_radius.comment"));
+		Property explosion_radius = config.get(BFR_CATEGORY, "explosion_radius", 4, "Reactor explosion radius", 1, 100);
 		explosion_radius.setLanguageKey("gui.bfr.config.better_fusion_reactor.explosion_radius");
 		explosionRadius = (float)explosion_radius.getInt();
 
@@ -74,6 +73,4 @@ public class BfrConfig {
 			}
 		}
 	}
-	
-
 }
