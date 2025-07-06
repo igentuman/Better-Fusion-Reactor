@@ -1,0 +1,11 @@
+{
+  "type": "mekanism:centrifuging",
+  "input": {
+    "amount": 1,
+    "gas": "mekanism:spent_nuclear_waste"
+  },
+  "output": {
+    "amount": 1,
+    "gas": "mekanism:enriched_nuclear_waste"
+  }
+}

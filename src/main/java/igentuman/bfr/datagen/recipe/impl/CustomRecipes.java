@@ -33,13 +33,5 @@ public class CustomRecipes implements ISubRecipeProvider {
                     slurry.getDirtySlurry().getStack(1_200)
             ).build(consumer, BetterFusionReactor.rl(basePath + "from_"+resource.getRegistrySuffix()+"irradiated_ore"));
         }
-
-        basePath = "crystallizing/";
-
-        ChemicalCrystallizerRecipeBuilder.crystallizing(
-                IngredientCreatorAccess.gas().from(MekanismGases.NUCLEAR_WASTE, 2000),
-                BfrItems.SOLIDIFIED_WASTE.getItemStack()
-        ).build(consumer, Mekanism.rl(basePath + "waste_to_solid_waste"));
-
     }
 }
