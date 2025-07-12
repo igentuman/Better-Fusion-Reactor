@@ -1,9 +1,9 @@
 package igentuman.bfr.common.content.fusion;
 
-import mekanism.api.NBTConstants;
+import mekanism.api.SerializationConstants;
 import mekanism.common.lib.multiblock.MultiblockCache;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-
 
 public class BFReactorCache extends MultiblockCache<BFReactorMultiblockData> {
 
@@ -15,8 +15,6 @@ public class BFReactorCache extends MultiblockCache<BFReactorMultiblockData> {
     private float adjustment;
     private float errorLevel;
     private int laserCountdown;
-
-
     private int getInjectionRate() {
         if (injectionRate == -1) {
             //If it never got set default to 2
@@ -40,8 +38,8 @@ public class BFReactorCache extends MultiblockCache<BFReactorMultiblockData> {
     }
 
     @Override
-    public void apply(BFReactorMultiblockData data) {
-        super.apply(data);
+    public void apply(HolderLookup.Provider provider, BFReactorMultiblockData data) {
+        super.apply(provider, data);
         if (plasmaTemperature >= 0) {
             data.plasmaTemperature = plasmaTemperature;
         }
@@ -69,11 +67,11 @@ public class BFReactorCache extends MultiblockCache<BFReactorMultiblockData> {
     }
 
     @Override
-    public void load(CompoundTag nbtTags) {
-        super.load(nbtTags);
-        plasmaTemperature = nbtTags.getDouble(NBTConstants.PLASMA_TEMP);
-        injectionRate = nbtTags.getInt(NBTConstants.INJECTION_RATE);
-        burning = nbtTags.getBoolean(NBTConstants.BURNING);
+    public void load(HolderLookup.Provider provider, CompoundTag nbtTags) {
+        super.load(provider, nbtTags);
+        plasmaTemperature = nbtTags.getDouble(SerializationConstants.PLASMA_TEMP);
+        injectionRate = nbtTags.getInt(SerializationConstants.INJECTION_RATE);
+        burning = nbtTags.getBoolean(SerializationConstants.BURNING);
         adjustment = nbtTags.getFloat(ReactorConstants.NBT_ADJUSTMENT);
         currentReactivity = nbtTags.getFloat(ReactorConstants.NBT_CURRENT_REACTIVITY);
         targetReactivity = nbtTags.getFloat(ReactorConstants.NBT_TARGET_REACTIVITY);
@@ -82,15 +80,15 @@ public class BFReactorCache extends MultiblockCache<BFReactorMultiblockData> {
     }
 
     @Override
-    public void save(CompoundTag nbtTags) {
-        super.save(nbtTags);
-        nbtTags.putDouble(NBTConstants.PLASMA_TEMP, plasmaTemperature);
-        nbtTags.putInt(NBTConstants.INJECTION_RATE, getInjectionRate());
+    public void save(HolderLookup.Provider provider, CompoundTag nbtTags) {
+        super.save(provider, nbtTags);
+        nbtTags.putDouble(SerializationConstants.PLASMA_TEMP, plasmaTemperature);
+        nbtTags.putInt(SerializationConstants.INJECTION_RATE, getInjectionRate());
+        nbtTags.putBoolean(SerializationConstants.BURNING, burning);
         nbtTags.putInt(ReactorConstants.NBT_LASER_SHOOT_COUNTDOWN, laserCountdown);
         nbtTags.putFloat(ReactorConstants.NBT_CURRENT_REACTIVITY, currentReactivity);
         nbtTags.putFloat(ReactorConstants.NBT_TARGET_REACTIVITY, targetReactivity);
         nbtTags.putFloat(ReactorConstants.NBT_ERROR_LEVEL, errorLevel);
         nbtTags.putFloat(ReactorConstants.NBT_ADJUSTMENT, adjustment);
-        nbtTags.putBoolean(NBTConstants.BURNING, burning);
     }
 }

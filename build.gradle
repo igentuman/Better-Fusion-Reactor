@@ -1,151 +1,133 @@
+import java.util.function.Consumer
+
 plugins {
-    id 'org.ajoberstar.grgit.service' version '5.2.0'
-    id 'java'
-    id 'eclipse'
-    id 'idea'
-    id 'maven-publish'
-    id 'net.darkhax.curseforgegradle' version '1.1.16'
-    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id('java')
+    id('idea')
+    id('net.neoforged.moddev') version('2.0.88')
 }
 
-tasks.named('wrapper', Wrapper).configure {
+tasks.named('wrapper', Wrapper) {
     //Define wrapper values here so as to not have to always do so when updating gradlew.properties
-    gradleVersion = '8.2.1'
+    gradleVersion = '8.14.1'
     distributionType = Wrapper.DistributionType.ALL
 }
 
-defaultTasks 'build'
+tasks.named('updateDaemonJvm', UpdateDaemonJvm) {
+    languageVersion = JavaLanguageVersion.of("${java_version}")
+}
+
+defaultTasks('build')
 
 group = "igentuman.bfr"
 version = "${minecraft_version}-${mod_version}"
-archivesBaseName = "BetterFusionReactor"
+project.base.archivesName = "BetterFusionReactor"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of("${java_version}"))
+        vendor.set(JvmVendorSpec.JETBRAINS)
+    }
+    withSourcesJar()
+}
+final runsFolder = layout.projectDirectory.dir('runs')
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-minecraft {
-    mappings channel: 'parchment', version: '2023.07.09-1.20.1'
-    accessTransformers.from(file('src/main/resources/META-INF/accesstransformer.cfg'))
+neoForge {
+    version = neo_version
+
+    mods {
+        bfr {
+            sourceSet(sourceSets.main)
+        }
+    }
+    
+    // Access transformers if needed
+    if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
+        accessTransformers.from(file('src/main/resources/META-INF/accesstransformer.cfg'))
+    }
+    
     runs {
         client {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.disableRefMap', 'true'
-            mods {
-                bfr {
-                    source sourceSets.main
-                }
-            }
+            client()
+            gameDirectory.value(runsFolder.dir('run'))
+            sourceSet = sourceSets.main
         }
 
         server {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            mods {
-                bfr {
-                    source sourceSets.main
-                }
-            }
+            gameDirectory.value(runsFolder.dir('server'))
+            server()
+            sourceSet = sourceSets.main
         }
 
         data {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            args '--mod', 'bfr', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            mods {
-                bfr {
-                    source sourceSets.main
-                }
-            }
+            data()
+            gameDirectory.value(runsFolder.dir('data'))
+            programArguments.addAll('--all', '--output', file('src/datagen/generated/').absolutePath,
+                    '--mod', 'bfr', '--existing', file('src/main/resources/').absolutePath)
+            sourceSet = sourceSets.main
         }
     }
 }
 
+static void exclusiveRepo(RepositoryHandler handler, String url, String... groups) {
+    exclusiveRepo(handler, url, filter -> {
+        for (def group : groups) {
+            filter.includeGroup(group)
+        }
+    })
+}
 
-repositories {
-    flatDir { dirs 'libs' }
-    maven {
-        name 'prog'
-        url 'https://dvs1.progwml6.com/files/maven'
-        content {
-            includeGroup 'mezz.jei'
-        }
+static void exclusiveRepo(RepositoryHandler handler, String url, Consumer<InclusiveRepositoryContentDescriptor> filterSetup) {
+    handler.exclusiveContent {
+        it.forRepositories(handler.maven {
+            setUrl(url)
+        })
+        it.filter { f -> filterSetup.accept(f) }
     }
-    maven {
-        name 'CraftTweaker'
-        url "https://maven.blamejared.com"
-        content {
-            includeGroup 'com.blamejared.crafttweaker'
-            includeGroup 'com.blamejared.jeitweaker'
-        }
-    }
-    maven {
-        name 'curios'
-        url "https://maven.theillusivec4.top/"
-        content {
-            includeGroup 'top.theillusivec4.curios'
-        }
-    }
-    maven {
-        name 'tterrag'
-        url 'https://maven.tterrag.com/'
-        content {
-            includeGroup 'team.chisel.ctm'
-        }
-    }
-    maven {
-        name 'CurseMaven'
-        url 'https://www.cursemaven.com'
-        content {
-            includeGroup 'curse.maven'
-        }
-    }
-    maven {
-        name 'Modmaven'
-        url 'https://modmaven.dev/'
-        content {
-            includeGroup 'appeng'
-            includeGroup 'mcjty.theoneprobe'
-            includeGroup 'mekanism'
-        }
-    }
-    maven {
-        url "https://maven.architectury.dev"
-        content {
-            includeGroup 'dev.architectury'
+}
+
+repositories { RepositoryHandler handler ->
+    exclusiveRepo(handler, 'https://maven.blamejared.com', filter -> {
+        filter.includeGroupAndSubgroups('com.blamejared')
+        filter.includeGroup('mezz.jei')
+        filter.includeGroup('org.openzen.zencode')
+    })
+    exclusiveRepo(handler, 'https://maven.terraformersmc.com/', 'dev.emi')
+    exclusiveRepo(handler, 'https://maven.theillusivec4.top/', 'top.theillusivec4.curios')
+    exclusiveRepo(handler, 'https://maven.tterrag.com/', 'team.chisel.ctm')
+    exclusiveRepo(handler, 'https://squiddev.cc/maven/', 'cc.tweaked', 'org.squiddev')
+    exclusiveRepo(handler, 'https://dogforce-games.com/maven/', 'dev.gigaherz.jsonthings')
+    exclusiveRepo(handler, 'https://maven2.bai.lol', 'lol.bai', 'mcp.mobius.waila')//WTHIT
+    exclusiveRepo(handler, 'https://www.cursemaven.com', 'curse.maven')
+    exclusiveRepo(handler, 'https://modmaven.dev/', 'mcjty.theoneprobe', 'dev.technici4n', 'mekanism', 'mekanism.generators')
+    exclusiveRepo(handler, 'https://maven.minecraftforge.net/releases/', 'com.github.glitchfiend')
+    exclusiveRepo(handler, 'https://maven.thiakil.com', 'com.thiakil', 'moze_intel.projecte')
+    exclusiveRepo(handler, 'https://maven.parchmentmc.org/', 'org.parchmentmc.data')
+    handler.exclusiveContent {
+        it.forRepositories(handler.mavenCentral())
+        it.filter {
+            includeGroup('org.appliedenergistics')
         }
     }
 }
 
 dependencies {
-    minecraft "net.neoforged:forge:${minecraft_version}-${forge_version}"
-    annotationProcessor project(":annotation-processor")
-    implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
-
-    implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
-    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
-    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
-    implementation(fg.deobf("curse.maven:cc-tweaked-282001:${cc_tweaked_id}")) {
-        transitive = false
+    compileOnly(project(':annotation-processor'))
+    annotationProcessor(project(':annotation-processor'))
+    compileOnly("dev.emi:emi-neoforge:${emi_version}+${minecraft_version}:api")
+    // JEI
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+    if (recipe_viewer == 'jei' || recipe_viewer == 'hybrid') {
+        runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
     }
-    implementation fg.deobf("curse.maven:sedna-511276:${sedna_version}")
-    implementation fg.deobf("curse.maven:markdownmanual-502485:${md_version}")
-    implementation fg.deobf("curse.maven:oc2r-1037738:${oc2_version}")
-   // compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
-    //compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
-    // at runtime, use the full JEI jar for Forge
-   // runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
-   // compileOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}:api") {
-  //      transitive = false
-  //  }
-  //  runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}") {
-  //      transitive = false
-  //  }
+    
+    // Mekanism
+    implementation("mekanism:Mekanism:${mekanism_version}")// core
+    implementation("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+    
+    // Other dependencies
+    compileOnly("cc.tweaked:cc-tweaked-${previous_minor_minecraft_version}-forge-api:${cc_tweaked_version}")
+    compileOnly("curse.maven:opencomputers2-437654:${oc2_id}")
 }
 
 jar {
@@ -166,7 +148,36 @@ tasks.withType(JavaCompile).configureEach({
     it.options.encoding = 'UTF-8'
 })
 
-tasks.withType(GenerateModuleMetadata) {
-    //Disable Gradle 7 module metadata generation as it does not play nicely with FG
-    enabled = false
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version_range      : neo_version_range,
+            neo_version            : neo_version,
+            loader_version_range   : loader_version_range,
+            generators_version     : generators_version,
+            mod_id                 : 'bfr',
+            mod_name               : 'Better Fusion Reactor',
+            mod_license            : 'MIT',
+            mod_version            : mod_version,
+            mod_authors            : 'igentuman',
+            mod_description        : 'BFR'
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }

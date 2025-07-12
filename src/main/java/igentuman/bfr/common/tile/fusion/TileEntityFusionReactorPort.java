@@ -1,106 +1,106 @@
 package igentuman.bfr.common.tile.fusion;
 
-import java.util.Set;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import mekanism.api.IConfigurable;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import mekanism.api.IContentsListener;
-import mekanism.api.chemical.gas.Gas;
-import mekanism.api.chemical.gas.GasStack;
-import mekanism.api.chemical.gas.IGasTank;
+import mekanism.api.chemical.IChemicalHandler;
 import mekanism.api.heat.IHeatHandler;
+import mekanism.api.text.EnumColor;
+import mekanism.common.attachments.containers.ContainerType;
 import mekanism.common.capabilities.Capabilities;
 import mekanism.common.capabilities.heat.CachedAmbientTemperature;
 import mekanism.common.capabilities.holder.chemical.IChemicalTankHolder;
 import mekanism.common.capabilities.holder.energy.IEnergyContainerHolder;
 import mekanism.common.capabilities.holder.fluid.IFluidTankHolder;
 import mekanism.common.capabilities.holder.heat.IHeatCapacitorHolder;
-import mekanism.common.capabilities.holder.slot.IInventorySlotHolder;
 import mekanism.common.integration.computer.annotation.ComputerMethod;
-import mekanism.common.tile.base.SubstanceType;
-import mekanism.common.util.CableUtils;
-import mekanism.common.util.CapabilityUtils;
-import mekanism.common.util.ChemicalUtil;
-import mekanism.common.util.MekanismUtils;
+import mekanism.common.integration.energy.BlockEnergyCapabilityCache;
+import mekanism.common.lib.multiblock.MultiblockData.CapabilityOutputTarget;
+import mekanism.common.lib.multiblock.MultiblockData.EnergyOutputTarget;
 import mekanism.common.util.WorldUtils;
 import mekanism.common.util.text.BooleanStateDisplay.InputOutput;
-import igentuman.bfr.common.content.fusion.BFReactorMultiblockData;
+import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.registries.BfrBlocks;
-import mekanism.generators.common.GeneratorsLang;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class TileEntityFusionReactorPort extends TileEntityFusionReactorBlock implements IConfigurable {
+public class TileEntityFusionReactorPort extends TileEntityFusionReactorBlock {
+
+    private final Map<Direction, BlockCapabilityCache<IChemicalHandler, @Nullable Direction>> chemicalCapabilityCaches = new EnumMap<>(Direction.class);
+    private final Map<Direction, BlockEnergyCapabilityCache> energyCapabilityCaches = new EnumMap<>(Direction.class);
 
     public TileEntityFusionReactorPort(BlockPos pos, BlockState state) {
         super(BfrBlocks.FUSION_REACTOR_PORT, pos, state);
-        delaySupplier = () -> 0;
-    }
-    @Nonnull
-    @Override
-    public IChemicalTankHolder<Gas, GasStack, IGasTank> getInitialGasTanks(IContentsListener listener) {
-        //Note: We can just use a proxied holder as the input/output restrictions are done in the tanks themselves
-        return side -> getMultiblock().getGasTanks(side);
+        delaySupplier = NO_DELAY;
     }
 
-    @Nonnull
+    @NotNull
+    @Override
+    public IChemicalTankHolder getInitialChemicalTanks(IContentsListener listener) {
+        //Note: We can just use a proxied holder as the input/output restrictions are done in the tanks themselves
+        return side -> getMultiblock().getChemicalTanks(side);
+    }
+
+    @NotNull
     @Override
     protected IFluidTankHolder getInitialFluidTanks(IContentsListener listener) {
         return side -> getMultiblock().getFluidTanks(side);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected IEnergyContainerHolder getInitialEnergyContainers(IContentsListener listener) {
         return side -> getMultiblock().getEnergyContainers(side);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected IHeatCapacitorHolder getInitialHeatCapacitors(IContentsListener listener, CachedAmbientTemperature ambientTemperature) {
         return side -> getMultiblock().getHeatCapacitors(side);
     }
 
-    @Nonnull
     @Override
-    protected IInventorySlotHolder getInitialInventory(IContentsListener listener) {
-        return side -> getMultiblock().getInventorySlots(side);
-    }
-    @Override
-    public boolean persists(SubstanceType type) {
-        if (type == SubstanceType.GAS || type == SubstanceType.FLUID || type == SubstanceType.ENERGY || type == SubstanceType.HEAT) {
+    public boolean persists(ContainerType<?, ?, ?> type) {
+        if (type == ContainerType.CHEMICAL || type == ContainerType.FLUID || type == ContainerType.ENERGY || type == ContainerType.HEAT) {
             return false;
         }
         return super.persists(type);
     }
 
-    @Override
-    public boolean persistInventory() {
-        return false;
+    public void addGasTargetCapability(List<CapabilityOutputTarget<IChemicalHandler>> outputTargets, Direction side) {
+        BlockCapabilityCache<IChemicalHandler, @Nullable Direction> cache = chemicalCapabilityCaches.get(side);
+        if (cache == null) {
+            cache = Capabilities.CHEMICAL.createCache((ServerLevel) level, worldPosition.relative(side), side.getOpposite());
+            chemicalCapabilityCaches.put(side, cache);
+        }
+        outputTargets.add(new CapabilityOutputTarget<>(cache, this::getActive));
     }
 
-    @Override
-    protected boolean onUpdateServer(BFReactorMultiblockData multiblock) {
-        boolean needsPacket = super.onUpdateServer(multiblock);
-        if (getActive() && multiblock.isFormed()) {
-            Set<Direction> directionsToEmit = multiblock.getDirectionsToEmit(getBlockPos());
-            ChemicalUtil.emit(directionsToEmit, multiblock.hotCoolantTank, this);
-            CableUtils.emit(directionsToEmit, multiblock.energyContainer, this);
+    public void addEnergyTargetCapability(List<EnergyOutputTarget> outputTargets, Direction side) {
+        BlockEnergyCapabilityCache cache = energyCapabilityCaches.get(side);
+        if (cache == null) {
+            cache = BlockEnergyCapabilityCache.create((ServerLevel) level, worldPosition.relative(side), side.getOpposite());
+            energyCapabilityCaches.put(side, cache);
         }
-        return needsPacket;
+        outputTargets.add(new EnergyOutputTarget(cache, this::getActive));
     }
 
     @Nullable
     @Override
-    public IHeatHandler getAdjacent(@Nonnull Direction side) {
+    public IHeatHandler getAdjacent(@NotNull Direction side) {
         if (canHandleHeat() && getHeatCapacitorCount(side) > 0) {
-            BlockEntity adj = WorldUtils.getTileEntity(getLevel(), getBlockPos().relative(side));
-            if (!(adj instanceof TileEntityFusionReactorBlock)) {
-                return CapabilityUtils.getCapability(adj, Capabilities.HEAT_HANDLER, side.getOpposite()).resolve().orElse(null);
+            if (WorldUtils.getBlockState(level, getBlockPos().relative(side))
+                  .filter(state -> !state.is(BfrBlocks.FUSION_REACTOR_PORT))
+                  .isPresent()) {
+                return getAdjacentUnchecked(side);
             }
         }
         return null;
@@ -111,7 +111,7 @@ public class TileEntityFusionReactorPort extends TileEntityFusionReactorBlock im
         if (!isRemote()) {
             boolean oldMode = getActive();
             setActive(!oldMode);
-            player.sendSystemMessage(MekanismUtils.logFormat(GeneratorsLang.REACTOR_PORT_EJECT.translate(InputOutput.of(oldMode, true))));
+            player.displayClientMessage(BfrLang.REACTOR_PORT_EJECT.translateColored(EnumColor.GRAY, InputOutput.of(oldMode, true)), true);
         }
         return InteractionResult.SUCCESS;
     }
@@ -127,13 +127,13 @@ public class TileEntityFusionReactorPort extends TileEntityFusionReactorBlock im
         return false;
     }
 
-    @ComputerMethod
-    public boolean getMode() {
+    @ComputerMethod(methodDescription = "true -> output, false -> input")
+    boolean getMode() {
         return getActive();
     }
 
-    @ComputerMethod
-    public void setMode(boolean output) {
+    @ComputerMethod(methodDescription = "true -> output, false -> input")
+    void setMode(boolean output) {
         setActive(output);
     }
     //End methods IComputerTile

@@ -1,8 +1,7 @@
 package igentuman.bfr.common.tile;
 
+import igentuman.bfr.common.registries.BfrBlocks;
 import mekanism.api.IContentsListener;
-import mekanism.api.math.FloatingLong;
-import mekanism.api.providers.IBlockProvider;
 import mekanism.api.recipes.ItemStackToItemStackRecipe;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.api.recipes.cache.CachedRecipe.OperationTracker.RecipeError;
@@ -57,30 +56,27 @@ public abstract class TileEntityMachine extends TileEntityProgressMachine<ItemSt
     @WrappingComputerMethod(wrapper = ComputerIInventorySlotWrapper.class, methodNames = "getOutput", docPlaceholder = "output slot")
     protected OutputInventorySlot outputSlot;
     protected EnergyInventorySlot energySlot;
-    public TileEntityMachine(IBlockProvider blockProvider, BlockPos pos, BlockState state, int ticksRequired) {
-        super(blockProvider, pos, state, TRACKED_ERROR_TYPES, ticksRequired);
-        configComponent = new TileComponentConfig(this, TransmissionType.ITEM);
+    public TileEntityMachine(BlockPos pos, BlockState state, int ticksRequired) {
+            super(BfrBlocks.IRRADIATOR, pos, state, TRACKED_ERROR_TYPES, ticksRequired);
         configComponent.setupItemIOConfig(inputSlot, outputSlot, energySlot);
-
         ejectorComponent = new TileComponentEjector(this);
         ejectorComponent.setOutputData(configComponent, TransmissionType.ITEM);
-
         inputHandler = InputHelper.getInputHandler(inputSlot, RecipeError.NOT_ENOUGH_INPUT);
         outputHandler = OutputHelper.getOutputHandler(outputSlot, RecipeError.NOT_ENOUGH_OUTPUT_SPACE);
     }
 
     @NotNull
     @Override
-    protected IEnergyContainerHolder getInitialEnergyContainers(IContentsListener listener, IContentsListener recipeCacheListener) {
-        EnergyContainerHelper builder = EnergyContainerHelper.forSideWithConfig(this::getDirection, this::getConfig);
+    protected IEnergyContainerHolder getInitialEnergyContainers(IContentsListener listener, IContentsListener recipeCacheListener, IContentsListener recipeCacheUnpauseListener) {
+        EnergyContainerHelper builder = EnergyContainerHelper.forSideWithConfig(this);
         builder.addContainer(energyContainer = MachineEnergyContainer.input(this, listener));
         return builder.build();
     }
 
     @NotNull
     @Override
-    protected IInventorySlotHolder getInitialInventory(IContentsListener listener, IContentsListener recipeCacheListener) {
-        InventorySlotHelper builder = InventorySlotHelper.forSideWithConfig(this::getDirection, this::getConfig);
+    protected IInventorySlotHolder getInitialInventory(IContentsListener listener, IContentsListener recipeCacheListener, IContentsListener recipeCacheUnpauseListener) {
+        InventorySlotHelper builder = InventorySlotHelper.forSideWithConfig(this);
         builder.addSlot(inputSlot = InputInventorySlot.at(this::containsRecipe, recipeCacheListener, 64, 17))
               .tracksWarnings(slot -> slot.warning(WarningType.NO_MATCHING_RECIPE, getWarningCheck(RecipeError.NOT_ENOUGH_INPUT)));
         builder.addSlot(outputSlot = OutputInventorySlot.at(listener, 116, 35))
@@ -91,9 +87,9 @@ public abstract class TileEntityMachine extends TileEntityProgressMachine<ItemSt
     }
 
     @Override
-    protected void onUpdateServer() {
+    protected boolean onUpdateServer() {
         super.onUpdateServer();
-        recipeCacheLookupMonitor.updateAndProcess();
+        return recipeCacheLookupMonitor.updateAndProcess();
     }
 
     @Nullable
@@ -107,7 +103,7 @@ public abstract class TileEntityMachine extends TileEntityProgressMachine<ItemSt
     public CachedRecipe<ItemStackToItemStackRecipe> createNewCachedRecipe(@NotNull ItemStackToItemStackRecipe recipe, int cacheIndex) {
         return OneInputCachedRecipe.itemToItem(recipe, recheckAllRecipeErrors, inputHandler, outputHandler)
               .setErrorsChanged(this::onErrorsChanged)
-              .setCanHolderFunction(() -> MekanismUtils.canFunction(this))
+              .setCanHolderFunction(this::canFunction)
               .setActive(this::setActive)
               .setEnergyRequirements(energyContainer::getEnergyPerTick, energyContainer)
               .setRequiredTicks(this::getTicksRequired)
@@ -115,26 +111,26 @@ public abstract class TileEntityMachine extends TileEntityProgressMachine<ItemSt
               .setOperatingTicksChanged(this::setOperatingTicks);
     }
 
-    @NotNull
+/*    @NotNull
     @Override
     public MachineUpgradeData getUpgradeData() {
         return new MachineUpgradeData(redstone, getControlType(), getEnergyContainer(), getOperatingTicks(), null, inputSlot, outputSlot, getComponents());
-    }
+    }*/
 
     public MachineEnergyContainer<TileEntityMachine> getEnergyContainer() {
         return energyContainer;
     }
 
-    @Override
+/*    @Override
     public boolean isConfigurationDataCompatible(BlockEntityType<?> tileType) {
         //Allow exact match or factories of the same type (as we will just ignore the extra data)
         return super.isConfigurationDataCompatible(tileType) || MekanismUtils.isSameTypeFactory(getBlockType(), tileType);
-    }
+    }*/
 
     //Methods relating to IComputerTile
     @ComputerMethod
-    public FloatingLong getEnergyUsage() {
-        return getActive() ? energyContainer.getEnergyPerTick() : FloatingLong.ZERO;
+    public long getEnergyUsage() {
+        return getActive() ? energyContainer.getEnergyPerTick() : 0L;
     }
     //End methods IComputerTile
 }

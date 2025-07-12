@@ -3,19 +3,21 @@ package igentuman.bfr.client;
 import igentuman.bfr.client.gui.*;
 import igentuman.bfr.client.render.RenderFusionReactor;
 import igentuman.bfr.common.BetterFusionReactor;
+import igentuman.bfr.common.registries.BfrBlocks;
 import igentuman.bfr.common.registries.BfrContainerTypes;
 import igentuman.bfr.common.registries.BfrTileEntityTypes;
 import mekanism.client.ClientRegistrationUtil;
-import net.minecraft.core.registries.Registries;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.RegisterEvent;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
-@Mod.EventBusSubscriber(modid = BetterFusionReactor.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = BetterFusionReactor.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class BfrClientRegistration {
 
     private BfrClientRegistration() {
@@ -23,27 +25,35 @@ public class BfrClientRegistration {
 
     @SubscribeEvent
     public static void init(FMLClientSetupEvent event) {
-        //ClientRegistrationUtil.setRenderLayer(RenderType.translucent(), BfrBlocks.LASER_FOCUS_MATRIX, BfrBlocks.REACTOR_GLASS);
     }
+
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(BfrTileEntityTypes.FUSION_REACTOR_CONTROLLER.get(), RenderFusionReactor::new);
     }
 
+
     @SuppressWarnings("Convert2MethodRef")
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public static void registerContainers(RegisterEvent event) {
-        event.register(Registries.MENU, helper -> {
-            ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_CONTROLLER, GuiFusionReactorController::new);
-            ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_FUEL, GuiFusionReactorFuel::new);
-            ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_HEAT, GuiFusionReactorHeat::new);
-            ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_LOGIC_ADAPTER, GuiFusionReactorLogicAdapterGeneral::new);
-            ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_STATS, GuiFusionReactorStats::new);
-            ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_LOGIC_GENERAL, GuiFusionReactorLogicAdapterGeneral::new);
-            ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_LOGIC_IN, GuiFusionReactorLogicAdapterInput::new);
-            ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_LOGIC_OUT, GuiFusionReactorLogicAdapterOutput::new);
-            ClientRegistrationUtil.registerScreen(BfrContainerTypes.FUSION_REACTOR_EFFICIENCY, GuiFusionReactorEfficiency::new);
-            ClientRegistrationUtil.registerScreen(BfrContainerTypes.IRRADIATOR, GuiIrradiator::new);
-        });
+    @SubscribeEvent
+    public static void registerScreens(RegisterMenuScreensEvent event) {
+        ClientRegistrationUtil.registerScreen(event, BfrContainerTypes.FUSION_REACTOR_CONTROLLER, GuiFusionReactorController::new);
+        ClientRegistrationUtil.registerScreen(event, BfrContainerTypes.FUSION_REACTOR_FUEL, GuiFusionReactorFuel::new);
+        ClientRegistrationUtil.registerScreen(event, BfrContainerTypes.FUSION_REACTOR_HEAT, GuiFusionReactorHeat::new);
+        ClientRegistrationUtil.registerScreen(event, BfrContainerTypes.FUSION_REACTOR_LOGIC_ADAPTER, GuiFusionReactorLogicAdapter::new);
+        ClientRegistrationUtil.registerScreen(event, BfrContainerTypes.FUSION_REACTOR_STATS, GuiFusionReactorStats::new);
+    }
+
+    @SubscribeEvent
+    public static void onStitch(TextureAtlasStitchedEvent event) {
+        if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
+            return;
+        }
+        //Reset any cached models now that the atlases are built
+        GeneratorsSpecialColors.GUI_OBJECTS.parse(BetterFusionReactor.rl("textures/colormap/gui_objects.png"));
+    }
+
+    @SubscribeEvent
+    public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        ClientRegistrationUtil.registerBlockExtensions(event, BfrBlocks.BLOCKS);
     }
 }

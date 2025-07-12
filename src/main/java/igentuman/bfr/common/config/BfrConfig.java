@@ -1,21 +1,17 @@
 package igentuman.bfr.common.config;
 
-import igentuman.bfr.client.jei.recipe.FusionJEIRecipe;
-import mekanism.api.NBTConstants;
-import mekanism.api.chemical.gas.Gas;
-import mekanism.api.chemical.gas.GasStack;
-import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
+import igentuman.bfr.common.content.fusion.BFReactorMultiblockData;
+import mekanism.api.chemical.Chemical;
+import mekanism.api.chemical.ChemicalStack;
 import mekanism.common.Mekanism;
 import mekanism.common.config.BaseMekanismConfig;
-import mekanism.common.config.value.CachedBooleanValue;
-import mekanism.common.config.value.CachedFloatValue;
-import mekanism.common.config.value.CachedIntValue;
-import mekanism.generators.common.registries.GeneratorsGases;
+import mekanism.common.config.value.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.config.ModConfig.Type;
+import net.neoforged.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,39 +19,46 @@ import java.util.List;
 
 public class BfrConfig extends BaseMekanismConfig {
 
-    private static final String FUSION_CATEGORY = "better_fusion_reactor";
-    private static final String IRRADIATOR_CATEGORY = "irradiator";
+    private final ModConfigSpec configSpec;
 
-    private final ForgeConfigSpec configSpec;
-
+    public final CachedLongValue energyPerFusionFuel;
+    public final CachedDoubleValue fusionThermocoupleEfficiency;
+    public final CachedDoubleValue fusionCasingThermalConductivity;
+    public final CachedDoubleValue fusionWaterHeatingRatio;
+    public final CachedLongValue fusionFuelCapacity;
+    public final CachedLongValue fusionEnergyCapacity;
+    public final CachedIntValue fusionWaterPerInjection;
+    public final CachedLongValue fusionSteamPerInjection;
     public final CachedIntValue irradiatorBaseProcessTicks;
     public final CachedIntValue irradiatorCoolingRate;
     public final CachedIntValue reactionDifficulty;
     public final CachedBooleanValue reactorMeltdown;
     public final CachedBooleanValue hideMekanismRecipes;
     public final CachedFloatValue reactorExplosionRadius;
-
-    public final ForgeConfigSpec.ConfigValue<List<? extends String>> fusionCoolants;
+    public final ModConfigSpec.ConfigValue<List<? extends String>> fusionCoolants;
 
     public List<Fluid> allowedCoolantFluids;
-    public List<Gas> allowedCoolantGases;
-    public List<Gas> allowedCoolantHotGases;
+    public List<Chemical> allowedCoolantGases;
+    public List<Chemical> allowedCoolantHotGases;
 
-    public HashMap<Gas, Object> coolantMap;
+    public HashMap<Chemical, Object> coolantMap;
+
     private static FluidStack resolveFluidIgredient(String name, int amount)
     {
         CompoundTag tag = new CompoundTag();
         tag.putString("FluidName", name);
         tag.putInt("Amount", amount);
-        return FluidStack.loadFluidStackFromNBT(tag);
+        // return FluidStack.loadFluidStackFromNBT(tag);
+        return FluidStack.EMPTY;
     }
 
-    private static GasStack resolveGasIgredient(String name, long amount)
+    private static ChemicalStack resolveGasIgredient(String name, int amount)
     {
         CompoundTag tag = new CompoundTag();
         tag.putString("gasName", name);
-        tag.putLong(NBTConstants.AMOUNT, amount);
-        return GasStack.readFromNBT(tag);
+        tag.putLong("amount", amount);
+        //return IngredientCreatorAccess.chemicalStack().from(new TagKey<Chemical>(), amount);
+        return ChemicalStack.EMPTY;
     }
 
     public void initFusionCoolants()
@@ -70,8 +73,8 @@ public class BfrConfig extends BaseMekanismConfig {
         for(String recipe: BetterFusionReactorConfig.bfr.fusionCoolants.get()) {
             String cold = recipe.split(";")[0];
             String hot = recipe.split(";")[1];
-            GasStack inputGas = resolveGasIgredient(cold, 1);
-            GasStack outputGas = resolveGasIgredient(hot, 1);
+            ChemicalStack inputGas = resolveGasIgredient(cold, 1);
+            ChemicalStack outputGas = resolveGasIgredient(hot, 1);
             Object coolantCold = null;
             if(inputGas.isEmpty()) {
                 //Probably liquid
@@ -83,34 +86,32 @@ public class BfrConfig extends BaseMekanismConfig {
                     Mekanism.logger.warn("Invalid coolant input: " + cold);
                 }
             } else {
-                coolantCold = inputGas.getType();
-                allowedCoolantGases.add(inputGas.getType());
+                coolantCold = inputGas.getChemical();
+                allowedCoolantGases.add(inputGas.getChemical());
             }
 
             if(!outputGas.isEmpty()) {
                 if(coolantCold != null) {
-                    coolantMap.put(outputGas.getType(), coolantCold);
+                    coolantMap.put(outputGas.getChemical(), coolantCold);
                 }
-                allowedCoolantHotGases.add(outputGas.getType());
+                allowedCoolantHotGases.add(outputGas.getChemical());
             } else {
                 Mekanism.logger.warn("Invalid coolant output: " + hot);
             }
         }
     }
 
-
     BfrConfig() {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-        builder.comment("Better Fusion Reactor. This config is synced between server and client.").push("bfr");
+        ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
-        builder.comment("Irradiator").push(IRRADIATOR_CATEGORY);
-        irradiatorBaseProcessTicks = CachedIntValue.wrap(this, builder.comment("Default process time in ticks", "Recipe can override this value")
-                .defineInRange("base_process_time", 200, 1, 10000));
-        irradiatorCoolingRate = CachedIntValue.wrap(this, builder.comment("How much temperature production by reactor will be suppressed by Irradiator")
-                .defineInRange("reactor_cooling", 5, 1, 10));
-        builder.pop();
-
-        builder.comment("Better Fusion Reactor").push(FUSION_CATEGORY);
+        BfrConfigTranslations.SERVER_FUSION.applyToBuilder(builder).push("better_fusion_reactor");
+        fusionCoolants = builder.comment("List of fluids that can be used as coolants in the fusion reactor (; separated)")
+                .defineList("fusion_coolants", () -> {
+                    return List.of(
+                            "water;mekanism:steam",
+                            "mekanism:sodium;mekanism:superheated_sodium"
+                    );
+                }, o -> o instanceof String);
         reactionDifficulty = CachedIntValue.wrap(this, builder.comment("How often Reactivity changes and error level change speed. default 10")
                 .defineInRange("reaction_difficulty", 10, 1, 20));
         hideMekanismRecipes = CachedBooleanValue.wrap(this, builder.comment("Hide original Mekanism Fusion Reactor recipes")
@@ -119,25 +120,45 @@ public class BfrConfig extends BaseMekanismConfig {
                 .define("reactor_meltdown", false));
         reactorExplosionRadius = CachedFloatValue.wrap(this, builder.comment("Radius of Explosion (default 4 - TNT size)")
                 .define("reactor_explosion_radius", 4.0));
-        fusionCoolants = builder.comment("List of fluids that can be used as coolants in the fusion reactor (; separated)")
-                .defineList("fusion_coolants", () -> {
-                    return List.of(
-                            "water;mekanism:steam",
-                            "mekanism:sodium;mekanism:superheated_sodium"
-                    );
-                }, o -> o instanceof String);
+        energyPerFusionFuel = CachedLongValue.definePositive(this, builder, BfrConfigTranslations.SERVER_FUSION_FUEL_ENERGY,
+              "fuelEnergy", 10_000_000L);
+        fusionThermocoupleEfficiency = CachedDoubleValue.wrap(this, BfrConfigTranslations.SERVER_FUSION_THERMOCOUPLE_EFFICIENCY.applyToBuilder(builder)
+              .defineInRange("thermocoupleEfficiency", 0.05D, 0D, 1D));
+        fusionCasingThermalConductivity = CachedDoubleValue.wrap(this, BfrConfigTranslations.SERVER_FUSION_THERMAL_CONDUCTIVITY.applyToBuilder(builder)
+              .defineInRange("casingThermalConductivity", 0.1D, 0.001D, 1D));
+        fusionWaterHeatingRatio = CachedDoubleValue.wrap(this, BfrConfigTranslations.SERVER_FUSION_HEATING_RATE.applyToBuilder(builder)
+              .defineInRange("waterHeatingRatio", 0.3D, 0D, 1D));
+        fusionFuelCapacity = CachedLongValue.wrap(this, BfrConfigTranslations.SERVER_FUSION_FUEL_CAPACITY.applyToBuilder(builder)
+              .defineInRange("fuelCapacity", FluidType.BUCKET_VOLUME, 2, 1_000L * FluidType.BUCKET_VOLUME));
+        fusionEnergyCapacity = CachedLongValue.define(this, builder, BfrConfigTranslations.SERVER_FUSION_ENERGY_CAPACITY,
+              "energyCapacity", 1_000_000_000, 1, Long.MAX_VALUE);
+        int baseMaxWater = 1_000 * FluidType.BUCKET_VOLUME;
+        fusionWaterPerInjection = CachedIntValue.wrap(this, BfrConfigTranslations.SERVER_FUSION_WATER_INJECTION.applyToBuilder(builder)
+              .defineInRange("waterPerInjection", 1_000 * FluidType.BUCKET_VOLUME, 1, Integer.MAX_VALUE / BFReactorMultiblockData.MAX_INJECTION));
+        fusionSteamPerInjection = CachedLongValue.wrap(this, BfrConfigTranslations.SERVER_FUSION_STEAM_INJECTION.applyToBuilder(builder)
+              .defineInRange("steamPerInjection", 100L * baseMaxWater, 1, Long.MAX_VALUE / BFReactorMultiblockData.MAX_INJECTION));
         builder.pop();
-
+        BfrConfigTranslations.IRRADIATOR.applyToBuilder(builder).push("irradiator");
+        irradiatorBaseProcessTicks = CachedIntValue.wrap(this, builder.comment("Default process time in ticks", "Recipe can override this value")
+                .defineInRange("base_process_time", 200, 1, 10000));
+        irradiatorCoolingRate = CachedIntValue.wrap(this, builder.comment("How much temperature production by reactor will be suppressed by Irradiator")
+                .defineInRange("reactor_cooling", 5, 1, 10));
+        builder.pop();
         configSpec = builder.build();
     }
 
     @Override
     public String getFileName() {
-        return "bfr";
+        return "generators";
     }
 
     @Override
-    public ForgeConfigSpec getConfigSpec() {
+    public String getTranslation() {
+        return "General Config";
+    }
+
+    @Override
+    public ModConfigSpec getConfigSpec() {
         return configSpec;
     }
 

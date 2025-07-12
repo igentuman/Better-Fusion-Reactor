@@ -6,16 +6,16 @@ import mekanism.client.gui.IGuiWrapper;
 import mekanism.client.gui.element.tab.GuiTabElementType;
 import mekanism.client.gui.element.tab.TabType;
 import mekanism.client.render.lib.ColorAtlas.ColorRegistryObject;
+import mekanism.common.network.PacketUtils;
 import mekanism.common.util.MekanismUtils;
 import mekanism.common.util.MekanismUtils.ResourceType;
-import igentuman.bfr.client.BfrSpecialColors;
+import igentuman.bfr.client.GeneratorsSpecialColors;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab.FusionReactorTab;
 import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.BetterFusionReactor;
-import igentuman.bfr.common.network.to_server.PacketBfrGuiButtonPress;
-import igentuman.bfr.common.network.to_server.PacketBfrGuiButtonPress.ClickedGeneratorsTileButton;
+import igentuman.bfr.common.network.to_server.PacketGeneratorsTileButtonPress;
+import igentuman.bfr.common.network.to_server.PacketGeneratorsTileButtonPress.ClickedGeneratorsTileButton;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
-import mekanism.generators.common.GeneratorsLang;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -26,10 +26,9 @@ public class GuiFusionReactorTab extends GuiTabElementType<TileEntityFusionReact
     }
 
     public enum FusionReactorTab implements TabType<TileEntityFusionReactorController> {
-        HEAT(MekanismUtils.getResource(ResourceType.GUI, "heat.png"), GeneratorsLang.HEAT_TAB, 6, ClickedGeneratorsTileButton.TAB_HEAT, BfrSpecialColors.TAB_MULTIBLOCK_HEAT),
-        FUEL(BetterFusionReactor.rl(ResourceType.GUI.getPrefix() + "fuel.png"), GeneratorsLang.FUEL_TAB, 34, ClickedGeneratorsTileButton.TAB_FUEL, BfrSpecialColors.TAB_MULTIBLOCK_FUEL),
-        STAT(MekanismUtils.getResource(ResourceType.GUI, "stats.png"), GeneratorsLang.STATS_TAB, 62, ClickedGeneratorsTileButton.TAB_STATS, SpecialColors.TAB_MULTIBLOCK_STATS),
-        EFFICIENCY(MekanismUtils.getResource(ResourceType.GUI, "visuals.png"), BfrLang.EFFICIENCY_TAB, 90, ClickedGeneratorsTileButton.TAB_EFFICIENCY, SpecialColors.TAB_MULTIBLOCK_STATS);
+        HEAT(MekanismUtils.getResource(ResourceType.GUI, "heat.png"), BfrLang.HEAT_TAB, 6, ClickedGeneratorsTileButton.TAB_HEAT, GeneratorsSpecialColors.TAB_MULTIBLOCK_HEAT),
+        FUEL(BetterFusionReactor.rl(ResourceType.GUI.getPrefix() + "fuel.png"), BfrLang.FUEL_TAB, 34, ClickedGeneratorsTileButton.TAB_FUEL, GeneratorsSpecialColors.TAB_MULTIBLOCK_FUEL),
+        STAT(MekanismUtils.getResource(ResourceType.GUI, "stats.png"), BfrLang.STATS_TAB, 62, ClickedGeneratorsTileButton.TAB_STATS, SpecialColors.TAB_MULTIBLOCK_STATS);
 
         private final ClickedGeneratorsTileButton button;
         private final ColorRegistryObject colorRO;
@@ -52,7 +51,7 @@ public class GuiFusionReactorTab extends GuiTabElementType<TileEntityFusionReact
 
         @Override
         public void onClick(TileEntityFusionReactorController tile) {
-            BetterFusionReactor.packetHandler().sendToServer(new PacketBfrGuiButtonPress(button, tile.getBlockPos()));
+            PacketUtils.sendToServer(new PacketGeneratorsTileButtonPress(button, tile.getBlockPos()));
         }
 
         @Override

@@ -1,24 +1,26 @@
 package igentuman.bfr.common.recipe;
 
 import mekanism.api.recipes.ItemStackToItemStackRecipe;
+import mekanism.api.recipes.basic.BasicItemStackToItemStackRecipe;
 import mekanism.api.recipes.ingredients.ItemStackIngredient;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 
-public abstract class ItemStackToItemStackWithTimeModRecipe extends ItemStackToItemStackRecipe {
+public abstract class ItemStackToItemStackWithTimeModRecipe extends BasicItemStackToItemStackRecipe {
     public int ticks;
     /**
-     * @param id     Recipe name.
      * @param input  Input.
      * @param output Output.
+     * @param recipeType Recipe type.
      */
-    public ItemStackToItemStackWithTimeModRecipe(ResourceLocation id, ItemStackIngredient input, ItemStack output) {
-        super(id, input, output);
+    public ItemStackToItemStackWithTimeModRecipe(ItemStackIngredient input, ItemStack output, RecipeType<ItemStackToItemStackRecipe> recipeType) {
+        super(input, output, recipeType);
         ticks = 0;
     }
 
-    public ItemStackToItemStackWithTimeModRecipe(ResourceLocation id, ItemStackIngredient input, ItemStack output, int ticks) {
-        super(id, input, output);
+    public ItemStackToItemStackWithTimeModRecipe(ItemStackIngredient input, ItemStack output, RecipeType<ItemStackToItemStackRecipe> recipeType, int ticks) {
+        super(input, output, recipeType);
         this.ticks = ticks;
     }
 

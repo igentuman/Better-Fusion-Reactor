@@ -4,15 +4,15 @@
     "type": "CTM",
     "layer": "TRANSLUCENT",
     "textures": [
-      "bfr:block/reactor_glass-ctm"
+      "mekanismgenerators:ctm/reactor_glass"
     ],
     "extra": {
       "connect_to": [
         {
-          "block": "bfr:reactor_glass"
+          "block": "mekanismgenerators:reactor_glass"
         },
         {
-          "block": "bfr:laser_focus_matrix"
+          "block": "mekanismgenerators:laser_focus_matrix"
         }
       ]
     }

@@ -2,28 +2,27 @@ plugins {
     id 'java'
 }
 
-group 'igentuman.annotation-processor'
-version '2.0.0'
+group = 'mekanism.annotation-processor'
+version = '2.0.0'
 java.toolchain.languageVersion = JavaLanguageVersion.of("${java_version}")
 
 repositories {
     def repo = maven {
-        name 'CraftTweaker'
-        url 'https://maven.blamejared.com'
+        name = 'ZenCode'
+        url = 'https://maven.blamejared.com'
     }
     exclusiveContent {
         forRepositories(repo)
-        filter { InclusiveRepositoryContentDescriptor f ->
-            f.includeGroup 'com.blamejared.crafttweaker'
-            f.includeGroup 'org.openzen.zencode'
+        filter {
+            includeGroup('org.openzen.zencode')
         }
     }
     mavenCentral()
 }
 
 dependencies {
-   // implementation "com.blamejared.crafttweaker:CraftTweaker-forge-${minecraft_version}:${crafttweaker_version}"
+    implementation('org.openzen.zencode:JavaAnnotations:0.3.8')
     //Version of GSON used by vanilla (and thus packed and already downloaded)
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10'
-    implementation "com.squareup:javapoet:1.13.0"
+    implementation('com.google.code.gson:gson:2.10.1')
+    implementation('com.palantir.javapoet:javapoet:0.6.0')
 }

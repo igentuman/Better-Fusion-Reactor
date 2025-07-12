@@ -1,10 +1,6 @@
 package igentuman.bfr.common.tile.fusion;
 
-import javax.annotation.Nonnull;
 import mekanism.api.lasers.ILaserReceptor;
-import mekanism.api.math.FloatingLong;
-import mekanism.common.capabilities.Capabilities;
-import mekanism.common.capabilities.resolver.BasicCapabilityResolver;
 import igentuman.bfr.common.content.fusion.BFReactorMultiblockData;
 import igentuman.bfr.common.registries.BfrBlocks;
 import net.minecraft.core.BlockPos;
@@ -16,15 +12,13 @@ public class TileEntityLaserFocusMatrix extends TileEntityFusionReactorBlock imp
 
     public TileEntityLaserFocusMatrix(BlockPos pos, BlockState state) {
         super(BfrBlocks.LASER_FOCUS_MATRIX, pos, state);
-        addCapabilityResolver(BasicCapabilityResolver.constant(Capabilities.LASER_RECEPTOR, this));
     }
 
     @Override
-    public void receiveLaserEnergy(@Nonnull FloatingLong energy) {
+    public void receiveLaserEnergy(long energy) {
         BFReactorMultiblockData multiblock = getMultiblock();
         if (multiblock.isFormed()) {
             multiblock.addTemperatureFromEnergyInput(energy);
-            multiblock.processLaserShoot(energy);
         }
     }
 

@@ -1,6 +1,6 @@
 package igentuman;
 
-import com.squareup.javapoet.JavaFile;
+import com.palantir.javapoet.JavaFile;
 import igentuman.builder.ComputerHandlerBuilder;
 
 import javax.annotation.processing.AbstractProcessor;

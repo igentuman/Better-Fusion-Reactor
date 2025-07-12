@@ -1,34 +1,22 @@
 package igentuman.bfr.common;
 
-import igentuman.bfr.common.compat.oc2.OC2BlockDeviceProvider;
-import igentuman.bfr.common.events.RadiationEvents;
-import igentuman.bfr.common.registries.*;
-import mekanism.common.Mekanism;
-import mekanism.common.base.IModModule;
-import mekanism.common.command.builders.BuildCommand;
-import mekanism.common.config.MekanismModConfig;
-import mekanism.common.lib.Version;
-import mekanism.common.lib.multiblock.MultiblockManager;
 import igentuman.bfr.common.config.BetterFusionReactorConfig;
 import igentuman.bfr.common.content.fusion.BFReactorCache;
 import igentuman.bfr.common.content.fusion.BFReactorMultiblockData;
 import igentuman.bfr.common.content.fusion.BFReactorValidator;
-import igentuman.bfr.common.network.BfrPacketHandler;
+import igentuman.bfr.common.network.GeneratorsPacketHandler;
+import igentuman.bfr.common.registries.*;
 import igentuman.bfr.common.registries.BfrBuilders.FusionReactorBuilder;
-import mekanism.generators.common.GeneratorsLang;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
+import mekanism.common.Mekanism;
+import mekanism.common.base.IModModule;
+import mekanism.common.command.builders.BuildCommand;
+import mekanism.common.lib.Version;
+import mekanism.common.lib.multiblock.MultiblockManager;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @Mod(BetterFusionReactor.MODID)
 public class BetterFusionReactor implements IModModule {
@@ -38,65 +26,50 @@ public class BetterFusionReactor implements IModModule {
     public static BetterFusionReactor instance;
 
     /**
-     * BetterFusionReactor version number
+     * MekanismGenerators version number
      */
     public final Version versionNumber;
     /**
      * Mekanism Generators Packet Pipeline
      */
-    private final BfrPacketHandler packetHandler;
+    private final GeneratorsPacketHandler packetHandler;
 
     public static final MultiblockManager<BFReactorMultiblockData> fusionReactorManager = new MultiblockManager<>("fusionReactor", BFReactorCache::new, BFReactorValidator::new);
-    public BetterFusionReactor() {
-        Mekanism.modulesLoaded.add(instance = this);
-        BetterFusionReactorConfig.registerConfigs(ModLoadingContext.get());
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+    public BetterFusionReactor(ModContainer modContainer, IEventBus modEventBus) {
+        Mekanism.addModule(instance = this);
+        //Set our version number to match the neoforge.mods.toml file, which matches the one in our build.gradle
+        versionNumber = new Version(modContainer);
+        BetterFusionReactorConfig.registerConfigs(modContainer);
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(this::onConfigLoad);
-        modEventBus.addListener(this::imcQueue);
-        BfrBlocks.BLOCKS.register(modEventBus);
-        BfrGases.GASES.register(modEventBus);
+        modEventBus.addListener(BetterFusionReactorConfig::onConfigLoad);
+
+        GeneratorsDataComponents.DATA_COMPONENTS.register(modEventBus);
         BfrItems.ITEMS.register(modEventBus);
-        BfrCreativeTabs.BFR_TAB.register(modEventBus);
+        BfrBlocks.BLOCKS.register(modEventBus);
+        BfrCreativeTabs.CREATIVE_TABS.register(modEventBus);
         BfrContainerTypes.CONTAINER_TYPES.register(modEventBus);
         BfrTileEntityTypes.TILE_ENTITY_TYPES.register(modEventBus);
-        BfrModules.MODULES.register(modEventBus);
-        BfrRecipes.init();
-
-        //Set our version number to match the mods.toml file, which matches the one in our build.gradle
-        versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
-        packetHandler = new BfrPacketHandler();
-        if(ModList.get().isLoaded("oc2r")) {
-            OC2BlockDeviceProvider.init();
-        }
+        BfrChemicals.CHEMICALS.register(modEventBus);
+        packetHandler = new GeneratorsPacketHandler(modEventBus, versionNumber);
     }
 
-    public static BfrPacketHandler packetHandler() {
+    public static GeneratorsPacketHandler packetHandler() {
         return instance.packetHandler;
     }
 
     public static ResourceLocation rl(String path) {
-        return new ResourceLocation(BetterFusionReactor.MODID, path);
-    }
-
-    public static <T> ResourceKey<Registry<T>> rk(final String name) {
-        return ResourceKey.createRegistryKey(new ResourceLocation(MODID, name));
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-        packetHandler.initialize();
-        MinecraftForge.EVENT_BUS.register(new RadiationEvents());
         event.enqueueWork(() -> {
-            BuildCommand.register("fusion", GeneratorsLang.FUSION_REACTOR, new FusionReactorBuilder());
+            //Register extended build commands (in enqueue as it is not thread safe)
+            BuildCommand.register("fusion", BfrLang.FUSION_REACTOR, new FusionReactorBuilder());
         });
 
-
-
         //Finalization
-        Mekanism.logger.info("Loaded 'Better Fusion Reactor' module.");
-    }
-
-    private void imcQueue(InterModEnqueueEvent event) {
+        Mekanism.logger.info("Loaded 'Mekanism: Generators' module.");
     }
 
     @Override
@@ -106,21 +79,6 @@ public class BetterFusionReactor implements IModModule {
 
     @Override
     public String getName() {
-        return "Better Fusion Reactor";
-    }
-
-    @Override
-    public void resetClient() {
-
-    }
-
-    private void onConfigLoad(ModConfigEvent configEvent) {
-        //Note: We listen to both the initial load and the reload, to make sure that we fix any accidentally
-        // cached values from calls before the initial loading
-        ModConfig config = configEvent.getConfig();
-        //Make sure it is for the same modid as us
-        if (config.getModId().equals(MODID) && config instanceof MekanismModConfig) {
-            ((MekanismModConfig) config).clearCache(configEvent);
-        }
+        return "Generators";
     }
 }

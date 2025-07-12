@@ -1,15 +1,15 @@
 package igentuman.builder;
 
-import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
+import com.palantir.javapoet.AnnotationSpec;
+import com.palantir.javapoet.ClassName;
+import com.palantir.javapoet.CodeBlock;
+import com.palantir.javapoet.FieldSpec;
+import com.palantir.javapoet.JavaFile;
+import com.palantir.javapoet.MethodSpec;
+import com.palantir.javapoet.ParameterSpec;
+import com.palantir.javapoet.ParameterizedTypeName;
+import com.palantir.javapoet.TypeName;
+import com.palantir.javapoet.TypeSpec;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -436,31 +436,31 @@ public class ComputerHandlerBuilder {
 
         //build and add a field to hold the MethodHandle
         FieldSpec methodHandleField = FieldSpec.builder(MethodHandle.class, "method$" + annotatedName, Modifier.STATIC, Modifier.PRIVATE)
-              .initializer(CodeBlock.of("getMethodHandle($T.class, $S$L)", containingClassName, annotatedName, builtParamTypes))
-              .build();
+                .initializer(CodeBlock.of("getMethodHandle($T.class, $S$L)", containingClassName, annotatedName, builtParamTypes))
+                .build();
         handlerTypeSpec.addField(methodHandleField);
 
         //Build and add the proxy method
         TypeName returnType = TypeName.get(executableElement.getReturnType());
         MethodSpec proxyMethod = MethodSpec.methodBuilder("proxy$" + annotatedName)
-              .addParameters(proxyParams)
-              .addModifiers(Modifier.STATIC, Modifier.PRIVATE)
-              .addException(computerException)
-              .returns(returnType)
-              .beginControlFlow("try")
-              //invoke the method handle
-              .addStatement("return ($T)$N.invokeExact($L)", returnType, methodHandleField, proxyParams.stream().map(param -> param.name).collect(Collectors.joining(", ")))
-              //catch a failing method handle (throw as RuntimeException)
-              .nextControlFlow("catch ($T wmte)", WrongMethodTypeException.class)
-              .addStatement("throw new $T($S, wmte)", RuntimeException.class, "Method not bound correctly")
-              //catch and rethrow a ComputerException
-              .nextControlFlow("catch ($T cex)", computerException)
-              .addStatement("throw cex")
-              //catch other exceptions and rethrow as a RuntimeException
-              .nextControlFlow("catch ($T t)", Throwable.class)
-              .addStatement("throw new $T(t.getMessage(), t)", RuntimeException.class)
-              .endControlFlow()
-              .build();
+                .addParameters(proxyParams)
+                .addModifiers(Modifier.STATIC, Modifier.PRIVATE)
+                .addException(computerException)
+                .returns(returnType)
+                .beginControlFlow("try")
+                //invoke the method handle
+                .addStatement("return ($T)$N.invokeExact($L)", returnType, methodHandleField, proxyParams.stream().map(ParameterSpec::name).collect(Collectors.joining(", ")))
+                //catch a failing method handle (throw as RuntimeException)
+                .nextControlFlow("catch ($T wmte)", WrongMethodTypeException.class)
+                .addStatement("throw new $T($S, wmte)", RuntimeException.class, "Method not bound correctly")
+                //catch and rethrow a ComputerException
+                .nextControlFlow("catch ($T cex)", computerException)
+                .addStatement("throw cex")
+                //catch other exceptions and rethrow as a RuntimeException
+                .nextControlFlow("catch ($T t)", Throwable.class)
+                .addStatement("throw new $T(t.getMessage(), t)", RuntimeException.class)
+                .endControlFlow()
+                .build();
         handlerTypeSpec.addMethod(proxyMethod);
         return proxyMethod;
     }

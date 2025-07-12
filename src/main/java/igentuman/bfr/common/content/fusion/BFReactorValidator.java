@@ -15,7 +15,6 @@ import mekanism.common.lib.multiblock.Structure.Axis;
 import mekanism.common.lib.multiblock.StructureHelper;
 import igentuman.bfr.common.registries.BfrBlockTypes;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
-import mekanism.generators.common.registries.GeneratorsBlockTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class BFReactorValidator extends CuboidStructureValidator<BFReactorMultiblockData> {
 
     private static final VoxelCuboid BOUNDS = new VoxelCuboid(5, 5, 5);
-    private static final byte[][] ALLOWED_GRID = new byte[][]{
+    private static final byte[][] ALLOWED_GRID = {
           {0, 0, 1, 0, 0},
           {0, 1, 2, 1, 0},
           {1, 2, 2, 2, 1},
@@ -51,7 +50,9 @@ public class BFReactorValidator extends CuboidStructureValidator<BFReactorMultib
         if (isControllerPos && !controller) {
             return FormationResult.fail(MekanismLang.MULTIBLOCK_INVALID_NO_CONTROLLER);
         } else if (!isControllerPos && controller) {
-            return FormationResult.fail(MekanismLang.MULTIBLOCK_INVALID_CONTROLLER_CONFLICT);
+            //When the controller is potentially outside the multiblock we need to make sure to not allow ignoring the failure
+            // as otherwise we may allow duplicate controllers
+            return FormationResult.fail(MekanismLang.MULTIBLOCK_INVALID_CONTROLLER_CONFLICT, pos, true);
         }
         return super.validateFrame(ctx, pos, state, type, needsFrame);
     }
@@ -59,12 +60,12 @@ public class BFReactorValidator extends CuboidStructureValidator<BFReactorMultib
     @Override
     protected CasingType getCasingType(BlockState state) {
         Block block = state.getBlock();
-        if (BlockType.is(block, BfrBlockTypes.FUSION_REACTOR_FRAME, GeneratorsBlockTypes.FUSION_REACTOR_FRAME)) {
+        if (BlockType.is(block, BfrBlockTypes.FUSION_REACTOR_FRAME)) {
             return CasingType.FRAME;
         } else if (BlockType.is(block, BfrBlockTypes.FUSION_REACTOR_PORT)) {
             return CasingType.VALVE;
         } else if (BlockType.is(block, BfrBlockTypes.FUSION_REACTOR_CONTROLLER,
-              BfrBlockTypes.FUSION_REACTOR_LOGIC_ADAPTER, BfrBlockTypes.LASER_FOCUS_MATRIX, GeneratorsBlockTypes.LASER_FOCUS_MATRIX)) {
+              BfrBlockTypes.FUSION_REACTOR_LOGIC_ADAPTER, BfrBlockTypes.LASER_FOCUS_MATRIX)) {
             return CasingType.OTHER;
         }
         return CasingType.INVALID;

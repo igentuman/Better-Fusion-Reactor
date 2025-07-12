@@ -1,12 +1,10 @@
 package igentuman.bfr.common.block.fusion;
 
-import javax.annotation.Nonnull;
-
-import igentuman.bfr.common.registries.BfrBlockTypes;
-import igentuman.bfr.common.tile.fusion.TileEntityLaserFocusMatrix;
-import mekanism.common.block.basic.BlockStructuralGlass;
 import mekanism.common.block.prefab.BlockBasicMultiblock;
 import mekanism.common.block.states.BlockStateHelper;
+import igentuman.bfr.common.block.BlockReactorGlass;
+import igentuman.bfr.common.registries.BfrBlockTypes;
+import igentuman.bfr.common.tile.fusion.TileEntityLaserFocusMatrix;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -20,45 +18,43 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 public class BlockLaserFocusMatrix extends BlockBasicMultiblock<TileEntityLaserFocusMatrix> {
 
     public BlockLaserFocusMatrix() {
-        super(BfrBlockTypes.LASER_FOCUS_MATRIX, BlockBehaviour.Properties.of().sound(SoundType.GLASS).strength(3.5F, 4.8F).noOcclusion()
-                .requiresCorrectToolForDrops().isSuffocating(BlockStateHelper.NEVER_PREDICATE).isViewBlocking(BlockStateHelper.NEVER_PREDICATE)
-                .instrument(NoteBlockInstrument.HAT));
+        super(BfrBlockTypes.LASER_FOCUS_MATRIX, BlockBehaviour.Properties.of().sound(SoundType.GLASS).strength(3.5F, 4.8F)
+              .requiresCorrectToolForDrops().noOcclusion().isSuffocating(BlockStateHelper.NEVER_PREDICATE).isViewBlocking(BlockStateHelper.NEVER_PREDICATE)
+              .instrument(NoteBlockInstrument.HAT));
     }
 
     @Override
-    public boolean shouldDisplayFluidOverlay(BlockState state, BlockAndTintGetter world, BlockPos pos, FluidState fluidState) {
+    public boolean shouldDisplayFluidOverlay(@NotNull BlockState state, @NotNull BlockAndTintGetter world, @NotNull BlockPos pos, @NotNull FluidState fluidState) {
         return true;
     }
 
     @Override
-    @Deprecated
-    public boolean skipRendering(@Nonnull BlockState state, @Nonnull BlockState adjacentBlockState, @Nonnull Direction side) {
+    protected boolean skipRendering(@NotNull BlockState state, @NotNull BlockState adjacentBlockState, @NotNull Direction side) {
         Block blockOffset = adjacentBlockState.getBlock();
-        if (blockOffset instanceof BlockStructuralGlass || blockOffset instanceof BlockLaserFocusMatrix) {
+        if (blockOffset instanceof BlockReactorGlass || blockOffset instanceof BlockLaserFocusMatrix) {
             return true;
         }
         return super.skipRendering(state, adjacentBlockState, side);
     }
 
     @Override
-    @Deprecated
-    public float getShadeBrightness(@Nonnull BlockState state, @Nonnull BlockGetter worldIn, @Nonnull BlockPos pos) {
+    protected float getShadeBrightness(@NotNull BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos) {
         return 1.0F;
     }
 
     @Override
-    public boolean propagatesSkylightDown(@Nonnull BlockState state, @Nonnull BlockGetter reader, @Nonnull BlockPos pos) {
+    protected boolean propagatesSkylightDown(@NotNull BlockState state, @NotNull BlockGetter reader, @NotNull BlockPos pos) {
         return true;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    @Deprecated
-    public VoxelShape getVisualShape(@Nonnull BlockState state, @Nonnull BlockGetter reader, @Nonnull BlockPos pos, @Nonnull CollisionContext ctx) {
+    protected VoxelShape getVisualShape(@NotNull BlockState state, @NotNull BlockGetter reader, @NotNull BlockPos pos, @NotNull CollisionContext ctx) {
         return Shapes.empty();
     }
 }

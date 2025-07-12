@@ -1,0 +1,32 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="https://github.com/igentuman/Better-Fusion-Reactor/issues"
+[[mods]]
+    modId="${mod_id}"
+    version="${mod_version}"
+    displayName="${mod_name}"
+    displayURL="https://itman.website/"
+    logoFile="logo.png"
+    authors="${mod_authors}"
+    credits="Aidancbrady, Thommy101, Thiakil, pupnewfster, dizzyd"
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    mandatory=true
+    versionRange="${neo_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="mekanismgenerators"
+    mandatory=true
+    versionRange="${generators_version}"
+    ordering="AFTER"
+    side="BOTH"

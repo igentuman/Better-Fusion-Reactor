@@ -1,10 +1,12 @@
 package igentuman;
 
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
+import com.palantir.javapoet.ClassName;
+import com.palantir.javapoet.CodeBlock;
+import com.palantir.javapoet.JavaFile;
+import com.palantir.javapoet.MethodSpec;
+import com.palantir.javapoet.TypeSpec;
+import mekanism.visitors.AnnotationHelper;
+
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,6 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.tools.StandardLocation;
-import igentuman.visitors.AnnotationHelper;
 
 import javax.lang.model.SourceVersion;
 import javax.lang.model.type.TypeKind;
@@ -53,10 +54,11 @@ public class MethodFactoryProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotatedTypes, RoundEnvironment roundEnvironment) {
-        TypeMirror methodFactoryType = processingEnv.getElementUtils().getTypeElement(MekAnnotationProcessors.COMPUTER_METHOD_FACTORY_ANNOTATION_CLASSNAME).asType();
+        TypeMirror methodFactoryType = processingEnv.getElementUtils().getTypeElement(mekanism.MekAnnotationProcessors.COMPUTER_METHOD_FACTORY_ANNOTATION_CLASSNAME).asType();
         TypeSpec.Builder registryType = TypeSpec.classBuilder("ComputerMethodRegistry_" + mekModule)
-              .addModifiers(Modifier.PUBLIC)
-              .addSuperinterface(methodRegistryInterface);
+                .addModifiers(Modifier.PUBLIC)
+                .addSuperinterface(methodRegistryInterface);
+        boolean hasOriginatingElements = false;
 
         //this should only ever be 1 annotation
         for (Element element : roundEnvironment.getElementsAnnotatedWithAny(annotatedTypes.toArray(new TypeElement[0]))) {
@@ -74,22 +76,23 @@ public class MethodFactoryProcessor extends AbstractProcessor {
                     continue;
                 }
                 registryType.addOriginatingElement(factoryTypeEl);
-                AnnotationHelper helper = new AnnotationHelper(processingEnv.getElementUtils(), annotationMirror);
+                hasOriginatingElements = true;
+                mekanism.visitors.AnnotationHelper helper = new AnnotationHelper(processingEnv.getElementUtils(), annotationMirror);
                 addHandlerToRegistry((TypeElement) typeUtils().asElement(helper.getClassValue("target")), ClassName.get(factoryTypeEl));
             }
         }
 
-        if (!registryType.originatingElements.isEmpty()) {
+        if (hasOriginatingElements) {
             registryType.addMethod(registryInit.build());
             TypeSpec registrySpec = registryType.build();
-            String packageName = "igentuman.bfr.generated." + mekModule;
+            String packageName = "mekanism.generated." + mekModule;
             try {
                 JavaFile.builder(packageName, registrySpec).build().writeTo(processingEnv.getFiler());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            try(Writer serviceWriter = processingEnv.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "","META-INF/services/"+methodRegistryInterface.canonicalName()).openWriter()) {
-                serviceWriter.write(packageName+"."+registrySpec.name);
+            try (Writer serviceWriter = processingEnv.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", "META-INF/services/" + methodRegistryInterface.canonicalName()).openWriter()) {
+                serviceWriter.write(packageName + "." + registrySpec.name());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

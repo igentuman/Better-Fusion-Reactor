@@ -1,23 +1,23 @@
 package igentuman.bfr.common.registries;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.function.Supplier;
-
-import igentuman.bfr.common.tile.TileEntityIrradiator;
-import mekanism.common.block.interfaces.IHasDescription;
-import mekanism.common.block.prefab.BlockBasicMultiblock;
-import mekanism.common.block.prefab.BlockTile;
-import mekanism.common.content.blocktype.Machine;
-import mekanism.common.item.block.ItemBlockTooltip;
-import mekanism.common.item.block.machine.ItemBlockMachine;
-import mekanism.common.registration.impl.BlockDeferredRegister;
-import mekanism.common.registration.impl.BlockRegistryObject;
 import igentuman.bfr.common.block.fusion.BlockLaserFocusMatrix;
+import igentuman.bfr.common.tile.TileEntityIrradiator;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorBlock;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorPort;
+import mekanism.common.attachments.component.AttachedSideConfig;
+import mekanism.common.attachments.containers.ContainerType;
+import mekanism.common.attachments.containers.item.ItemSlotsBuilder;
+import mekanism.common.block.interfaces.IHasDescription;
+import mekanism.common.block.prefab.BlockBasicMultiblock;
+import mekanism.common.block.prefab.BlockTile.BlockTileModel;
+import mekanism.common.content.blocktype.Machine;
+import mekanism.common.item.block.ItemBlockTooltip;
+import mekanism.common.registration.impl.BlockDeferredRegister;
+import mekanism.common.registration.impl.BlockRegistryObject;
+import mekanism.common.registration.impl.ItemDeferredRegister;
+import mekanism.common.registries.MekanismDataComponents;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -25,10 +25,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
-import igentuman.bfr.common.block.IrradiatorBlock;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.function.Supplier;
 
 import static igentuman.bfr.common.BetterFusionReactor.MODID;
 
@@ -41,8 +41,17 @@ public class BfrBlocks {
     }
 
     public static final BlockDeferredRegister BLOCKS = new BlockDeferredRegister(MODID);
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
-    public static final BlockRegistryObject<BlockTile.BlockTileModel<TileEntityIrradiator, Machine<TileEntityIrradiator>>, ItemBlockMachine> IRRADIATOR = BLOCKS.register("irradiator", () -> new BlockTile.BlockTileModel<>(BfrBlockTypes.IRRADIATOR, properties -> properties.mapColor(MapColor.METAL)), IrradiatorBlock::new);
+    public static final ItemDeferredRegister ITEMS = new ItemDeferredRegister(MODID);
+    public static final BlockRegistryObject<BlockTileModel<TileEntityIrradiator, Machine<TileEntityIrradiator>>, ItemBlockTooltip<BlockTileModel<TileEntityIrradiator, Machine<TileEntityIrradiator>>>> IRRADIATOR =
+            BLOCKS.register("irradiator", () -> new BlockTileModel<>(BfrBlockTypes.IRRADIATOR, properties -> properties.mapColor(MapColor.METAL)), (block, properties) -> new ItemBlockTooltip<>(block, true, properties
+                    .component(MekanismDataComponents.SIDE_CONFIG, AttachedSideConfig.ROTARY)
+            )).forItemHolder(holder -> holder
+                    .addAttachmentOnlyContainers(ContainerType.ITEM, () -> ItemSlotsBuilder.builder()
+                            .addOutput()
+                            .build()
+                    )
+            );
+
 
     public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityFusionReactorController>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityFusionReactorController>>> FUSION_REACTOR_CONTROLLER = registerTooltipBlock("fusion_reactor_controller", () -> new BlockBasicMultiblock<>(BfrBlockTypes.FUSION_REACTOR_CONTROLLER, properties -> properties.mapColor(MapColor.COLOR_ORANGE)));
     public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityFusionReactorBlock>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityFusionReactorBlock>>> FUSION_REACTOR_FRAME = registerTooltipBlock("fusion_reactor_frame", () -> new BlockBasicMultiblock<>(BfrBlockTypes.FUSION_REACTOR_FRAME, properties -> properties.mapColor(MapColor.TERRACOTTA_BROWN)));
@@ -56,7 +65,7 @@ public class BfrBlocks {
         }
     }
     private static <BLOCK extends Block & IHasDescription> BlockRegistryObject<BLOCK, ItemBlockTooltip<BLOCK>> registerTooltipBlock(String name, Supplier<BLOCK> blockCreator) {
-        return BLOCKS.registerDefaultProperties(name, blockCreator, ItemBlockTooltip::new);
+        return BLOCKS.register(name, blockCreator, ItemBlockTooltip::new);
     }
     public static final BlockBehaviour.Properties ORE_BLOCK_PROPERTIES = BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(2f).requiresCorrectToolForDrops();
     public static final Item.Properties ORE_ITEM_PROPERTIES = new Item.Properties().rarity(Rarity.UNCOMMON);
@@ -69,8 +78,8 @@ public class BfrBlocks {
         return BLOCKS.register(name, () -> new Block(ORE_BLOCK_PROPERTIES));
     }
 
-    public static <B extends Block> RegistryObject<Item> fromBlock(RegistryObject<B> block) {
+    /*public static <B extends Item> ItemRegistryObject<Item> fromBlock(ItemRegistryObject<B> block) {
         return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), ORE_ITEM_PROPERTIES));
-    }
+    }*/
 
 }

@@ -2,12 +2,11 @@ package igentuman.bfr.common.tile;
 
 import igentuman.bfr.common.config.BetterFusionReactorConfig;
 import igentuman.bfr.common.content.fusion.BFReactorMultiblockData;
-import igentuman.bfr.common.recipe.impl.IrradiatingIRecipe;
+import igentuman.bfr.common.recipe.impl.IrradiatorRecipe;
 import igentuman.bfr.common.registries.BfrBlocks;
 import igentuman.bfr.common.registries.BfrRecipes;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorPort;
 import mekanism.api.RelativeSide;
-import mekanism.api.math.FloatingLong;
 import mekanism.api.recipes.ItemStackToItemStackRecipe;
 import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.api.recipes.cache.OneInputCachedRecipe;
@@ -19,6 +18,7 @@ import mekanism.generators.common.content.fission.FissionReactorMultiblockData;
 import mekanism.generators.common.tile.fission.TileEntityFissionReactorPort;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +38,7 @@ public class TileEntityIrradiator extends TileEntityMachine {
     public double fluxAggregated = 0;
 
     public TileEntityIrradiator(BlockPos pos, BlockState state) {
-        super(BfrBlocks.IRRADIATOR, pos, state, 200);
+        super(pos, state, 200);
         configComponent.addDisabledSides(RelativeSide.BACK);
         if(BetterFusionReactorConfig.bfr.isLoaded()) {
             reactorCoolingRate = (10 - BetterFusionReactorConfig.bfr.irradiatorCoolingRate.get()) / 100000.0+0.9999;
@@ -48,7 +48,7 @@ public class TileEntityIrradiator extends TileEntityMachine {
     Field recipeOperatingTicks;
 
     @Override
-    protected void onUpdateServer() {
+    protected boolean onUpdateServer() {
         updateRadiativeFlux();
         if(radiativeFlux > 0) {
             boolean process = recipeCacheLookupMonitor.updateAndProcess();
@@ -78,6 +78,7 @@ public class TileEntityIrradiator extends TileEntityMachine {
         if (ejectorComponent != null) {
             ejectorComponent.tickServer();
         }
+        return radiativeFlux > 0;
     }
 
     private void cooldownRadiativeFluxSource() {
@@ -101,6 +102,7 @@ public class TileEntityIrradiator extends TileEntityMachine {
             }
         }
     }
+/*
 
     @Override
     protected void addGeneralPersistentData(CompoundTag data) {
@@ -115,9 +117,10 @@ public class TileEntityIrradiator extends TileEntityMachine {
         radiativeFlux = data.getDouble("radiativeFlux");
         hasRadiationSource = data.getBoolean("hasRadiationSource");
     }
+*/
 
     @Override
-    public @NotNull IMekanismRecipeTypeProvider<ItemStackToItemStackRecipe, InputRecipeCache.SingleItem<ItemStackToItemStackRecipe>> getRecipeType() {
+    public @NotNull IMekanismRecipeTypeProvider<SingleRecipeInput, ItemStackToItemStackRecipe, InputRecipeCache.SingleItem<ItemStackToItemStackRecipe>> getRecipeType() {
         return BfrRecipes.IRRADIATING;
     }
 
@@ -143,11 +146,11 @@ public class TileEntityIrradiator extends TileEntityMachine {
 
         double caseAirConductivity = MekanismGeneratorsConfig.generators.fusionCasingThermalConductivity.get();
         //so if burn rate lower than 10 will affect irradiation in a negative way ( at 2 burn rate will be x0.2)
-        double lowTemperature = 10 * MekanismGeneratorsConfig.generators.energyPerFusionFuel.get().doubleValue() / 0.2 *
+        double lowTemperature = 10 * MekanismGeneratorsConfig.generators.energyPerFusionFuel.get() / 0.2D *
                 (0.2 + caseAirConductivity) / caseAirConductivity;
         //capping max temperature to 200 of burn rate. so we will have around 20x irradiation max
         //98 burn rate ~x10 irradiation
-        double highTemperature = 200 * MekanismGeneratorsConfig.generators.energyPerFusionFuel.get().doubleValue() / 0.2 *
+        double highTemperature = 200 * MekanismGeneratorsConfig.generators.energyPerFusionFuel.get() / 0.2D *
                 (0.2 + caseAirConductivity) / caseAirConductivity;
         double temperature = Math.min(reactor.plasmaTemperature, highTemperature);
         return temperature/lowTemperature;
@@ -200,6 +203,7 @@ public class TileEntityIrradiator extends TileEntityMachine {
     {
         radiativeFlux = value;
     }
+/*
 
     @Override
     public void handleUpdateTag(@NotNull CompoundTag tag) {
@@ -217,17 +221,18 @@ public class TileEntityIrradiator extends TileEntityMachine {
         updateTag.putBoolean("hasRadiationSource", hasRadiationSource);
         return updateTag;
     }
+*/
 
     protected CachedRecipe<ItemStackToItemStackRecipe> currentRecipe;
     @NotNull
     @Override
     public CachedRecipe<ItemStackToItemStackRecipe> createNewCachedRecipe(@NotNull ItemStackToItemStackRecipe recipe, int cacheIndex) {
-        ticksRequired = ((IrradiatingIRecipe)recipe).getTicks();
+        ticksRequired = ((IrradiatorRecipe)recipe).getTicks();
         currentRecipe =  OneInputCachedRecipe.itemToItem(recipe, recheckAllRecipeErrors, inputHandler, outputHandler)
                 .setErrorsChanged(this::onErrorsChanged)
-                .setCanHolderFunction(() -> MekanismUtils.canFunction(this))
+                .setCanHolderFunction(this::canFunction)
                 .setActive(this::setActive)
-                .setEnergyRequirements(() -> FloatingLong.create(0), getEnergyContainer())
+                .setEnergyRequirements(() -> 0, getEnergyContainer())
                 .setRequiredTicks(this::getTicksRequired)
                 .setOnFinish(this::markForSave)
                 .setOperatingTicksChanged(this::setOperatingTicks);

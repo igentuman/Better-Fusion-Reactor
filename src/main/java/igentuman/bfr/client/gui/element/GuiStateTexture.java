@@ -1,16 +1,13 @@
 package igentuman.bfr.client.gui.element;
 
 import java.util.function.BooleanSupplier;
-import javax.annotation.Nonnull;
-
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import mekanism.client.gui.IGuiWrapper;
 import mekanism.client.gui.element.GuiTexturedElement;
 import mekanism.common.util.MekanismUtils.ResourceType;
 import igentuman.bfr.common.BetterFusionReactor;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class GuiStateTexture extends GuiTexturedElement {
 
@@ -28,12 +25,9 @@ public class GuiStateTexture extends GuiTexturedElement {
     }
 
     @Override
-    public void drawBackground(@Nonnull GuiGraphics matrix, int mouseX, int mouseY, float partialTicks) {
-        RenderSystem.setShaderTexture(0, getResource());
-        int x = getButtonX();
-        int y = getButtonY();
-        matrix.blit(stateHolder, x, y, 0, 0, width, height, width, height);
-        RenderSystem.setShaderTexture(0, onSupplier.getAsBoolean() ? onTexture : offTexture);
-        matrix.blit(stateHolder, x + 2, y + 2, 0, 0, width - 4, height - 4, width - 4, height - 4);
+    public void drawBackground(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        guiGraphics.blit(getResource(), relativeX, relativeY, 0, 0, width, height, width, height);
+        ResourceLocation resource = onSupplier.getAsBoolean() ? onTexture : offTexture;
+        guiGraphics.blit(resource, relativeX + 2, relativeY + 2, 0, 0, width - 4, height - 4, width - 4, height - 4);
     }
 }

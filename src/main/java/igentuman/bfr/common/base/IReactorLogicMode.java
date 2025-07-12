@@ -11,6 +11,4 @@ public interface IReactorLogicMode<TYPE extends Enum<TYPE> & IReactorLogicMode<T
     ItemStack getRenderStack();
 
     EnumColor getColor();
-
-    int getId();
 }
