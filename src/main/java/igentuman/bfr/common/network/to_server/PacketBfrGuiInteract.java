@@ -68,7 +68,7 @@ public record PacketBfrGuiInteract(GeneratorsGuiInteraction interaction, BlockPo
         }),
         CHANGE_CR((tile, player, extra) -> {
             if (tile instanceof TileEntityFusionReactorBlock reactorBlock) {
-                reactorBlock.setInjectionRateFromPacket((int) Math.round(extra));
+                reactorBlock.adjustReactivity((int) Math.round(extra));
             }
         }),
         LOGIC_TYPE((tile, player, extra) -> {

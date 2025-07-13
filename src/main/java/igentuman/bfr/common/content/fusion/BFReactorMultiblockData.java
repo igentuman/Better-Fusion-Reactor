@@ -150,7 +150,7 @@ public class BFReactorMultiblockData extends MultiblockData {
     protected float adjustment = 0;
     protected int reactivityUpdateTicks = 10000;
     protected int currentReactivityTick = 0;
-    protected int adjustmentTicks = 100;
+    protected int adjustmentTicks = 80;
     protected float difficulty = 10;
     public boolean explodeFlag = false;
 
@@ -304,14 +304,14 @@ public class BFReactorMultiblockData extends MultiblockData {
     protected void updateAdjustment()
     {
         if(adjustment == 0) return;
-        markDirty();
         currentReactivity += adjustment;
         currentReactivity = Math.min(100, Math.max(0, currentReactivity));
         adjustmentTicks--;
         if(adjustmentTicks < 1) {
-            adjustmentTicks = 100;
+            adjustmentTicks = 80;
             adjustment = 0;
         }
+        markDirty();
     }
 
     public int reactivityUpdateTicksScaled()

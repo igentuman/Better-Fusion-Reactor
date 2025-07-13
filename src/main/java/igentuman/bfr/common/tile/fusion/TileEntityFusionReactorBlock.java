@@ -50,7 +50,7 @@ public class TileEntityFusionReactorBlock extends TileEntityMultiblock<BFReactor
     public void adjustReactivity(int rate) {
         BFReactorMultiblockData multiblock = getMultiblock();
         if (multiblock.isFormed()) {
-            multiblock.setAdjustment(rate);
+            multiblock.adjustReactivity(rate);
             markForSave();
         }
     }
