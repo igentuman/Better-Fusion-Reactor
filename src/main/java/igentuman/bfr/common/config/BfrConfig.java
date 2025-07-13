@@ -149,7 +149,7 @@ public class BfrConfig extends BaseMekanismConfig {
 
     @Override
     public String getFileName() {
-        return "generators";
+        return "bfr";
     }
 
     @Override

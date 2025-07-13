@@ -1,6 +1,8 @@
 package igentuman.bfr.client.gui;
 
 import java.util.List;
+
+import igentuman.bfr.client.gui.element.GuiFusionReactorTab;
 import mekanism.client.gui.GuiMekanismTile;
 import mekanism.client.gui.element.button.MekanismImageButton;
 import mekanism.client.gui.element.tab.GuiEnergyTab;
@@ -17,6 +19,7 @@ import mekanism.common.util.text.EnergyDisplay;
 import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.content.fusion.BFReactorMultiblockData;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
+import mekanism.generators.common.GeneratorsLang;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -39,7 +42,7 @@ public abstract class GuiFusionReactorInfo extends GuiMekanismTile<TileEntityFus
         addRenderableWidget(new GuiEnergyTab(this, () -> {
             BFReactorMultiblockData multiblock = tile.getMultiblock();
             return List.of(MekanismLang.STORING.translate(EnergyDisplay.of(multiblock.energyContainer)),
-                  BfrLang.PRODUCING_AMOUNT.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, true))));
+                    GeneratorsLang.PRODUCING_AMOUNT.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, true))));
         }));
         addRenderableWidget(new GuiHeatTab(this, () -> {
             BFReactorMultiblockData multiblock = tile.getMultiblock();

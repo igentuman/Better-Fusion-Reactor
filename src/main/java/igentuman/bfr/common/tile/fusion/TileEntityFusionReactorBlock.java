@@ -47,6 +47,14 @@ public class TileEntityFusionReactorBlock extends TileEntityMultiblock<BFReactor
         }
     }
 
+    public void adjustReactivity(int rate) {
+        BFReactorMultiblockData multiblock = getMultiblock();
+        if (multiblock.isFormed()) {
+            multiblock.setAdjustment(rate);
+            markForSave();
+        }
+    }
+
     @Override
     public void addContainerTrackers(MekanismContainer container) {
         super.addContainerTrackers(container);

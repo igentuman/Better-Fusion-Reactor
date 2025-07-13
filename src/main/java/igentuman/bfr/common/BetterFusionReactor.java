@@ -4,7 +4,7 @@ import igentuman.bfr.common.config.BetterFusionReactorConfig;
 import igentuman.bfr.common.content.fusion.BFReactorCache;
 import igentuman.bfr.common.content.fusion.BFReactorMultiblockData;
 import igentuman.bfr.common.content.fusion.BFReactorValidator;
-import igentuman.bfr.common.network.GeneratorsPacketHandler;
+import igentuman.bfr.common.network.BfrPacketHandler;
 import igentuman.bfr.common.registries.*;
 import igentuman.bfr.common.registries.BfrBuilders.FusionReactorBuilder;
 import mekanism.common.Mekanism;
@@ -32,7 +32,7 @@ public class BetterFusionReactor implements IModModule {
     /**
      * Mekanism Generators Packet Pipeline
      */
-    private final GeneratorsPacketHandler packetHandler;
+    private final BfrPacketHandler packetHandler;
 
     public static final MultiblockManager<BFReactorMultiblockData> fusionReactorManager = new MultiblockManager<>("fusionReactor", BFReactorCache::new, BFReactorValidator::new);
 
@@ -51,10 +51,10 @@ public class BetterFusionReactor implements IModModule {
         BfrContainerTypes.CONTAINER_TYPES.register(modEventBus);
         BfrTileEntityTypes.TILE_ENTITY_TYPES.register(modEventBus);
         BfrChemicals.CHEMICALS.register(modEventBus);
-        packetHandler = new GeneratorsPacketHandler(modEventBus, versionNumber);
+        packetHandler = new BfrPacketHandler(modEventBus, versionNumber);
     }
 
-    public static GeneratorsPacketHandler packetHandler() {
+    public static BfrPacketHandler packetHandler() {
         return instance.packetHandler;
     }
 

@@ -14,12 +14,13 @@ import igentuman.bfr.client.gui.element.GuiFusionReactorTab.FusionReactorTab;
 import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.content.fusion.BFReactorMultiblockData;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
+import mekanism.generators.common.GeneratorsLang;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-public class GuiFusionReactorController extends GuiMekanismTile<TileEntityFusionReactorController, MekanismTileContainer<TileEntityFusionReactorController>> {
+public class    GuiFusionReactorController extends GuiMekanismTile<TileEntityFusionReactorController, MekanismTileContainer<TileEntityFusionReactorController>> {
 
     public GuiFusionReactorController(MekanismTileContainer<TileEntityFusionReactorController> container, Inventory inv, Component title) {
         super(container, inv, title);
@@ -36,7 +37,7 @@ public class GuiFusionReactorController extends GuiMekanismTile<TileEntityFusion
             addRenderableWidget(new GuiEnergyTab(this, () -> {
                 BFReactorMultiblockData multiblock = tile.getMultiblock();
                 return List.of(MekanismLang.STORING.translate(EnergyDisplay.of(multiblock.energyContainer)),
-                      BfrLang.PRODUCING_AMOUNT.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, true))));
+                        GeneratorsLang.PRODUCING_AMOUNT.translate(EnergyDisplay.of(multiblock.getPassiveGeneration(false, true))));
             }));
             addRenderableWidget(new GuiHeatTab(this, () -> {
                 BFReactorMultiblockData multiblock = tile.getMultiblock();
@@ -48,6 +49,7 @@ public class GuiFusionReactorController extends GuiMekanismTile<TileEntityFusion
             addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.HEAT));
             addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.FUEL));
             addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.STAT));
+            addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.EFFICIENCY));
         }
     }
 

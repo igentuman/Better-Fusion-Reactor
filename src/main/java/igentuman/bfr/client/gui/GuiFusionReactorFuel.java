@@ -11,9 +11,10 @@ import mekanism.common.util.text.InputValidator;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab.FusionReactorTab;
 import igentuman.bfr.common.BfrLang;
-import igentuman.bfr.common.network.to_server.PacketGeneratorsGuiInteract;
-import igentuman.bfr.common.network.to_server.PacketGeneratorsGuiInteract.GeneratorsGuiInteraction;
+import igentuman.bfr.common.network.to_server.PacketBfrGuiInteract;
+import igentuman.bfr.common.network.to_server.PacketBfrGuiInteract.GeneratorsGuiInteraction;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
+import mekanism.generators.common.GeneratorsLang;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -37,6 +38,7 @@ public class GuiFusionReactorFuel extends GuiFusionReactorInfo {
         addRenderableWidget(new GuiProgress(() -> tile.getMultiblock().isBurning(), ProgressType.SMALL_LEFT, this, 106, 76));
         addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.HEAT));
         addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.STAT));
+        addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.EFFICIENCY));
         injectionRateField = addRenderableWidget(new GuiTextField(this, 103, 115, 26, 11));
         injectionRateField.setInputValidator(InputValidator.DIGIT)
               .setEnterHandler(this::setInjection)
@@ -46,14 +48,14 @@ public class GuiFusionReactorFuel extends GuiFusionReactorInfo {
 
     @Override
     protected void drawForegroundText(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        drawScrollingString(guiGraphics, BfrLang.REACTOR_INJECTION_RATE.translate(tile.getMultiblock().getInjectionRate()), 0, 35, TextAlignment.CENTER, titleTextColor(), 16, false);
-        drawScrollingString(guiGraphics, BfrLang.REACTOR_EDIT_RATE.translate(), 4, 117, TextAlignment.RIGHT, titleTextColor(), 99, 2, false);
+        drawScrollingString(guiGraphics, GeneratorsLang.REACTOR_INJECTION_RATE.translate(tile.getMultiblock().getInjectionRate()), 0, 35, TextAlignment.CENTER, titleTextColor(), 16, false);
+        drawScrollingString(guiGraphics, GeneratorsLang.REACTOR_EDIT_RATE.translate(), 4, 117, TextAlignment.RIGHT, titleTextColor(), 99, 2, false);
         super.drawForegroundText(guiGraphics, mouseX, mouseY);
     }
 
     private void setInjection() {
         if (!injectionRateField.getText().isEmpty()) {
-            PacketUtils.sendToServer(new PacketGeneratorsGuiInteract(GeneratorsGuiInteraction.INJECTION_RATE, tile, Integer.parseInt(injectionRateField.getText())));
+            PacketUtils.sendToServer(new PacketBfrGuiInteract(GeneratorsGuiInteraction.INJECTION_RATE, tile, Integer.parseInt(injectionRateField.getText())));
             injectionRateField.setText("");
         }
     }

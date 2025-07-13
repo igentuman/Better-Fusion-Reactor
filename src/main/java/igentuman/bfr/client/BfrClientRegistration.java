@@ -41,6 +41,10 @@ public class BfrClientRegistration {
         ClientRegistrationUtil.registerScreen(event, BfrContainerTypes.FUSION_REACTOR_HEAT, GuiFusionReactorHeat::new);
         ClientRegistrationUtil.registerScreen(event, BfrContainerTypes.FUSION_REACTOR_LOGIC_ADAPTER, GuiFusionReactorLogicAdapter::new);
         ClientRegistrationUtil.registerScreen(event, BfrContainerTypes.FUSION_REACTOR_STATS, GuiFusionReactorStats::new);
+        ClientRegistrationUtil.registerScreen(event, BfrContainerTypes.FUSION_REACTOR_LOGIC_IN, GuiFusionReactorLogicAdapterInput::new);
+        ClientRegistrationUtil.registerScreen(event, BfrContainerTypes.FUSION_REACTOR_LOGIC_OUT, GuiFusionReactorLogicAdapterOutput::new);
+        ClientRegistrationUtil.registerScreen(event, BfrContainerTypes.FUSION_REACTOR_EFFICIENCY, GuiFusionReactorEfficiency::new);
+        ClientRegistrationUtil.registerScreen(event, BfrContainerTypes.IRRADIATOR, GuiIrradiator::new);
     }
 
     @SubscribeEvent

@@ -23,31 +23,31 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Used for informing the server that an action happened in a GUI
  */
-public record PacketGeneratorsGuiInteract(GeneratorsGuiInteraction interaction, BlockPos tilePosition, double extra) implements IMekanismPacket {
+public record PacketBfrGuiInteract(GeneratorsGuiInteraction interaction, BlockPos tilePosition, double extra) implements IMekanismPacket {
 
-    public static final CustomPacketPayload.Type<PacketGeneratorsGuiInteract> TYPE = new CustomPacketPayload.Type<>(BetterFusionReactor.rl("gui_interact"));
-    public static final StreamCodec<ByteBuf, PacketGeneratorsGuiInteract> STREAM_CODEC = StreamCodec.composite(
-          GeneratorsGuiInteraction.STREAM_CODEC, PacketGeneratorsGuiInteract::interaction,
-          BlockPos.STREAM_CODEC, PacketGeneratorsGuiInteract::tilePosition,
-          ByteBufCodecs.DOUBLE, PacketGeneratorsGuiInteract::extra,
-          PacketGeneratorsGuiInteract::new
+    public static final CustomPacketPayload.Type<PacketBfrGuiInteract> TYPE = new CustomPacketPayload.Type<>(BetterFusionReactor.rl("gui_interact"));
+    public static final StreamCodec<ByteBuf, PacketBfrGuiInteract> STREAM_CODEC = StreamCodec.composite(
+          GeneratorsGuiInteraction.STREAM_CODEC, PacketBfrGuiInteract::interaction,
+          BlockPos.STREAM_CODEC, PacketBfrGuiInteract::tilePosition,
+          ByteBufCodecs.DOUBLE, PacketBfrGuiInteract::extra,
+          PacketBfrGuiInteract::new
     );
 
-    public PacketGeneratorsGuiInteract(GeneratorsGuiInteraction interaction, BlockEntity tile) {
+    public PacketBfrGuiInteract(GeneratorsGuiInteraction interaction, BlockEntity tile) {
         this(interaction, tile.getBlockPos());
     }
 
-    public PacketGeneratorsGuiInteract(GeneratorsGuiInteraction interaction, BlockEntity tile, double extra) {
+    public PacketBfrGuiInteract(GeneratorsGuiInteraction interaction, BlockEntity tile, double extra) {
         this(interaction, tile.getBlockPos(), extra);
     }
 
-    public PacketGeneratorsGuiInteract(GeneratorsGuiInteraction interaction, BlockPos tilePosition) {
+    public PacketBfrGuiInteract(GeneratorsGuiInteraction interaction, BlockPos tilePosition) {
         this(interaction, tilePosition, 0);
     }
 
     @NotNull
     @Override
-    public CustomPacketPayload.Type<PacketGeneratorsGuiInteract> type() {
+    public CustomPacketPayload.Type<PacketBfrGuiInteract> type() {
         return TYPE;
     }
 
@@ -62,6 +62,11 @@ public record PacketGeneratorsGuiInteract(GeneratorsGuiInteraction interaction, 
 
     public enum GeneratorsGuiInteraction {
         INJECTION_RATE((tile, player, extra) -> {
+            if (tile instanceof TileEntityFusionReactorBlock reactorBlock) {
+                reactorBlock.setInjectionRateFromPacket((int) Math.round(extra));
+            }
+        }),
+        CHANGE_CR((tile, player, extra) -> {
             if (tile instanceof TileEntityFusionReactorBlock reactorBlock) {
                 reactorBlock.setInjectionRateFromPacket((int) Math.round(extra));
             }

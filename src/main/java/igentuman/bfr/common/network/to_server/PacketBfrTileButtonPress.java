@@ -27,18 +27,18 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Used for informing the server that a click happened in a GUI and the gui window needs to change
  */
-public record PacketGeneratorsTileButtonPress(ClickedGeneratorsTileButton buttonClicked, BlockPos pos) implements IMekanismPacket {
+public record PacketBfrTileButtonPress(ClickedGeneratorsTileButton buttonClicked, BlockPos pos) implements IMekanismPacket {
 
-    public static final CustomPacketPayload.Type<PacketGeneratorsTileButtonPress> TYPE = new CustomPacketPayload.Type<>(BetterFusionReactor.rl("tile_button"));
-    public static final StreamCodec<ByteBuf, PacketGeneratorsTileButtonPress> STREAM_CODEC = StreamCodec.composite(
-          ClickedGeneratorsTileButton.STREAM_CODEC, PacketGeneratorsTileButtonPress::buttonClicked,
-          BlockPos.STREAM_CODEC, PacketGeneratorsTileButtonPress::pos,
-          PacketGeneratorsTileButtonPress::new
+    public static final CustomPacketPayload.Type<PacketBfrTileButtonPress> TYPE = new CustomPacketPayload.Type<>(BetterFusionReactor.rl("tile_button"));
+    public static final StreamCodec<ByteBuf, PacketBfrTileButtonPress> STREAM_CODEC = StreamCodec.composite(
+          ClickedGeneratorsTileButton.STREAM_CODEC, PacketBfrTileButtonPress::buttonClicked,
+          BlockPos.STREAM_CODEC, PacketBfrTileButtonPress::pos,
+          PacketBfrTileButtonPress::new
     );
 
     @NotNull
     @Override
-    public CustomPacketPayload.Type<PacketGeneratorsTileButtonPress> type() {
+    public CustomPacketPayload.Type<PacketBfrTileButtonPress> type() {
         return TYPE;
     }
 
@@ -64,6 +64,12 @@ public record PacketGeneratorsTileButtonPress(ClickedGeneratorsTileButton button
         }),
         TAB_HEAT(tile -> BfrContainerTypes.FUSION_REACTOR_HEAT.getProvider(BfrLang.FUSION_REACTOR, tile)),
         TAB_FUEL(tile -> BfrContainerTypes.FUSION_REACTOR_FUEL.getProvider(BfrLang.FUSION_REACTOR, tile)),
+        TAB_EFFICIENCY(tile -> {
+            if (tile instanceof TileEntityFusionReactorController) {
+                return BfrContainerTypes.FUSION_REACTOR_EFFICIENCY.getProvider(BfrLang.EFFICIENCY_TAB, tile);
+            }
+            return null;
+        }),
         TAB_STATS(tile -> {
             if (tile instanceof TileEntityFusionReactorController) {
                 return BfrContainerTypes.FUSION_REACTOR_STATS.getProvider(BfrLang.FUSION_REACTOR, tile);
