@@ -140,7 +140,7 @@ public class BFReactorMultiblockData extends MultiblockData {
     protected float adjustment = 0;
     protected int reactivityUpdateTicks = 10000;
     protected int currentReactivityTick = 0;
-    protected int adjustmentTicks = 100;
+    protected int adjustmentTicks = 80;
     protected float difficulty = 10;
     public boolean explodeFlag = false;
 
@@ -274,7 +274,7 @@ public class BFReactorMultiblockData extends MultiblockData {
         currentReactivity = Math.min(100, Math.max(0, currentReactivity));
         adjustmentTicks--;
         if(adjustmentTicks < 1) {
-            adjustmentTicks = 100;
+            adjustmentTicks = 80;
             adjustment = 0;
         }
     }
@@ -291,7 +291,12 @@ public class BFReactorMultiblockData extends MultiblockData {
         currentReactivityTick++;
         if(reactivityUpdateTicksScaled() < currentReactivityTick) {
             currentReactivityTick = 0;
-            setTargetReactivity(low + new Random().nextFloat() * (high - low));
+            float currentTarget = getTargetReactivity();
+            // Limit maximum change to 75% relative to the current target reactivity
+            float maxDelta = 75f;
+            float newLow = Math.max(low, currentTarget - maxDelta);
+            float newHigh = Math.min(high, currentTarget + maxDelta);
+            setTargetReactivity(newLow + new Random().nextFloat() * (newHigh - newLow));
             setCurrentReactivity((low + new Random().nextFloat() * (high - low) + currentReactivity*3)/4);
         }
     }
