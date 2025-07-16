@@ -11,6 +11,7 @@ import mekanism.api.text.ILangEntry;
 import mekanism.common.block.attribute.Attribute;
 import mekanism.common.block.attribute.AttributeState;
 import igentuman.bfr.common.BfrLang;
+import mekanism.generators.common.GeneratorsLang;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -46,9 +47,9 @@ public class AttributeStateFissionPortMode implements AttributeState {
 
     @NothingNullByDefault
     public enum FissionPortMode implements StringRepresentable, IHasEnumNameTextComponent, IIncrementalEnum<FissionPortMode> {
-        INPUT("input", BfrLang.FISSION_PORT_MODE_INPUT, EnumColor.BRIGHT_GREEN),
-        OUTPUT_WASTE("output_waste", BfrLang.FISSION_PORT_MODE_OUTPUT_WASTE, EnumColor.BROWN),
-        OUTPUT_COOLANT("output_coolant", BfrLang.FISSION_PORT_MODE_OUTPUT_COOLANT, EnumColor.DARK_AQUA);
+        INPUT("input", GeneratorsLang.FISSION_PORT_MODE_INPUT, EnumColor.BRIGHT_GREEN),
+        OUTPUT_WASTE("output_waste", GeneratorsLang.FISSION_PORT_MODE_OUTPUT_WASTE, EnumColor.BROWN),
+        OUTPUT_COOLANT("output_coolant", GeneratorsLang.FISSION_PORT_MODE_OUTPUT_COOLANT, EnumColor.DARK_AQUA);
 
         public static final IntFunction<FissionPortMode> BY_ID = ByIdMap.continuous(FissionPortMode::ordinal, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
         public static final StreamCodec<ByteBuf, FissionPortMode> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, FissionPortMode::ordinal);

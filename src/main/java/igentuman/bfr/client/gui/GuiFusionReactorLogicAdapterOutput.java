@@ -1,7 +1,7 @@
 package igentuman.bfr.client.gui;
 
+import igentuman.bfr.client.gui.element.GuiReactorLogicTab;
 import igentuman.bfr.client.gui.element.button.ReactorLogicButton;
-import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.network.to_server.PacketBfrGuiInteract;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
 import mekanism.client.gui.GuiMekanismTile;
@@ -9,6 +9,7 @@ import mekanism.client.gui.element.GuiElementHolder;
 import mekanism.client.gui.element.scroll.GuiScrollBar;
 import mekanism.client.gui.element.tab.GuiRedstoneControlTab;
 import mekanism.common.inventory.container.tile.EmptyTileContainer;
+import mekanism.common.network.PacketUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.network.chat.Component;
@@ -25,6 +26,7 @@ public class GuiFusionReactorLogicAdapterOutput extends GuiMekanismTile<TileEnti
 
     public GuiFusionReactorLogicAdapterOutput(EmptyTileContainer<TileEntityFusionReactorLogicAdapter> container, Inventory inv, Component title) {
         super(container, inv, title);
+        imageWidth += 20;
     }
 
     @Override
@@ -42,19 +44,20 @@ public class GuiFusionReactorLogicAdapterOutput extends GuiMekanismTile<TileEnti
                 break;
             }
         }
-        //addRenderableWidget(new GuReactorLogicTab(this, tile, GuReactorLogicTab.ReactorLogicTab.GENERAL));
-        //addRenderableWidget(new GuReactorLogicTab(this, tile, GuReactorLogicTab.ReactorLogicTab.INPUT));
+        addRenderableWidget(new GuiReactorLogicTab(this, tile, GuiReactorLogicTab.ReactorLogicTab.GENERAL));
+        addRenderableWidget(new GuiReactorLogicTab(this, tile, GuiReactorLogicTab.ReactorLogicTab.INPUT));
         addRenderableWidget(new GuiElementHolder(this, 16, 31, 130, 112));
- /*        scrollBar = addRenderableWidget(new GuiScrollBar(this, 146, 31, 112, () -> tile.getOutputModes().length, () -> DISPLAY_COUNT));
+        scrollBar = addRenderableWidget(new GuiScrollBar(this, 146, 31, 112, () -> tile.getOutputModes().length, () -> DISPLAY_COUNT));
         for (int i = 0; i < DISPLAY_COUNT; i++) {
             int typeShift = 22 * i;
-            addRenderableWidget(new ReactorLogicButton<>(this, 17, 32 + typeShift, i, tile, scrollBar::getCurrentSelection, tile::getOutputModes, type -> {
-                if (type == null) {
-                    return;
-                }
-                BetterFusionReactor.packetHandler().sendToServer(new PacketBfrGuiInteract(PacketBfrGuiInteract.BfrGuiInteraction.LOGIC_TYPE, tile, type.getId()));
-            }));
-        }*/
+            addRenderableWidget(new ReactorLogicButton<>(this, 17, 32 + typeShift, i, tile, TileEntityFusionReactorLogicAdapter.FusionReactorLogic.class, scrollBar::getCurrentSelection, tile::getOutputModes, this::changeLogic));
+        }
+    }
+
+    private void changeLogic(TileEntityFusionReactorLogicAdapter.FusionReactorLogic type) {
+        if (type != null) {
+            PacketUtils.sendToServer(new PacketBfrGuiInteract(PacketBfrGuiInteract.GeneratorsGuiInteraction.LOGIC_TYPE, tile, type.ordinal()));
+        }
     }
 
     @Override

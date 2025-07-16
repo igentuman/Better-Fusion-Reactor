@@ -326,7 +326,12 @@ public class BFReactorMultiblockData extends MultiblockData {
         currentReactivityTick++;
         if(reactivityUpdateTicksScaled() < currentReactivityTick) {
             currentReactivityTick = 0;
-            setTargetReactivity(low + new Random().nextFloat() * (high - low));
+            float currentTarget = getTargetReactivity();
+            // Limit maximum change to 75% relative to the current target reactivity
+            float maxDelta = 75f;
+            float newLow = Math.max(low, currentTarget - maxDelta);
+            float newHigh = Math.min(high, currentTarget + maxDelta);
+            setTargetReactivity(newLow + new Random().nextFloat() * (newHigh - newLow));
             setCurrentReactivity((low + new Random().nextFloat() * (high - low) + currentReactivity*3)/4);
         }
     }

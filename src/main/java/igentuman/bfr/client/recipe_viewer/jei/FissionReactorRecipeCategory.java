@@ -19,6 +19,7 @@ import mekanism.common.util.text.BooleanStateDisplay.ActiveDisabled;
 import mekanism.common.util.text.TextUtils;
 import igentuman.bfr.client.recipe_viewer.recipe.FissionRecipeViewerRecipe;
 import igentuman.bfr.common.BfrLang;
+import mekanism.generators.common.GeneratorsLang;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.helpers.ICodecHelper;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -41,14 +42,14 @@ public class FissionReactorRecipeCategory extends BaseRecipeCategory<FissionReci
         addElement(new GuiInnerScreen(this, 45, 17, 105, 56, () -> List.of(
               MekanismLang.STATUS.translate(EnumColor.BRIGHT_GREEN, ActiveDisabled.of(true)),
               BfrLang.GAS_BURN_RATE.translate(1.0),
-              BfrLang.FISSION_HEATING_RATE.translate(0),
+              GeneratorsLang.FISSION_HEATING_RATE.translate(0),
               MekanismLang.TEMPERATURE.translate(EnumColor.BRIGHT_GREEN, MekanismUtils.getTemperatureDisplay(HeatAPI.AMBIENT_TEMP, TemperatureUnit.KELVIN, true)),
-              BfrLang.FISSION_DAMAGE.translate(EnumColor.BRIGHT_GREEN, TextUtils.getPercent(0))
+                GeneratorsLang.FISSION_DAMAGE.translate(EnumColor.BRIGHT_GREEN, TextUtils.getPercent(0))
         )).spacing(1));
-        coolantTank = addElement(GuiFluidGauge.getDummy(GaugeType.STANDARD, this, 6, 13).setLabel(BfrLang.FISSION_COOLANT_TANK.translateColored(EnumColor.AQUA)));
-        fuelTank = addElement(GuiChemicalGauge.getDummy(GaugeType.STANDARD, this, 25, 13).setLabel(BfrLang.FISSION_FUEL_TANK.translateColored(EnumColor.DARK_GREEN)));
-        heatedCoolantTank = addElement(GuiChemicalGauge.getDummy(GaugeType.STANDARD, this, 152, 13).setLabel(BfrLang.FISSION_HEATED_COOLANT_TANK.translateColored(EnumColor.GRAY)));
-        wasteTank = addElement(GuiChemicalGauge.getDummy(GaugeType.STANDARD, this, 171, 13).setLabel(BfrLang.FISSION_WASTE_TANK.translateColored(EnumColor.BROWN)));
+        coolantTank = addElement(GuiFluidGauge.getDummy(GaugeType.STANDARD, this, 6, 13).setLabel(GeneratorsLang.FISSION_COOLANT_TANK.translateColored(EnumColor.AQUA)));
+        fuelTank = addElement(GuiChemicalGauge.getDummy(GaugeType.STANDARD, this, 25, 13).setLabel(GeneratorsLang.FISSION_FUEL_TANK.translateColored(EnumColor.DARK_GREEN)));
+        heatedCoolantTank = addElement(GuiChemicalGauge.getDummy(GaugeType.STANDARD, this, 152, 13).setLabel(GeneratorsLang.FISSION_HEATED_COOLANT_TANK.translateColored(EnumColor.GRAY)));
+        wasteTank = addElement(GuiChemicalGauge.getDummy(GaugeType.STANDARD, this, 171, 13).setLabel(GeneratorsLang.FISSION_WASTE_TANK.translateColored(EnumColor.BROWN)));
     }
 
     @Override

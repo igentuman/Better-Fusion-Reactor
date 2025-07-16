@@ -6,9 +6,9 @@ import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter.FusionReactorLogic;
 import net.minecraft.core.component.DataComponentType;
 
-public class GeneratorsDataComponents {
+public class BfrDataComponents {
 
-    private GeneratorsDataComponents() {
+    private BfrDataComponents() {
     }
 
     public static final DataComponentDeferredRegister DATA_COMPONENTS = new DataComponentDeferredRegister(BetterFusionReactor.MODID);

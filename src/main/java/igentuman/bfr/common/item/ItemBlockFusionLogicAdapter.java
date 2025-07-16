@@ -6,7 +6,7 @@ import mekanism.common.block.prefab.BlockBasicMultiblock;
 import mekanism.common.item.block.ItemBlockTooltip;
 import mekanism.common.util.text.BooleanStateDisplay.OnOff;
 import igentuman.bfr.common.BfrLang;
-import igentuman.bfr.common.registries.GeneratorsDataComponents;
+import igentuman.bfr.common.registries.BfrDataComponents;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter.FusionReactorLogic;
 import net.minecraft.network.chat.Component;
@@ -18,14 +18,14 @@ import org.jetbrains.annotations.NotNull;
 public class ItemBlockFusionLogicAdapter extends ItemBlockTooltip<BlockBasicMultiblock<TileEntityFusionReactorLogicAdapter>> {
 
     public ItemBlockFusionLogicAdapter(BlockBasicMultiblock<TileEntityFusionReactorLogicAdapter> block, Properties properties) {
-        super(block, true, properties.component(GeneratorsDataComponents.FUSION_LOGIC_TYPE, FusionReactorLogic.DISABLED));
+        super(block, true, properties.component(BfrDataComponents.FUSION_LOGIC_TYPE, FusionReactorLogic.READY));
     }
 
     @Override
     protected void addDetails(@NotNull ItemStack stack, @NotNull Item.TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         super.addDetails(stack, context, tooltip, flag);
-        FusionReactorLogic logicType = stack.getOrDefault(GeneratorsDataComponents.FUSION_LOGIC_TYPE, FusionReactorLogic.DISABLED);
+        FusionReactorLogic logicType = stack.getOrDefault(BfrDataComponents.FUSION_LOGIC_TYPE, FusionReactorLogic.READY);
         tooltip.add(BfrLang.REACTOR_LOGIC_REDSTONE_MODE.translate(logicType.getColor(), logicType));
-        tooltip.add(BfrLang.REACTOR_LOGIC_ACTIVE_COOLING.translate(EnumColor.RED, OnOff.of(stack.getOrDefault(GeneratorsDataComponents.ACTIVE_COOLED, false))));
+        tooltip.add(BfrLang.REACTOR_LOGIC_ACTIVE_COOLING.translate(EnumColor.RED, OnOff.of(stack.getOrDefault(BfrDataComponents.ACTIVE_COOLED, false))));
     }
 }

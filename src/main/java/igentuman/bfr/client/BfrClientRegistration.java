@@ -53,7 +53,7 @@ public class BfrClientRegistration {
             return;
         }
         //Reset any cached models now that the atlases are built
-        GeneratorsSpecialColors.GUI_OBJECTS.parse(BetterFusionReactor.rl("textures/colormap/gui_objects.png"));
+        BfrSpecialColors.GUI_OBJECTS.parse(BetterFusionReactor.rl("textures/colormap/gui_objects.png"));
     }
 
     @SubscribeEvent

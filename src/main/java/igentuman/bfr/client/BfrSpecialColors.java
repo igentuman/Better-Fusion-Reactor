@@ -3,9 +3,9 @@ package igentuman.bfr.client;
 import mekanism.client.render.lib.ColorAtlas;
 import mekanism.client.render.lib.ColorAtlas.ColorRegistryObject;
 
-public class GeneratorsSpecialColors {
+public class BfrSpecialColors {
 
-    private GeneratorsSpecialColors() {
+    private BfrSpecialColors() {
     }
 
     public static final ColorAtlas GUI_OBJECTS = new ColorAtlas("generators_gui_objects");

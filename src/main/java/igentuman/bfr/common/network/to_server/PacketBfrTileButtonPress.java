@@ -1,5 +1,6 @@
 package igentuman.bfr.common.network.to_server;
 
+import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
 import io.netty.buffer.ByteBuf;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -73,6 +74,24 @@ public record PacketBfrTileButtonPress(ClickedGeneratorsTileButton buttonClicked
         TAB_STATS(tile -> {
             if (tile instanceof TileEntityFusionReactorController) {
                 return BfrContainerTypes.FUSION_REACTOR_STATS.getProvider(BfrLang.FUSION_REACTOR, tile);
+            }
+            return null;
+        }),
+        TAB_LOGIC_GENERAL(tile -> {
+            if (tile instanceof TileEntityFusionReactorLogicAdapter) {
+                return BfrContainerTypes.FUSION_REACTOR_LOGIC_ADAPTER.getProvider(BfrLang.LOGIC_GENERAL_TAB, tile);
+            }
+            return null;
+        }),
+        TAB_LOGIC_INPUT(tile -> {
+            if (tile instanceof TileEntityFusionReactorLogicAdapter) {
+                return BfrContainerTypes.FUSION_REACTOR_LOGIC_IN.getProvider(BfrLang.LOGIC_IN_TAB, tile);
+            }
+            return null;
+        }),
+        TAB_LOGIC_OUTPUT(tile -> {
+            if (tile instanceof TileEntityFusionReactorLogicAdapter) {
+                return BfrContainerTypes.FUSION_REACTOR_LOGIC_OUT.getProvider(BfrLang.LOGIC_OUT_TAB, tile);
             }
             return null;
         });
