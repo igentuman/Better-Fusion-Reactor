@@ -1,11 +1,12 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "F": {
       "item": "bfr:fusion_reactor_frame"
     },
     "R": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     }
   },
   "pattern": [
@@ -14,6 +15,7 @@
     " R "
   ],
   "result": {
-    "item": "bfr:fusion_reactor_logic_adapter"
+    "count": 1,
+    "id": "bfr:fusion_reactor_logic_adapter"
   }
 }

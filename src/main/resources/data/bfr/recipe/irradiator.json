@@ -1,8 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "C": {
-      "tag": "forge:circuits/ultimate"
+      "tag": "c:circuits/ultimate"
     },
     "F": {
       "item": "mekanism:laser_tractor_beam"
@@ -23,6 +24,6 @@
     "FHF"
   ],
   "result": {
-    "item": "bfr:irradiator"
+    "id": "bfr:irradiator"
   }
 }

@@ -1,6 +1,1 @@
-{
-  "pack": {
-    "pack_format": 9,
-    "description": "Resources used for BFR"
-  }
-}
+{"pack":{"pack_format":48,"supported_formats":[34,48]}}

@@ -1,11 +1,12 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "G": {
       "item": "mekanismgenerators:reactor_glass"
     },
     "R": {
-      "tag": "forge:storage_blocks/redstone"
+      "tag": "c:storage_blocks/redstone"
     }
   },
   "pattern": [
@@ -15,6 +16,6 @@
   ],
   "result": {
     "count": 2,
-    "item": "bfr:laser_focus_matrix"
+    "id": "bfr:laser_focus_matrix"
   }
 }

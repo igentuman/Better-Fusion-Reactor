@@ -4,6 +4,7 @@ import igentuman.bfr.common.BetterFusionReactor;
 import mekanism.common.block.attribute.Attribute;
 import mekanism.common.block.attribute.Attributes.AttributeComparator;
 import mekanism.common.registration.impl.CreativeTabDeferredRegister;
+import mekanism.generators.common.MekanismGenerators;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
@@ -12,21 +13,25 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
+import static mekanism.generators.common.registries.GeneratorsCreativeTabs.GENERATORS;
+
 public class BfrCreativeTabs {
 
-    public static final CreativeTabDeferredRegister CREATIVE_TABS = new CreativeTabDeferredRegister(BetterFusionReactor.MODID, BfrCreativeTabs::addToExistingTabs);
+    public static final CreativeTabDeferredRegister CREATIVE_TABS = new CreativeTabDeferredRegister(MekanismGenerators.MODID, BfrCreativeTabs::addToExistingTabs);
 
 
     private static void addToExistingTabs(BuildCreativeModeTabContentsEvent event) {
         ResourceKey<CreativeModeTab> tabKey = event.getTabKey();
         if (tabKey == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
-
+            CreativeTabDeferredRegister.addToDisplay(event, BfrBlocks.FUSION_REACTOR_CONTROLLER,  BfrBlocks.FUSION_REACTOR_PORT, BfrBlocks.FUSION_REACTOR_FRAME, BfrBlocks.FUSION_REACTOR_LOGIC_ADAPTER, BfrBlocks.LASER_FOCUS_MATRIX, BfrBlocks.IRRADIATOR);
         } else if (tabKey == CreativeModeTabs.REDSTONE_BLOCKS) {
             for (Holder<Item> item : BfrBlocks.BLOCKS.getSecondaryEntries()) {
                 if (item.value() instanceof BlockItem blockItem && Attribute.has(blockItem.getBlock(), AttributeComparator.class)) {
                     CreativeTabDeferredRegister.addToDisplay(event, item);
                 }
             }
+        } else if(tabKey == GENERATORS.getKey()) {
+            CreativeTabDeferredRegister.addToDisplay(event, BfrBlocks.FUSION_REACTOR_CONTROLLER,  BfrBlocks.FUSION_REACTOR_PORT, BfrBlocks.FUSION_REACTOR_FRAME, BfrBlocks.FUSION_REACTOR_LOGIC_ADAPTER, BfrBlocks.LASER_FOCUS_MATRIX, BfrBlocks.IRRADIATOR);
         }
     }
 }
