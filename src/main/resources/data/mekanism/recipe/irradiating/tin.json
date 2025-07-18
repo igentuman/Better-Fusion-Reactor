@@ -1,0 +1,11 @@
+{
+  "type": "mekanism:irradiating",
+  "input": {
+    "tag": "c:ores/tin",
+    "count": 1
+  },
+  "output": {
+    "id": "bfr:irradiated_tin_ore"
+  },
+  "ticks": 200
+}

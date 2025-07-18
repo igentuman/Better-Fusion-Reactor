@@ -1,0 +1,11 @@
+{
+  "type": "mekanism:crystallizing",
+  "chemicalType": "gas",
+  "input": {
+    "amount": 2000,
+    "chemical": "mekanism:enriched_nuclear_waste"
+  },
+  "output": {
+    "id": "bfr:solidified_waste"
+  }
+}

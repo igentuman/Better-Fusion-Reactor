@@ -1,9 +1,11 @@
 package igentuman.bfr.common.registries;
 
+import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.tile.TileEntityIrradiator;
 import igentuman.bfr.common.tile.fusion.*;
 import mekanism.common.MekanismLang;
 import mekanism.common.block.attribute.AttributeMultiblock;
+import mekanism.common.block.attribute.AttributeSideConfig;
 import mekanism.common.block.attribute.Attributes;
 import mekanism.common.block.attribute.Attributes.AttributeMobSpawn;
 import mekanism.common.block.attribute.Attributes.AttributeRedstoneEmitter;
@@ -20,8 +22,9 @@ public class BfrBlockTypes {
     }
 
     public static final Machine<TileEntityIrradiator> IRRADIATOR = Machine.MachineBuilder
-            .createMachine(() -> BfrTileEntityTypes.IRRADIATOR, MekanismLang.DESCRIPTION_SOLAR_NEUTRON_ACTIVATOR)
+            .createMachine(() -> BfrTileEntityTypes.IRRADIATOR, BfrLang.IRRADIATOR_DESCRIPTION)
             .withGui(() -> BfrContainerTypes.IRRADIATOR)
+            .with(AttributeSideConfig.ELECTRIC_MACHINE)
             .withComputerSupport("irradiator")
             .build();
 

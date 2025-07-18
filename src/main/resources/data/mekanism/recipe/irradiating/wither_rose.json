@@ -1,0 +1,11 @@
+{
+  "type": "mekanism:irradiating",
+  "input": {
+    "item": "minecraft:rose_bush",
+    "count": 1
+  },
+  "output": {
+    "id": "minecraft:wither_rose"
+  },
+  "ticks": 1000
+}

@@ -1,24 +1,15 @@
 package igentuman.bfr.common.recipe;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import mekanism.api.SerializationConstants;
-import mekanism.api.SerializerHelper;
-import mekanism.api.recipes.ItemStackToItemStackRecipe;
 import mekanism.api.recipes.basic.BasicItemStackToItemStackRecipe;
 import mekanism.api.recipes.ingredients.ItemStackIngredient;
-import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import mekanism.common.recipe.serializer.MekanismRecipeSerializer;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiFunction;
 

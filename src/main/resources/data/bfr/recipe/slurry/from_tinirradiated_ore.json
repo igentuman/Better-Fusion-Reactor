@@ -1,17 +1,16 @@
 {
   "type": "mekanism:dissolution",
-  "gasInput": {
+  "chemical_input": {
     "amount": 1,
-    "gas": "mekanism:sulfuric_acid"
+    "chemical": "mekanism:sulfuric_acid"
   },
-  "itemInput": {
-    "ingredient": {
-      "item": "bfr:irradiated_tin_ore"
-    }
+  "item_input": {
+    "count": 1,
+    "item": "bfr:irradiated_tin_ore"
   },
   "output": {
-    "amount": 1200,
-    "chemicalType": "slurry",
-    "slurry": "mekanism:dirty_tin"
-  }
+    "amount": 1000,
+    "id": "mekanism:dirty_tin"
+  },
+  "per_tick_usage": true
 }

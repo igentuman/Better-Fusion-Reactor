@@ -52,6 +52,7 @@ public class BetterFusionReactor implements IModModule {
         BfrTileEntityTypes.TILE_ENTITY_TYPES.register(modEventBus);
         BfrChemicals.CHEMICALS.register(modEventBus);
         packetHandler = new BfrPacketHandler(modEventBus, versionNumber);
+        BfrRecipes.init();
     }
 
     public static BfrPacketHandler packetHandler() {

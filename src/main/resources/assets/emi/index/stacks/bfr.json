@@ -1,0 +1,9 @@
+{
+  "removed": [
+    "item:mekanismgenerators:fusion_reactor_controller",
+    "item:mekanismgenerators:fusion_reactor_frame",
+    "item:mekanismgenerators:fusion_reactor_logic_adapter",
+    "item:mekanismgenerators:fusion_reactor_port",
+    "item:mekanismgenerators:laser_focus_matrix"
+  ]
+}

@@ -2,14 +2,19 @@ package igentuman.bfr.client.recipe_viewer.jei;
 
 import igentuman.bfr.client.recipe_viewer.BfrRVRecipeType;
 import igentuman.bfr.client.recipe_viewer.alias.GeneratorsAliasMapping;
+import igentuman.bfr.client.recipe_viewer.recipe.BfrRecipeViewerType;
 import igentuman.bfr.client.recipe_viewer.recipe.FusionRecipeViewerRecipe;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.registries.BfrBlocks;
 import igentuman.bfr.common.registries.BfrItems;
+import igentuman.bfr.common.registries.BfrRecipes;
 import mekanism.client.recipe_viewer.jei.CatalystRegistryHelper;
 import mekanism.client.recipe_viewer.jei.JEIAliasHelper;
 import mekanism.client.recipe_viewer.jei.MekanismJEI;
 import mekanism.client.recipe_viewer.jei.RecipeRegistryHelper;
+import mekanism.client.recipe_viewer.jei.machine.ItemStackToItemStackRecipeCategory;
+import mekanism.client.recipe_viewer.type.RecipeViewerRecipeType;
+import mekanism.common.recipe.MekanismRecipeType;
 import mekanism.generators.common.registries.GeneratorsBlocks;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -49,7 +54,8 @@ public class BfrJEI implements IModPlugin {
             return;
         }
         IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
-       registry.addRecipeCategories(new FusionReactorRecipeCategory(guiHelper, BfrRVRecipeType.FUSION));
+        registry.addRecipeCategories(new FusionReactorRecipeCategory(guiHelper, BfrRVRecipeType.FUSION));
+        registry.addRecipeCategories(new ItemStackToItemStackRecipeCategory(guiHelper, BfrRecipeViewerType.IRRADIATING));
     }
 
     @Override
@@ -58,6 +64,7 @@ public class BfrJEI implements IModPlugin {
             return;
         }
         CatalystRegistryHelper.register(registry, BfrRVRecipeType.FUSION);
+        CatalystRegistryHelper.register(registry, BfrRecipeViewerType.IRRADIATING);
     }
 
     @Override
@@ -81,5 +88,6 @@ public class BfrJEI implements IModPlugin {
             registry.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, collection);
         }
         RecipeRegistryHelper.register(registry, BfrRVRecipeType.FUSION, FusionRecipeViewerRecipe.getFusionRecipes());
+        RecipeRegistryHelper.register(registry, BfrRecipeViewerType.IRRADIATING, BfrRecipes.IRRADIATING);
     }
 }

@@ -1,0 +1,11 @@
+{
+  "type": "mekanism:irradiating",
+  "input": {
+    "tag": "c:ores/lead",
+    "count": 1
+  },
+  "output": {
+    "id": "bfr:irradiated_lead_ore"
+  },
+  "ticks": 200
+}

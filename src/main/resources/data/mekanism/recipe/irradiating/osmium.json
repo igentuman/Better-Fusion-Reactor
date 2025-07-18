@@ -1,0 +1,11 @@
+{
+  "type": "mekanism:irradiating",
+  "input": {
+    "tag": "c:ores/osmium",
+    "count": 1
+  },
+  "output": {
+    "id": "bfr:irradiated_osmium_ore"
+  },
+  "ticks": 200
+}

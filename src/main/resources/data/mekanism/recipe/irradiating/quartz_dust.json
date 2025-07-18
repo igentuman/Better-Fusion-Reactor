@@ -1,12 +1,11 @@
 {
   "type": "mekanism:irradiating",
   "input": {
-    "ingredient": {
-      "tag": "forge:sand"
-    }
+    "tag": "c:sand",
+    "count": 1
   },
   "output": {
-    "item": "mekanism:dust_quartz"
+    "id": "mekanism:dust_quartz"
   },
   "ticks": 500
 }

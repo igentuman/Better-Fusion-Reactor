@@ -26,6 +26,7 @@ import mekanism.common.lib.transmitter.TransmissionType;
 import mekanism.common.recipe.lookup.ISingleRecipeLookupHandler.ItemRecipeLookupHandler;
 import mekanism.common.tile.component.TileComponentConfig;
 import mekanism.common.tile.component.TileComponentEjector;
+import mekanism.common.tile.component.config.slot.InventorySlotInfo;
 import mekanism.common.tile.prefab.TileEntityProgressMachine;
 import mekanism.common.upgrade.MachineUpgradeData;
 import mekanism.common.util.MekanismUtils;
@@ -55,10 +56,8 @@ public abstract class TileEntityMachine extends TileEntityProgressMachine<ItemSt
     protected InputInventorySlot inputSlot;
     @WrappingComputerMethod(wrapper = ComputerIInventorySlotWrapper.class, methodNames = "getOutput", docPlaceholder = "output slot")
     protected OutputInventorySlot outputSlot;
-    protected EnergyInventorySlot energySlot;
     public TileEntityMachine(BlockPos pos, BlockState state, int ticksRequired) {
             super(BfrBlocks.IRRADIATOR, pos, state, TRACKED_ERROR_TYPES, ticksRequired);
-        configComponent.setupItemIOConfig(inputSlot, outputSlot, energySlot);
         ejectorComponent = new TileComponentEjector(this);
         ejectorComponent.setOutputData(configComponent, TransmissionType.ITEM);
         inputHandler = InputHelper.getInputHandler(inputSlot, RecipeError.NOT_ENOUGH_INPUT);
@@ -69,7 +68,6 @@ public abstract class TileEntityMachine extends TileEntityProgressMachine<ItemSt
     @Override
     protected IEnergyContainerHolder getInitialEnergyContainers(IContentsListener listener, IContentsListener recipeCacheListener, IContentsListener recipeCacheUnpauseListener) {
         EnergyContainerHelper builder = EnergyContainerHelper.forSideWithConfig(this);
-        builder.addContainer(energyContainer = MachineEnergyContainer.input(this, listener));
         return builder.build();
     }
 
@@ -81,8 +79,6 @@ public abstract class TileEntityMachine extends TileEntityProgressMachine<ItemSt
               .tracksWarnings(slot -> slot.warning(WarningType.NO_MATCHING_RECIPE, getWarningCheck(RecipeError.NOT_ENOUGH_INPUT)));
         builder.addSlot(outputSlot = OutputInventorySlot.at(listener, 116, 35))
               .tracksWarnings(slot -> slot.warning(WarningType.NO_SPACE_IN_OUTPUT, getWarningCheck(RecipeError.NOT_ENOUGH_OUTPUT_SPACE)));
-        energySlot = EnergyInventorySlot.fillOrConvert(energyContainer, this::getLevel, listener, 64, 53);
-
         return builder.build();
     }
 

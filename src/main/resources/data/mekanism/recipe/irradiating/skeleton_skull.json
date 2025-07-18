@@ -1,0 +1,11 @@
+{
+  "type": "mekanism:irradiating",
+  "input": {
+    "item": "minecraft:zombie_head",
+    "count": 1
+  },
+  "output": {
+    "id": "minecraft:skeleton_skull"
+  },
+  "ticks": 1000
+}

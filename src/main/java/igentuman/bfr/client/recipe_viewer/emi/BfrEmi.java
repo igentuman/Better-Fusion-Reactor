@@ -10,7 +10,7 @@ import igentuman.bfr.common.registries.BfrItems;
 import mekanism.client.recipe_viewer.emi.MekanismEmi;
 import igentuman.bfr.client.recipe_viewer.emi.recipe.FusionReactorEmiRecipe;
 @EmiEntrypoint
-public class GeneratorsEmi implements EmiPlugin {
+public class BfrEmi implements EmiPlugin {
 
     @Override
     public void register(EmiRegistry registry) {
