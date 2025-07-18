@@ -1,12 +1,18 @@
 package igentuman.bfr.common.config;
 
 import igentuman.bfr.common.content.fusion.BFReactorMultiblockData;
+import mekanism.api.MekanismAPI;
 import mekanism.api.chemical.Chemical;
 import mekanism.api.chemical.ChemicalStack;
+import mekanism.api.recipes.ingredients.creator.IngredientCreatorAccess;
 import mekanism.common.Mekanism;
 import mekanism.common.config.BaseMekanismConfig;
 import mekanism.common.config.value.*;
+import mekanism.common.registries.MekanismChemicals;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.fml.config.ModConfig.Type;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -45,19 +51,29 @@ public class BfrConfig extends BaseMekanismConfig {
 
     private static FluidStack resolveFluidIgredient(String name, int amount)
     {
-        CompoundTag tag = new CompoundTag();
-        tag.putString("FluidName", name);
-        tag.putInt("Amount", amount);
-        // return FluidStack.loadFluidStackFromNBT(tag);
+        try {
+            ResourceLocation fluidId = ResourceLocation.parse(name);
+            Fluid fluid = BuiltInRegistries.FLUID.get(fluidId);
+            if (fluid != null && !fluid.isSame(net.minecraft.world.level.material.Fluids.EMPTY)) {
+                return new FluidStack(fluid, amount);
+            }
+        } catch (Exception e) {
+            Mekanism.logger.warn("Failed to resolve fluid: " + name, e);
+        }
         return FluidStack.EMPTY;
     }
 
-    private static ChemicalStack resolveGasIgredient(String name, int amount)
+    private static ChemicalStack resolveGasIgredient(String name, long amount)
     {
-        CompoundTag tag = new CompoundTag();
-        tag.putString("gasName", name);
-        tag.putLong("amount", amount);
-        //return IngredientCreatorAccess.chemicalStack().from(new TagKey<Chemical>(), amount);
+        try {
+            ResourceLocation chemicalId = ResourceLocation.parse(name);
+            Chemical chemical = MekanismAPI.CHEMICAL_REGISTRY.get(chemicalId);
+            if (chemical != null) {
+                return new ChemicalStack(chemical, amount);
+            }
+        } catch (Exception e) {
+            Mekanism.logger.warn("Failed to resolve chemical: " + name, e);
+        }
         return ChemicalStack.EMPTY;
     }
 

@@ -1,11 +1,15 @@
 package igentuman.bfr.client.recipe_viewer.jei;
 
+import igentuman.bfr.client.recipe_viewer.BfrRVRecipeType;
 import igentuman.bfr.client.recipe_viewer.alias.GeneratorsAliasMapping;
+import igentuman.bfr.client.recipe_viewer.recipe.FusionRecipeViewerRecipe;
 import igentuman.bfr.common.BetterFusionReactor;
 import igentuman.bfr.common.registries.BfrBlocks;
 import igentuman.bfr.common.registries.BfrItems;
+import mekanism.client.recipe_viewer.jei.CatalystRegistryHelper;
 import mekanism.client.recipe_viewer.jei.JEIAliasHelper;
 import mekanism.client.recipe_viewer.jei.MekanismJEI;
+import mekanism.client.recipe_viewer.jei.RecipeRegistryHelper;
 import mekanism.generators.common.registries.GeneratorsBlocks;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -23,13 +27,11 @@ import java.util.stream.Collectors;
 import static igentuman.bfr.common.config.BetterFusionReactorConfig.bfr;
 
 @JeiPlugin
-public class GeneratorsJEI implements IModPlugin {
+public class BfrJEI implements IModPlugin {
 
     @NotNull
     @Override
     public ResourceLocation getPluginUid() {
-        //Note: Can't use MekanismGenerators.rl, as JEI needs this in the constructor and the class may not be loaded yet.
-        // we can still reference the modid though because of constant inlining
         return ResourceLocation.fromNamespaceAndPath(BetterFusionReactor.MODID, "jei_plugin");
     }
 
@@ -47,7 +49,7 @@ public class GeneratorsJEI implements IModPlugin {
             return;
         }
         IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
-       // registry.addRecipeCategories(new FissionReactorRecipeCategory(guiHelper, GeneratorsRVRecipeType.FISSION));
+       registry.addRecipeCategories(new FusionReactorRecipeCategory(guiHelper, BfrRVRecipeType.FUSION));
     }
 
     @Override
@@ -55,7 +57,7 @@ public class GeneratorsJEI implements IModPlugin {
         if (!MekanismJEI.shouldLoad()) {
             return;
         }
-      //  CatalystRegistryHelper.register(registry, GeneratorsRVRecipeType.FISSION);
+        CatalystRegistryHelper.register(registry, BfrRVRecipeType.FUSION);
     }
 
     @Override
@@ -78,6 +80,6 @@ public class GeneratorsJEI implements IModPlugin {
         if(bfr.hideMekanismRecipes.get()) {
             registry.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, collection);
         }
-        //RecipeRegistryHelper.register(registry, GeneratorsRVRecipeType.FISSION, FissionRecipeViewerRecipe.getFissionRecipes());
+        RecipeRegistryHelper.register(registry, BfrRVRecipeType.FUSION, FusionRecipeViewerRecipe.getFusionRecipes());
     }
 }

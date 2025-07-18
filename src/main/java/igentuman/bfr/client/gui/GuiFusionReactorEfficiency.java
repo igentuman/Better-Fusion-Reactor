@@ -110,8 +110,8 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
                 (button, mouseX, mouseY) -> PacketUtils.sendToServer(new PacketBfrGuiInteract(PacketBfrGuiInteract.GeneratorsGuiInteraction.CHANGE_CR, tile, -5))));
 
         reactorLaserReadyButton = addRenderableWidget(new LaserReadyButton(this, 8, 132, 120));
-        helpButton = addRenderableWidget(new HelpButton(this, 152, 6, 121));
-        heatMultiplierButton = addRenderableWidget(new HeatMultiplierButton(this, 152, 118, 122));
+        helpButton = addRenderableWidget(new HelpButton(this, 162, 6, 121));
+        heatMultiplierButton = addRenderableWidget(new HeatMultiplierButton(this, 162, 118, 122));
     }
 
     @Override
@@ -127,7 +127,6 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
         helpButton.active = false;
         heatMultiplierButton.active = false;
         reactorLaserReadyButton.active = false;
-
     }
 
     @Override
@@ -135,18 +134,18 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
         drawTitleText(matrix, GeneratorsLang.FUSION_REACTOR.translate(), titleLabelY);
         BFReactorMultiblockData multiblock = tile.getMultiblock();
         Font font = Minecraft.getInstance().font;
-        matrix.drawString(font, BfrLang.REACTOR_CR.translate(), 30, 35, titleTextColor());
-        matrix.drawString(font, BfrLang.REACTOR_TR.translate(), 64, 35, titleTextColor());
-        matrix.drawString(font, BfrLang.REACTOR_EF.translate(), 102, 35, titleTextColor());
-        matrix.drawString(font, BfrLang.REACTOR_ER.translateColored(EnumColor.DARK_RED), 142, 35, titleTextColor());
+        matrix.drawString(font, BfrLang.REACTOR_CR.translate(), 30, 35, titleTextColor(), false);
+        matrix.drawString(font, BfrLang.REACTOR_TR.translate(), 64, 35, titleTextColor(), false);
+        matrix.drawString(font, BfrLang.REACTOR_EF.translate(), 102, 35, titleTextColor(), false);
+        matrix.drawString(font, BfrLang.REACTOR_ER.translateColored(EnumColor.DARK_RED), 142, 35, titleTextColor(), false);
 
-        matrix.drawString(font, Component.literal(String.format("%.1f",multiblock.getCurrentReactivity())), 30, 45, titleTextColor());
-        matrix.drawString(font, Component.literal(String.format("%.1f",multiblock.getTargetReactivity())), 64, 45, titleTextColor());
-        matrix.drawString(font, Component.literal(String.format("%.1f",multiblock.getEfficiency())), 102, 45, titleTextColor());
-        matrix.drawString(font, Component.literal(String.format("%.1f",multiblock.getErrorLevel())), 142, 45, titleTextColor());
+        matrix.drawString(font, Component.literal(String.format("%.1f",multiblock.getCurrentReactivity())), 30, 45, titleTextColor(), false);
+        matrix.drawString(font, Component.literal(String.format("%.1f",multiblock.getTargetReactivity())), 64, 45, titleTextColor(), false);
+        matrix.drawString(font, Component.literal(String.format("%.1f",multiblock.getEfficiency())), 102, 45, titleTextColor(), false);
+        matrix.drawString(font, Component.literal(String.format("%.1f",multiblock.getErrorLevel())), 142, 45, titleTextColor(), false);
 
         if (multiblock.isFormed() && multiblock.isBurning()) {
-            drawScaledScrollingString(matrix, BfrLang.REACTOR_HEAT_MULTIPLIER.translate(String.format("%.2f",multiblock.getKt()*10)), 8, 120, TextAlignment.CENTER, titleTextColor(), 156, false, 0.5f);
+            matrix.drawString(font, BfrLang.REACTOR_HEAT_MULTIPLIER.translate(String.format("%.2f",multiblock.getKt()*10)), 8, 120, titleTextColor(), false);
             heatMultiplierButton.visible = true;
             if(multiblock.getLaserShootCountdown() == 0) {
                 reactorLaserReadyButton.visible = true;

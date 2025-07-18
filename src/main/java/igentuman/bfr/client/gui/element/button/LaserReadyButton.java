@@ -3,6 +3,8 @@ package igentuman.bfr.client.gui.element.button;
 import igentuman.bfr.common.BfrLang;
 import mekanism.client.gui.IGuiWrapper;
 import mekanism.client.gui.element.button.MekanismButton;
+import mekanism.client.gui.tooltip.TooltipUtils;
+import mekanism.common.util.text.EnergyDisplay;
 import net.minecraft.client.gui.GuiGraphics;
 
 import javax.annotation.Nonnull;
@@ -12,7 +14,7 @@ public class LaserReadyButton extends MekanismButton {
 
 
     public LaserReadyButton(IGuiWrapper gui, int x, int y, int index) {
-        super(gui, x, y, 128, 22, BfrLang.REACTOR_LASER_READY_BUTTON.translate(), (element, mouseX, mouseY) -> {return false;}, null);
+        super(gui, x, y, 148, 22, BfrLang.REACTOR_LASER_READY_BUTTON.translate(), (element, mouseX, mouseY) -> {return false;}, null);
         this.index = index;
     }
 
@@ -22,9 +24,8 @@ public class LaserReadyButton extends MekanismButton {
     }
 
     @Override
-    public void renderToolTip(@Nonnull GuiGraphics matrix, int mouseX, int mouseY) {
-        super.renderToolTip(matrix, mouseX, mouseY);
-       // displayTooltips(matrix, mouseX, mouseY, BfrLang.REACTOR_LASER_MIN_ENERGY.translate(EnergyDisplay.of(FloatingLong.create(500000000))),BfrLang.REACTOR_LASER_MIN_ENERGY_DESCR.translate());
+    public void updateTooltip(int mouseX, int mouseY) {
+        setTooltip(TooltipUtils.create(BfrLang.REACTOR_LASER_MIN_ENERGY.translate(EnergyDisplay.of(500000000L)), BfrLang.REACTOR_LASER_MIN_ENERGY_DESCR.translate()));
     }
 
 }

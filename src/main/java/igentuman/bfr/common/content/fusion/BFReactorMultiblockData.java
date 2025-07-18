@@ -8,6 +8,8 @@ import java.util.Set;
 import mekanism.api.Action;
 import mekanism.api.AutomationType;
 import mekanism.api.SerializationConstants;
+import mekanism.api.chemical.Chemical;
+import mekanism.api.chemical.ChemicalStack;
 import mekanism.api.chemical.IChemicalHandler;
 import mekanism.api.chemical.IChemicalTank;
 import mekanism.api.energy.IEnergyContainer;
@@ -91,13 +93,16 @@ public class BFReactorMultiblockData extends MultiblockData {
     public IHeatCapacitor heatCapacitor;
 
     @ContainerSync(tags = HEAT_TAB)
-    @WrappingComputerMethod(wrapper = ComputerFluidTankWrapper.class, methodNames = {"getWater", "getWaterCapacity", "getWaterNeeded",
-                                                                                     "getWaterFilledPercentage"}, docPlaceholder = "water tank")
-    public IExtendedFluidTank waterTank;
+    @WrappingComputerMethod(wrapper = ComputerFluidTankWrapper.class, methodNames = {"getLiquidCoolant", "getLiquidCoolantCapacity", "getLiquidCoolantNeeded", "getLiquidCoolantFilledPercentage"}, docPlaceholder = "cold coolant tank")
+    public IExtendedFluidTank liquidCoolantTank;
+
     @ContainerSync(tags = HEAT_TAB)
-    @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getSteam", "getSteamCapacity", "getSteamNeeded",
-                                                                                        "getSteamFilledPercentage"}, docPlaceholder = "steam tank")
+    @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getSteam", "getSteamCapacity", "getSteamNeeded", "getSteamFilledPercentage"}, docPlaceholder = "steam tank")
     public IChemicalTank steamTank;
+
+    @ContainerSync(tags = HEAT_TAB)
+    @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getCoolant", "getCoolantCapacity", "getCoolantNeeded", "getCoolantFilledPercentage"}, docPlaceholder = "coolant tank")
+    public IChemicalTank gasCoolantTank;
 
     private double biomeAmbientTemp;
     @ContainerSync(tags = HEAT_TAB)
@@ -112,16 +117,13 @@ public class BFReactorMultiblockData extends MultiblockData {
     public double lastTransferLoss;
 
     @ContainerSync(tags = FUEL_TAB)
-    @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getDeuterium", "getDeuteriumCapacity", "getDeuteriumNeeded",
-                                                                                        "getDeuteriumFilledPercentage"}, docPlaceholder = "deuterium tank")
+    @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getDeuterium", "getDeuteriumCapacity", "getDeuteriumNeeded", "getDeuteriumFilledPercentage"}, docPlaceholder = "deuterium tank")
     public IChemicalTank deuteriumTank;
     @ContainerSync(tags = FUEL_TAB)
-    @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getTritium", "getTritiumCapacity", "getTritiumNeeded",
-                                                                                        "getTritiumFilledPercentage"}, docPlaceholder = "tritium tank")
+    @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getTritium", "getTritiumCapacity", "getTritiumNeeded", "getTritiumFilledPercentage"}, docPlaceholder = "tritium tank")
     public IChemicalTank tritiumTank;
     @ContainerSync(tags = FUEL_TAB)
-    @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getDTFuel", "getDTFuelCapacity", "getDTFuelNeeded",
-                                                                                        "getDTFuelFilledPercentage"}, docPlaceholder = "fuel tank")
+    @WrappingComputerMethod(wrapper = ComputerChemicalTankWrapper.class, methodNames = {"getDTFuel", "getDTFuelCapacity", "getDTFuelNeeded", "getDTFuelFilledPercentage"}, docPlaceholder = "fuel tank")
     public IChemicalTank fuelTank;
     @ContainerSync(tags = {FUEL_TAB, HEAT_TAB, STATS_TAB}, getter = "getInjectionRate", setter = "setInjectionRate")
     private int injectionRate = 2;
@@ -156,6 +158,9 @@ public class BFReactorMultiblockData extends MultiblockData {
 
     public BFReactorMultiblockData(TileEntityFusionReactorBlock tile) {
         super(tile);
+        if(BetterFusionReactorConfig.bfr.isLoaded()) {
+            BetterFusionReactorConfig.bfr.initFusionCoolants();
+        }
         //Default biome temp to the ambient temperature at the block we are at
         biomeAmbientTemp = HeatAPI.getAmbientTemp(tile.getLevel(), tile.getBlockPos());
         lastPlasmaTemperature = biomeAmbientTemp;
@@ -167,8 +172,9 @@ public class BFReactorMultiblockData extends MultiblockData {
               chemical -> chemical.is(BfrTags.Chemicals.TRITIUM), this));
         chemicalTanks.add(fuelTank = VariableCapacityChemicalTank.input(this, MekanismGeneratorsConfig.generators.fusionFuelCapacity,
               chemical -> chemical.is(BfrTags.Chemicals.FUSION_FUEL), createSaveAndComparator()));
-        chemicalTanks.add(steamTank = VariableCapacityChemicalTank.output(this, this::getMaxSteam, chemical -> chemical.is(MekanismChemicals.STEAM), this));
-        fluidTanks.add(waterTank = VariableCapacityFluidTank.input(this, this::getMaxWater, fluid -> fluid.is(FluidTags.WATER), this));
+        chemicalTanks.add(steamTank = VariableCapacityChemicalTank.output(this, this::getMaxSteam, chemical -> BetterFusionReactorConfig.bfr.allowedCoolantHotGases.contains(chemical.getChemical()), this));
+        chemicalTanks.add(gasCoolantTank = VariableCapacityChemicalTank.input(this, this::getMaxWater, chemical -> BetterFusionReactorConfig.bfr.allowedCoolantGases.contains(chemical.getChemical()), this));
+        fluidTanks.add(liquidCoolantTank = VariableCapacityFluidTank.input(this, this::getMaxWater, fluid -> BetterFusionReactorConfig.bfr.allowedCoolantFluids.contains(fluid.getFluid()), this));
         energyContainers.add(energyContainer = VariableCapacityEnergyContainer.output(MekanismGeneratorsConfig.generators.fusionEnergyCapacity, this));
         heatCapacitors.add(heatCapacitor = VariableHeatCapacitor.create(caseHeatCapacity, BFReactorMultiblockData::getInverseConductionCoefficient,
               () -> inverseInsulation, () -> biomeAmbientTemp, this));
@@ -550,12 +556,27 @@ public class BFReactorMultiblockData extends MultiblockData {
         double caseWaterHeat = MekanismGeneratorsConfig.generators.fusionWaterHeatingRatio.get() * (lastCaseTemperature - biomeAmbientTemp);
         if (Math.abs(caseWaterHeat) > HeatAPI.EPSILON) {
             int waterToVaporize = (int) (HeatUtils.getSteamEnergyEfficiency() * caseWaterHeat / HeatUtils.getWaterThermalEnthalpy());
-            waterToVaporize = Math.min(waterToVaporize, Math.min(waterTank.getFluidAmount(), MathUtils.clampToInt(steamTank.getNeeded())));
+            waterToVaporize = Math.min(waterToVaporize, Math.min(liquidCoolantTank.getFluidAmount(), MathUtils.clampToInt(steamTank.getNeeded())));
             if (waterToVaporize > 0) {
-                MekanismUtils.logMismatchedStackSize(waterTank.shrinkStack(waterToVaporize, Action.EXECUTE), waterToVaporize);
+                MekanismUtils.logMismatchedStackSize(liquidCoolantTank.shrinkStack(waterToVaporize, Action.EXECUTE), waterToVaporize);
                 steamTank.insert(MekanismChemicals.STEAM.asStack(waterToVaporize), Action.EXECUTE, AutomationType.INTERNAL);
                 caseWaterHeat = waterToVaporize * HeatUtils.getWaterThermalEnthalpy() / HeatUtils.getSteamEnergyEfficiency();
                 heatCapacitor.handleHeat(-caseWaterHeat);
+            } else {
+                long gasToVaporize = (long) (HeatUtils.getSteamEnergyEfficiency() * caseWaterHeat / HeatUtils.getWaterThermalEnthalpy());
+                gasToVaporize = Math.min(gasToVaporize, Math.min(gasCoolantTank.getStored(), steamTank.getNeeded()));
+                if(gasToVaporize > 0) {
+
+                    for(Chemical out: BetterFusionReactorConfig.bfr.coolantMap.keySet()) {
+                        if(BetterFusionReactorConfig.bfr.coolantMap.get(out).equals(gasCoolantTank.getType())) {
+                            steamTank.insert(new ChemicalStack(out, gasToVaporize), Action.EXECUTE, AutomationType.INTERNAL);
+                            MekanismUtils.logMismatchedStackSize(gasCoolantTank.shrinkStack(gasToVaporize, Action.EXECUTE), gasToVaporize);
+                            break;
+                        }
+                    }
+                    caseWaterHeat = gasToVaporize * HeatUtils.getWaterThermalEnthalpy() / HeatUtils.getSteamEnergyEfficiency();
+                    heatCapacitor.handleHeat(-caseWaterHeat);
+                }
             }
         }
 
@@ -620,8 +641,11 @@ public class BFReactorMultiblockData extends MultiblockData {
             maxWater = injectionRate * MekanismGeneratorsConfig.generators.fusionWaterPerInjection.get();
             maxSteam = injectionRate * MekanismGeneratorsConfig.generators.fusionSteamPerInjection.get();
             if (getLevel() != null && !isRemote()) {
-                if (!waterTank.isEmpty()) {
-                    waterTank.setStackSize(Math.min(waterTank.getFluidAmount(), waterTank.getCapacity()), Action.EXECUTE);
+                if (!liquidCoolantTank.isEmpty()) {
+                    liquidCoolantTank.setStackSize(Math.min(liquidCoolantTank.getFluidAmount(), liquidCoolantTank.getCapacity()), Action.EXECUTE);
+                }
+                if (!gasCoolantTank.isEmpty()) {
+                    gasCoolantTank.setStackSize(Math.min(gasCoolantTank.getStored(), gasCoolantTank.getCapacity()), Action.EXECUTE);
                 }
                 if (!steamTank.isEmpty()) {
                     steamTank.setStackSize(Math.min(steamTank.getStored(), steamTank.getCapacity()), Action.EXECUTE);

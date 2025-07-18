@@ -15,7 +15,6 @@ import mekanism.common.util.MekanismUtils;
 import mekanism.common.util.UnitDisplayUtils.TemperatureUnit;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab;
 import igentuman.bfr.client.gui.element.GuiFusionReactorTab.FusionReactorTab;
-import igentuman.bfr.common.BfrLang;
 import igentuman.bfr.common.content.fusion.BFReactorMultiblockData;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
 import mekanism.generators.common.GeneratorsLang;
@@ -84,9 +83,13 @@ public class GuiFusionReactorHeat extends GuiFusionReactorInfo {
         addRenderableWidget(new GuiProgress(() -> tile.getMultiblock().getCaseTemp() > 0, ProgressType.SMALL_RIGHT, this, 88, 61));
         addRenderableWidget(new GuiProgress(() -> {
             BFReactorMultiblockData multiblock = tile.getMultiblock();
-            return multiblock.getCaseTemp() > 0 && !multiblock.waterTank.isEmpty() && multiblock.steamTank.getStored() < multiblock.steamTank.getCapacity();
+            return multiblock.getCaseTemp() > 0 && !multiblock.liquidCoolantTank.isEmpty() && multiblock.steamTank.getStored() < multiblock.steamTank.getCapacity();
         }, ProgressType.SMALL_RIGHT, this, 88, 91));
-        addRenderableWidget(new GuiFluidGauge(() -> tile.getMultiblock().waterTank, () -> tile.getFluidTanks(null), GaugeType.SMALL, this, 120, 84));
+        if(tile.getMultiblock().gasCoolantTank.getStored() == 0) {
+            addRenderableWidget(new GuiFluidGauge(() -> tile.getMultiblock().liquidCoolantTank, () -> tile.getFluidTanks(null), GaugeType.SMALL, this, 120, 84));
+        } else {
+            addRenderableWidget(new GuiChemicalGauge(() -> tile.getMultiblock().gasCoolantTank, () -> tile.getChemicalTanks(null), GaugeType.SMALL, this, 120, 84));
+        }
         addRenderableWidget(new GuiChemicalGauge(() -> tile.getMultiblock().steamTank, () -> tile.getChemicalTanks(null), GaugeType.SMALL, this, 156, 84));
         addRenderableWidget(new GuiEnergyGauge(tile.getMultiblock().energyContainer, GaugeType.SMALL, this, 120, 46));
         addRenderableWidget(new GuiFusionReactorTab(this, tile, FusionReactorTab.FUEL));

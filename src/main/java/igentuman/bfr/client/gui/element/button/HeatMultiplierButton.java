@@ -23,8 +23,7 @@ public class HeatMultiplierButton extends MekanismButton {
     }
 
     @Override
-    public void renderToolTip(@Nonnull GuiGraphics matrix, int mouseX, int mouseY) {
-        super.renderToolTip(matrix, mouseX, mouseY);
-        //displayTooltips(matrix, mouseX, mouseY, BfrLang.REACTOR_HELP_HEAT_MULTIPLIER1.translate(),BfrLang.REACTOR_HELP_HEAT_MULTIPLIER2.translate(),BfrLang.REACTOR_HELP_HEAT_MULTIPLIER3.translate());
+    public void updateTooltip(int mouseX, int mouseY) {
+        setTooltip(TooltipUtils.create(BfrLang.REACTOR_HELP_HEAT_MULTIPLIER1.translate(),BfrLang.REACTOR_HELP_HEAT_MULTIPLIER2.translate(),BfrLang.REACTOR_HELP_HEAT_MULTIPLIER3.translate()));
     }
 }

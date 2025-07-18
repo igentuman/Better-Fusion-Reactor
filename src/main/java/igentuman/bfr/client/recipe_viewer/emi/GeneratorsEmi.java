@@ -3,10 +3,12 @@ package igentuman.bfr.client.recipe_viewer.emi;
 import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
+import igentuman.bfr.client.recipe_viewer.BfrRVRecipeType;
+import igentuman.bfr.client.recipe_viewer.recipe.FusionRecipeViewerRecipe;
 import igentuman.bfr.common.registries.BfrBlocks;
 import igentuman.bfr.common.registries.BfrItems;
 import mekanism.client.recipe_viewer.emi.MekanismEmi;
-
+import igentuman.bfr.client.recipe_viewer.emi.recipe.FusionReactorEmiRecipe;
 @EmiEntrypoint
 public class GeneratorsEmi implements EmiPlugin {
 
@@ -19,6 +21,6 @@ public class GeneratorsEmi implements EmiPlugin {
     }
 
     private void addCategories(EmiRegistry registry) {
-       // MekanismEmi.addCategoryAndRecipes(registry, GeneratorsRVRecipeType.FISSION, FissionReactorEmiRecipe::new, FissionRecipeViewerRecipe.getFissionRecipes());
+        MekanismEmi.addCategoryAndRecipes(registry, BfrRVRecipeType.FUSION, FusionReactorEmiRecipe::new, FusionRecipeViewerRecipe.getFusionRecipes());
     }
 }
