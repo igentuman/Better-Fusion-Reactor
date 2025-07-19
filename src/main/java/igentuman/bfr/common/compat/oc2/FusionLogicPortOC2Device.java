@@ -1,11 +1,11 @@
 package igentuman.bfr.common.compat.oc2;
 
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
-import li.cil.oc2r.api.bus.device.Device;
-import li.cil.oc2r.api.bus.device.object.Callback;
-import li.cil.oc2r.api.bus.device.object.NamedDevice;
-import li.cil.oc2r.api.bus.device.object.ObjectDevice;
-import li.cil.oc2r.api.bus.device.rpc.RPCDevice;
+import li.cil.oc2.api.bus.device.Device;
+import li.cil.oc2.api.bus.device.object.Callback;
+import li.cil.oc2.api.bus.device.object.NamedDevice;
+import li.cil.oc2.api.bus.device.object.ObjectDevice;
+import li.cil.oc2.api.bus.device.rpc.RPCDevice;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;

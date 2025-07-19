@@ -1,9 +1,9 @@
 package igentuman.bfr.common.compat.oc2;
 
-import li.cil.oc2r.api.bus.device.object.Callback;
-import li.cil.oc2r.api.bus.device.object.NamedDevice;
-import li.cil.oc2r.api.bus.device.object.ObjectDevice;
-import li.cil.oc2r.api.bus.device.rpc.RPCDevice;
+import li.cil.oc2.api.bus.device.object.Callback;
+import li.cil.oc2.api.bus.device.object.NamedDevice;
+import li.cil.oc2.api.bus.device.object.ObjectDevice;
+import li.cil.oc2.api.bus.device.rpc.RPCDevice;
 import mekanism.generators.common.tile.fission.TileEntityFissionReactorLogicAdapter;
 import org.jetbrains.annotations.NotNull;
 

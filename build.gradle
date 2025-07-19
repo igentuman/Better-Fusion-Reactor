@@ -120,14 +120,31 @@ repositories {
             includeGroup 'dev.architectury'
         }
     }
+    maven { // SlimeKnights and JEI
+        name 'DVS1 Maven FS'
+        url 'https://dvs1.progwml6.com/files/maven'
+    }
 }
 
 dependencies {
     minecraft "net.neoforged:forge:${minecraft_version}-${forge_version}"
     annotationProcessor project(":annotation-processor")
+    implementation fg.deobf("curse.maven:tinkers-advanced-1213078:6732862"){
+        transitive = false
+    }
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
 
-    implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    runtimeOnly fg.deobf("curse.maven:ctm-267602:5983309")
+    implementation fg.deobf("curse.maven:etst-lib-1206379:6732443"){
+        transitive = false
+    }
+    implementation fg.deobf("slimeknights.tconstruct:TConstruct:1.20.1-${tcon_version}"){
+        transitive = false
+    }
+    implementation fg.deobf("slimeknights.mantle:Mantle:1.20.1-${mantle_version}"){
+        transitive = false
+    }
+    implementation fg.deobf("curse.maven:jei-238222:6600311")
     implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
     implementation fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
     implementation(fg.deobf("curse.maven:cc-tweaked-282001:${cc_tweaked_id}")) {

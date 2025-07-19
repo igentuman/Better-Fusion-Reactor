@@ -1,5 +1,7 @@
 package igentuman.bfr.common.content.fusion;
 
+import igentuman.bfr.common.ModUtil;
+import igentuman.bfr.common.compat.TinkersAdvanced;
 import igentuman.bfr.common.config.BetterFusionReactorConfig;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.List;
@@ -129,7 +131,7 @@ public class BFReactorMultiblockData extends MultiblockData {
     private boolean clientBurning;
     private double clientTemp;
 
-    private AABB deathZone;
+    public AABB deathZone;
 
     protected int laserShootCountdown = 0;
     protected int laserShootEnergyDuration = 12000;
@@ -456,6 +458,9 @@ public class BFReactorMultiblockData extends MultiblockData {
             targetReactivity = getTargetReactivity();
             errorLevel = getErrorLevel();
             needsPacket = true;
+        }
+        if(ModUtil.isTinkersAdvancedLoaded()) {
+            TinkersAdvanced.blowIron(this, world);
         }
         return needsPacket;
     }
