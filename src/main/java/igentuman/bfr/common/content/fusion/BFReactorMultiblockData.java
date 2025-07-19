@@ -58,6 +58,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fluids.FluidType;
 
+import static igentuman.bfr.common.events.GameEvents.REACTOR_HI_CR_VIBRATION;
+import static igentuman.bfr.common.events.GameEvents.REACTOR_LOW_CR_VIBRATION;
 import static mekanism.generators.common.content.fusion.FusionReactorMultiblockData.FUEL_TAB;
 
 public class BFReactorMultiblockData extends MultiblockData {
@@ -458,6 +460,13 @@ public class BFReactorMultiblockData extends MultiblockData {
             targetReactivity = getTargetReactivity();
             errorLevel = getErrorLevel();
             needsPacket = true;
+        }
+        int reactivityDelta = (int) (currentReactivity - targetReactivity);
+        if(reactivityDelta > 5) {
+            getWorld().gameEvent(null, REACTOR_HI_CR_VIBRATION.get(), getMaxPos().offset(-3, -3, -3));
+        }
+        if(reactivityDelta < -5) {
+            getWorld().gameEvent(null, REACTOR_LOW_CR_VIBRATION.get(), getMaxPos().below());
         }
         if(ModUtil.isTinkersAdvancedLoaded()) {
             TinkersAdvanced.blowIron(this, world);

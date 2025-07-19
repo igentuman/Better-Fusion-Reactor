@@ -25,6 +25,8 @@ public class TileRedstoneCapacitor extends BlockEntity {
             setChanged();
             getLevel().setBlockAndUpdate(getBlockPos(), getBlockState());
             getLevel().updateNeighbourForOutputSignal(getBlockPos().relative(getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING)), getBlockState().getBlock());
+            getLevel().updateNeighbourForOutputSignal(getBlockPos().relative(getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite()), getBlockState().getBlock());
+            getLevel().updateNeighbourForOutputSignal(getBlockPos(), getBlockState().getBlock());
             getLevel().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
         }
     }

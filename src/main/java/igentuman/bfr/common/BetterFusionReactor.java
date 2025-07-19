@@ -1,6 +1,7 @@
 package igentuman.bfr.common;
 
 import igentuman.bfr.common.compat.oc2.OC2BlockDeviceProvider;
+import igentuman.bfr.common.events.GameEvents;
 import igentuman.bfr.common.events.RadiationEvents;
 import igentuman.bfr.common.registries.*;
 import mekanism.common.Mekanism;
@@ -63,7 +64,7 @@ public class BetterFusionReactor implements IModModule {
         BfrTileEntityTypes.BLOCK_ENTITIES.register(modEventBus);
         BfrModules.MODULES.register(modEventBus);
         BfrRecipes.init();
-
+        GameEvents.init(FMLJavaModLoadingContext.get());
         //Set our version number to match the mods.toml file, which matches the one in our build.gradle
         versionNumber = new Version(ModLoadingContext.get().getActiveContainer());
         packetHandler = new BfrPacketHandler();
@@ -89,6 +90,7 @@ public class BetterFusionReactor implements IModModule {
         MinecraftForge.EVENT_BUS.register(new RadiationEvents());
         event.enqueueWork(() -> {
             BuildCommand.register("fusion", GeneratorsLang.FUSION_REACTOR, new FusionReactorBuilder());
+            GameEvents.commonSetup();
         });
 
 

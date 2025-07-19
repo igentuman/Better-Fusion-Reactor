@@ -132,6 +132,9 @@ dependencies {
     compileOnly fg.deobf("curse.maven:tinkers-advanced-1213078:6732862"){
         transitive = false
     }
+    runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}") {
+        transitive = false
+    }
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
 
     runtimeOnly fg.deobf("curse.maven:ctm-267602:5983309")

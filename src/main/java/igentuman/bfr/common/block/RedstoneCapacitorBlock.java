@@ -1,8 +1,15 @@
 package igentuman.bfr.common.block;
 
 import igentuman.bfr.common.tile.TileRedstoneCapacitor;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -15,6 +22,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 import static igentuman.bfr.common.registries.BfrTileEntityTypes.REDSTONE_CAPACITOR_TILE;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
@@ -80,5 +89,23 @@ public class RedstoneCapacitorBlock extends HorizontalDirectionalBlock implement
                 tile.tickServer();
             }
         };
+    }
+
+    @Override
+    public void appendHoverText(ItemStack pStack, @javax.annotation.Nullable BlockGetter pLevel, List<Component> list, TooltipFlag pFlag) {
+        list.add(applyFormat(__("tootip.bfr.redstone_capacitor"), ChatFormatting.AQUA));
+    }
+
+    public static MutableComponent applyFormat(Component component, ChatFormatting... color)
+    {
+        Style style = component.getStyle();
+        for(ChatFormatting format : color)
+            style = style.applyFormat(format);
+        return component.copy().setStyle(style);
+    }
+
+    public static MutableComponent __(String text, Object... pArgs)
+    {
+        return Component.translatable(text, pArgs);
     }
 }

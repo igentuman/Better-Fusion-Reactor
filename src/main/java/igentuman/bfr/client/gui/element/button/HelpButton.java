@@ -33,6 +33,6 @@ public class HelpButton extends MekanismButton {
     @Override
     public void renderToolTip(@Nonnull GuiGraphics matrix, int mouseX, int mouseY) {
         super.renderToolTip(matrix, mouseX, mouseY);
-        displayTooltips(matrix, mouseX, mouseY, BfrLang.REACTOR_HELP1.translate(),BfrLang.REACTOR_HELP2.translate(), BfrLang.REACTOR_HELP3.translate());
+        displayTooltips(matrix, mouseX, mouseY, BfrLang.REACTOR_HELP1.translate(),BfrLang.REACTOR_HELP2.translate(), BfrLang.REACTOR_HELP3.translate(), BfrLang.REACTOR_HELP4.translate());
     }
 }
