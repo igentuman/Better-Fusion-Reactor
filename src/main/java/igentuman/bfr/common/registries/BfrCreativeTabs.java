@@ -13,6 +13,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 
+import static igentuman.bfr.common.registries.BfrBlocks.REDSTONE_CAPACITOR;
 import static mekanism.generators.common.registries.GeneratorsCreativeTabs.GENERATORS;
 
 
@@ -30,6 +31,7 @@ public class BfrCreativeTabs {
                     CreativeTabDeferredRegister.addToDisplay(event, block);
                 }
             }
+            event.accept(REDSTONE_CAPACITOR);
         }  else if (tabKey == CreativeModeTabs.INGREDIENTS) {
              CreativeTabDeferredRegister.addToDisplay(event, BfrItems.SOLIDIFIED_WASTE);
              for(IBlockProvider block : BfrBlocks.ORE_BLOCKS.values()) {

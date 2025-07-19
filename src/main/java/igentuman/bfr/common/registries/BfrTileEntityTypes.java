@@ -1,6 +1,8 @@
 package igentuman.bfr.common.registries;
 
 import igentuman.bfr.common.tile.TileEntityIrradiator;
+import igentuman.bfr.common.tile.TileRedstoneCapacitor;
+import mekanism.common.registration.impl.BlockRegistryObject;
 import mekanism.common.registration.impl.TileEntityTypeDeferredRegister;
 import mekanism.common.registration.impl.TileEntityTypeRegistryObject;
 import igentuman.bfr.common.BetterFusionReactor;
@@ -9,15 +11,24 @@ import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorController;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorLogicAdapter;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorPort;
 import igentuman.bfr.common.tile.fusion.TileEntityLaserFocusMatrix;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+
+import static igentuman.bfr.common.BetterFusionReactor.MODID;
+import static igentuman.bfr.common.registries.BfrBlocks.REDSTONE_CAPACITOR;
 
 public class BfrTileEntityTypes {
 
     private BfrTileEntityTypes() {
     }
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
 
-    public static final TileEntityTypeDeferredRegister TILE_ENTITY_TYPES = new TileEntityTypeDeferredRegister(BetterFusionReactor.MODID);
+    public static final TileEntityTypeDeferredRegister TILE_ENTITY_TYPES = new TileEntityTypeDeferredRegister(MODID);
     //Misc
     public static final TileEntityTypeRegistryObject<TileEntityIrradiator> IRRADIATOR = TILE_ENTITY_TYPES.register(BfrBlocks.IRRADIATOR, TileEntityIrradiator::new);
+    public static final RegistryObject<BlockEntityType<TileRedstoneCapacitor>> REDSTONE_CAPACITOR_TILE = BLOCK_ENTITIES.register("redstone_capacitor", () -> BlockEntityType.Builder.of(TileRedstoneCapacitor::new, REDSTONE_CAPACITOR.getBlock()).build(null));
 
     //Fusion Reactor
     public static final TileEntityTypeRegistryObject<TileEntityFusionReactorController> FUSION_REACTOR_CONTROLLER = TILE_ENTITY_TYPES.register(BfrBlocks.FUSION_REACTOR_CONTROLLER, TileEntityFusionReactorController::new);

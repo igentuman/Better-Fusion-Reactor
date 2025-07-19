@@ -129,19 +129,19 @@ repositories {
 dependencies {
     minecraft "net.neoforged:forge:${minecraft_version}-${forge_version}"
     annotationProcessor project(":annotation-processor")
-    implementation fg.deobf("curse.maven:tinkers-advanced-1213078:6732862"){
+    compileOnly fg.deobf("curse.maven:tinkers-advanced-1213078:6732862"){
         transitive = false
     }
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
 
     runtimeOnly fg.deobf("curse.maven:ctm-267602:5983309")
-    implementation fg.deobf("curse.maven:etst-lib-1206379:6732443"){
+    compileOnly fg.deobf("curse.maven:etst-lib-1206379:6732443"){
         transitive = false
     }
-    implementation fg.deobf("slimeknights.tconstruct:TConstruct:1.20.1-${tcon_version}"){
+    compileOnly fg.deobf("slimeknights.tconstruct:TConstruct:1.20.1-${tcon_version}"){
         transitive = false
     }
-    implementation fg.deobf("slimeknights.mantle:Mantle:1.20.1-${mantle_version}"){
+    compileOnly fg.deobf("slimeknights.mantle:Mantle:1.20.1-${mantle_version}"){
         transitive = false
     }
     implementation fg.deobf("curse.maven:jei-238222:6600311")

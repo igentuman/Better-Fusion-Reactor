@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "tag": "forge:circuits/basic"
+    },
+    "F": {
+      "item": "minecraft:comparator"
+    },
+    "T": {
+      "item": "minecraft:repeater"
+    }
+  },
+  "pattern": [
+    "CFC",
+    "T T",
+    "CFC"
+  ],
+  "result": {
+    "item": "bfr:redstone_capacitor"
+  }
+}

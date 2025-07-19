@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Supplier;
 
+import igentuman.bfr.common.block.RedstoneCapacitorBlock;
 import igentuman.bfr.common.tile.TileEntityIrradiator;
 import mekanism.common.block.interfaces.IHasDescription;
 import mekanism.common.block.prefab.BlockBasicMultiblock;
@@ -49,7 +50,7 @@ public class BfrBlocks {
     public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityFusionReactorPort>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityFusionReactorPort>>> FUSION_REACTOR_PORT = registerTooltipBlock("fusion_reactor_port", () -> new BlockBasicMultiblock<>(BfrBlockTypes.FUSION_REACTOR_PORT, properties -> properties.mapColor(MapColor.TERRACOTTA_BROWN)));
     public static final BlockRegistryObject<BlockBasicMultiblock<TileEntityFusionReactorLogicAdapter>, ItemBlockTooltip<BlockBasicMultiblock<TileEntityFusionReactorLogicAdapter>>> FUSION_REACTOR_LOGIC_ADAPTER = registerTooltipBlock("fusion_reactor_logic_adapter", () -> new BlockBasicMultiblock<>(BfrBlockTypes.FUSION_REACTOR_LOGIC_ADAPTER, properties -> properties.mapColor(MapColor.TERRACOTTA_BROWN)));
     public static final BlockRegistryObject<BlockLaserFocusMatrix, ItemBlockTooltip<BlockLaserFocusMatrix>> LASER_FOCUS_MATRIX = registerTooltipBlock("laser_focus_matrix", BlockLaserFocusMatrix::new);
-
+    public static final BlockRegistryObject<Block, BlockItem> REDSTONE_CAPACITOR = BLOCKS.register("redstone_capacitor", () -> new RedstoneCapacitorBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(1.5f, 6.0f).sound(SoundType.METAL)));
     static {
         for (String ore : ORES) {
             ORE_BLOCKS.put(ore, registerOre(ore));

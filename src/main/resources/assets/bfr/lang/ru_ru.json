@@ -5,6 +5,7 @@
   "block.bfr.fusion_reactor_port": "Порт Термоядерного Реактора",
   "block.bfr.laser_focus_matrix": "Лазерная матрица",
   "block.bfr.reactor_glass": "Стекло Реактора",
+  "block.bfr.redstone_capacitor": "Редстоун Конденсатор",
   "description.bfr.reactor.logic.efficiency": "100% = 15 блоков редстоун сигнала. 1 блок ~ 7%",
   "description.bfr.reactor.logic.error_level": "100% = 15 блоков редстоун сигнала. 1 блок ~ 7%",
   "description.bfr.reactor.logic.injection_down": "Входной редстоун импульс любой силы",

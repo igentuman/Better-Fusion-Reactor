@@ -1,0 +1,12 @@
+{
+  "parent": "mekanism:block/machine",
+  "textures": {
+    "sides": "bfr:block/redstone_capacitor/side",
+    "front": "bfr:block/redstone_capacitor/front",
+    "west": "bfr:block/redstone_capacitor/side",
+    "east": "bfr:block/redstone_capacitor/side",
+    "south": "bfr:block/redstone_capacitor/back",
+    "up": "bfr:block/redstone_capacitor/side",
+    "down": "bfr:block/redstone_capacitor/side"
+  }
+}

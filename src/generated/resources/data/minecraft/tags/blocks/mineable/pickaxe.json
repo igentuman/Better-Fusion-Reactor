@@ -12,6 +12,7 @@
     "bfr:irradiated_iron_ore",
     "bfr:irradiated_copper_ore",
     "bfr:irradiated_uranium_ore",
-    "bfr:irradiated_lead_ore"
+    "bfr:irradiated_lead_ore",
+    "bfr:redstone_capacitor"
   ]
 }

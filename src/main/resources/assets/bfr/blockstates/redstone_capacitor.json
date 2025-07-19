@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "bfr:block/redstone_capacitor"
+    },
+    "facing=south": {
+      "model": "bfr:block/redstone_capacitor",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "bfr:block/redstone_capacitor",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "bfr:block/redstone_capacitor",
+      "y": -90
+    }
+  }
+}
