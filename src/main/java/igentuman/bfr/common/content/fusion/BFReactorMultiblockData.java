@@ -142,6 +142,7 @@ public class BFReactorMultiblockData extends MultiblockData {
     protected float targetReactivity = 0;
     protected float errorLevel = 0;
     protected float adjustment = 0;
+    protected float heatMult = 0;
     protected int reactivityUpdateTicks = 10000;
     protected int currentReactivityTick = 0;
     protected int adjustmentTicks = 80;
@@ -222,24 +223,28 @@ public class BFReactorMultiblockData extends MultiblockData {
     }
 
     /** values range 0 .. 5.16 or even bigger **/
-    public float getKt()
+    public float getHeatMult()
     {
         //so laser gives you 1 minute of independence from Kt
         if(laserShootEnergyDuration - getLaserShootCountdown() < 1200) {
             return  0;
         }
+        if(getWorld().getGameTime() % 10 != 0) {
+            return heatMult;
+        }
         float tDevide = 20;
         if(isActiveCooled()) {
             tDevide = 30;
         }
-        return (float) Math.pow((float)(Math.abs(Math.sqrt((float)getLastPlasmaTemp()/2000000) - 40))/tDevide, 2);
+        heatMult = (float) Math.pow((float)(Math.abs(Math.sqrt((float)getLastPlasmaTemp()/2000000) - 40))/tDevide, 1.5);
+        return heatMult;
     }
 
     // if efficiency bigger than 80% we reducing chances
     protected void updateErrorLevel()
     {
         if(isBurning()) {
-            float shift = ((80 - getEfficiency()) * ((getKt() + 1) / 2)) * 0.0005f;
+            float shift = ((80 - getEfficiency()) * ((getHeatMult() + 1) / 2)) * 0.0005f;
             if(shift > 0) {
                 shift = shift*(difficulty/10);
             }
@@ -285,7 +290,7 @@ public class BFReactorMultiblockData extends MultiblockData {
 
     public int reactivityUpdateTicksScaled()
     {
-        return (int) (( reactivityUpdateTicks / (getKt() + 0.25)) * (difficulty/10));
+        return (int) (( reactivityUpdateTicks / (getHeatMult() + 0.25)) * (1.5*difficulty/10));
     }
 
     public void updateReactivity()
@@ -507,7 +512,7 @@ public class BFReactorMultiblockData extends MultiblockData {
     private void injectFuel() {
         long amountNeeded = fuelTank.getNeeded();
         long amountAvailable = 2 * Math.min(deuteriumTank.getStored(), tritiumTank.getStored());
-        long amountToInject = Math.min(amountNeeded, Math.min(amountAvailable, injectionRate));
+        long amountToInject = Math.min(amountNeeded, amountAvailable);
         amountToInject -= amountToInject % 2;
         long injectingAmount = amountToInject / 2;
         MekanismUtils.logMismatchedStackSize(deuteriumTank.shrinkStack(injectingAmount, Action.EXECUTE), injectingAmount);

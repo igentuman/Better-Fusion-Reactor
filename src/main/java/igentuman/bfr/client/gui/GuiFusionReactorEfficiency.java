@@ -143,7 +143,7 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
         drawString(matrix, Component.literal(String.format("%.1f",multiblock.getErrorLevel())), 142, 45, titleTextColor());
 
         if (multiblock.isFormed() && multiblock.isBurning()) {
-            drawTextScaledBound(matrix, BfrLang.REACTOR_HEAT_MULTIPLIER.translate(String.format("%.2f",multiblock.getKt()*10)), 8, 120, titleTextColor(), 156);
+            drawTextScaledBound(matrix, BfrLang.REACTOR_HEAT_MULTIPLIER.translate(String.format("%.2f",multiblock.getHeatMult()*10)), 8, 120, titleTextColor(), 156);
             heatMultiplierButton.visible = true;
             if(multiblock.getLaserShootCountdown() == 0) {
                 reactorLaserReadyButton.visible = true;
