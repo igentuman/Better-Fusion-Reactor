@@ -1,4 +1,5 @@
 Better Fusion Reactor is an addon for Mekanism Generators
+
 [![Build Mod Job](https://github.com/igentuman/Better-Fusion-Reactor/actions/workflows/gradle.yml/badge.svg?branch=1.20)](https://github.com/igentuman/Better-Fusion-Reactor/actions/workflows/gradle.yml)
 [![https://cf.way2muchnoise.eu/full_602409_downloads.svg](https://cf.way2muchnoise.eu/full_602409_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/better-fusion-reactor-for-mekanism)
 [![https://cf.way2muchnoise.eu/versions/602409.svg](https://cf.way2muchnoise.eu/versions/602409.svg)](https://www.curseforge.com/minecraft/mc-mods/better-fusion-reactor-for-mekanism)
