@@ -2,9 +2,9 @@ name: Build Mod Job
 
 on:
   push:
-    branches: [ "1.21" ]
+    branches: [ "1.21x" ]
   pull_request:
-    branches: [ "1.21" ]
+    branches: [ "1.21x" ]
 
 permissions:
   contents: read
