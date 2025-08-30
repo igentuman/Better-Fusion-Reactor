@@ -69,7 +69,7 @@ public class BFReactorMultiblockData extends MultiblockData {
     private static final long MAX_STEAM = MAX_COOLANT * 100L;
     private static final long MAX_FUEL = FluidType.BUCKET_VOLUME;
 
-    public static final int MAX_INJECTION = 98;//this is the effective cap in the GUI, as text field is limited to 2 chars
+    public static final int MAX_INJECTION = 500;//this is the effective cap in the GUI, as text field is limited to 3 chars
     //Reaction characteristics
     private static final double burnTemperature = 100_000_000;
     private static final double burnRatio = 1;
@@ -125,6 +125,7 @@ public class BFReactorMultiblockData extends MultiblockData {
 
     @WrappingComputerMethod(wrapper = ComputerIInventorySlotWrapper.class, methodNames = "getHohlraum", docPlaceholder = "Hohlraum slot")
     private final ReactorInventorySlot reactorSlot;
+    private int hadCoolant = 0;
 
     public ReactorInventorySlot getReactorSlot() {
         return reactorSlot;
@@ -215,11 +216,13 @@ public class BFReactorMultiblockData extends MultiblockData {
         }
     }
 
-    protected void laserShootCount()
+    protected boolean laserShootCount()
     {
         if(laserShootCountdown > 0) {
             laserShootCountdown--;
+            return laserShootCountdown == 0;
         }
+        return false;
     }
 
     /** values range 0 .. 5.16 or even bigger **/
@@ -250,7 +253,7 @@ public class BFReactorMultiblockData extends MultiblockData {
             }
             errorLevel += shift;
         } else {
-            errorLevel -= 0.1;
+            errorLevel -= 0.1F;
         }
 
         errorLevel = Math.min(100, Math.max(0, errorLevel));
@@ -275,9 +278,9 @@ public class BFReactorMultiblockData extends MultiblockData {
         return true;
     }
 
-    protected void updateAdjustment()
+    protected boolean updateAdjustment()
     {
-        if(adjustment == 0) return;
+        if(adjustment == 0) return false;
         markDirty();
         currentReactivity += adjustment;
         currentReactivity = Math.min(100, Math.max(0, currentReactivity));
@@ -286,6 +289,7 @@ public class BFReactorMultiblockData extends MultiblockData {
             adjustmentTicks = 80;
             adjustment = 0;
         }
+        return true;
     }
 
     public int reactivityUpdateTicksScaled()
@@ -293,7 +297,7 @@ public class BFReactorMultiblockData extends MultiblockData {
         return (int) (( reactivityUpdateTicks / (getHeatMult() + 0.25)) * (1.5*difficulty/10));
     }
 
-    public void updateReactivity()
+    public boolean updateReactivity()
     {
         float low = 0f;
         float high = 100f;
@@ -307,11 +311,14 @@ public class BFReactorMultiblockData extends MultiblockData {
             float newHigh = Math.min(high, currentTarget + maxDelta);
             setTargetReactivity(newLow + new Random().nextFloat() * (newHigh - newLow));
             setCurrentReactivity((low + new Random().nextFloat() * (high - low) + currentReactivity*3)/4);
+            return true;
         }
+        return false;
     }
     protected boolean isActiveCooled()
-    {
-        return !fluidTanks.get(0).isEmpty();
+    {   boolean hasCoolant = !liquidCoolantTank.isEmpty() || !gasCoolantTank.isEmpty() || hadCoolant > 0;
+        hadCoolant = (!liquidCoolantTank.isEmpty() || !gasCoolantTank.isEmpty()) ? 20 : Math.max(0, hadCoolant - 1);
+        return hasCoolant;
     }
 
     @ComputerMethod(nameOverride = "adjustReactivity")
@@ -428,9 +435,9 @@ public class BFReactorMultiblockData extends MultiblockData {
             updateErrorLevel();
             //Only inject fuel if we're burning
             if (isBurning()) {
-                laserShootCount();
-                updateReactivity();
-                updateAdjustment();
+                needsPacket = laserShootCount() || needsPacket;
+                needsPacket = updateReactivity() || needsPacket;
+                needsPacket = updateAdjustment() || needsPacket;
                 injectFuel();
                 long fuelBurned = burnFuel();
                 if (fuelBurned == 0) {
@@ -466,12 +473,14 @@ public class BFReactorMultiblockData extends MultiblockData {
             errorLevel = getErrorLevel();
             needsPacket = true;
         }
-        int reactivityDelta = (int) (currentReactivity - targetReactivity);
-        if(reactivityDelta > 5) {
-            getWorld().gameEvent(null, REACTOR_HI_CR_VIBRATION.get(), getMaxPos().offset(-3, -3, -3));
-        }
-        if(reactivityDelta < -5) {
-            getWorld().gameEvent(null, REACTOR_LOW_CR_VIBRATION.get(), getMaxPos().below());
+        if(getWorld().getGameTime() % 20 == 0) {
+            int reactivityDelta = (int) (currentReactivity - targetReactivity);
+            if (reactivityDelta > 4.9) {
+                getWorld().gameEvent(null, REACTOR_HI_CR_VIBRATION.get(), getMaxPos().offset(-3, -3, -3));
+            }
+            if (reactivityDelta < -4.9) {
+                getWorld().gameEvent(null, REACTOR_LOW_CR_VIBRATION.get(), getMaxPos().below());
+            }
         }
         if(ModUtil.isTinkersAdvancedLoaded()) {
             TinkersAdvanced.blowIron(this, world);
@@ -510,14 +519,14 @@ public class BFReactorMultiblockData extends MultiblockData {
     }
 
     private void injectFuel() {
-        long amountNeeded = fuelTank.getNeeded();
-        long amountAvailable = 2 * Math.min(deuteriumTank.getStored(), tritiumTank.getStored());
-        long amountToInject = Math.min(amountNeeded, amountAvailable);
-        amountToInject -= amountToInject % 2;
-        long injectingAmount = amountToInject / 2;
-        MekanismUtils.logMismatchedStackSize(deuteriumTank.shrinkStack(injectingAmount, Action.EXECUTE), injectingAmount);
-        MekanismUtils.logMismatchedStackSize(tritiumTank.shrinkStack(injectingAmount, Action.EXECUTE), injectingAmount);
-        fuelTank.insert(GeneratorsGases.FUSION_FUEL.getStack(amountToInject), Action.EXECUTE, AutomationType.INTERNAL);
+        long amountNeeded = this.fuelTank.getNeeded();
+        long amountAvailable = 2L * Math.min(this.deuteriumTank.getStored(), this.tritiumTank.getStored());
+        long amountToInject = Math.min(amountNeeded, Math.min(amountAvailable, (long)this.injectionRate));
+        amountToInject -= amountToInject % 2L;
+        long injectingAmount = amountToInject / 2L;
+        MekanismUtils.logMismatchedStackSize(this.deuteriumTank.shrinkStack(injectingAmount, Action.EXECUTE), injectingAmount);
+        MekanismUtils.logMismatchedStackSize(this.tritiumTank.shrinkStack(injectingAmount, Action.EXECUTE), injectingAmount);
+        this.fuelTank.insert(GeneratorsGases.FUSION_FUEL.getStack(amountToInject), Action.EXECUTE, AutomationType.INTERNAL);
     }
 
     private long burnFuel() {
@@ -686,7 +695,7 @@ public class BFReactorMultiblockData extends MultiblockData {
         double temperature = current ? getLastCaseTemp() : getMaxCasingTemperature(active);
         return FloatingLong.create(MekanismGeneratorsConfig.generators.fusionThermocoupleEfficiency.get() *
                 MekanismGeneratorsConfig.generators.fusionCasingThermalConductivity.get() * temperature *
-                ((getEfficiency()/100+2)/3));
+                ((getEfficiency()/80+2)/3));
     }
 
     public long getSteamPerTick(boolean current) {
@@ -694,7 +703,7 @@ public class BFReactorMultiblockData extends MultiblockData {
         return MathUtils.clampToLong(HeatUtils.getSteamEnergyEfficiency() *
                 MekanismGeneratorsConfig.generators.fusionWaterHeatingRatio.get() *
                 (temperature / HeatUtils.getWaterThermalEnthalpy()) *
-                ((getEfficiency()/100+2)/3)
+                (((getEfficiency())/80+2)/3)
         );
     }
 
