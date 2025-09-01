@@ -25,6 +25,7 @@ public enum BfrLang implements ILangEntry {
     REACTOR_HELP1("reactor", "reactor_help1"),
     REACTOR_HELP2("reactor", "reactor_helps2"),
     REACTOR_HELP3("reactor", "reactor_help3"),
+    REACTOR_HELP4("reactor", "reactor_help4"),
     REACTOR_CR("reactor", "efficiency.cr"),
     REACTOR_CURRENT_REACTIVITY("reactor", "efficiency.current_reactivity"),
     REACTOR_BUTTON_REACTIVITY_UP("reactor", "efficiency.reactivity_up_button"),

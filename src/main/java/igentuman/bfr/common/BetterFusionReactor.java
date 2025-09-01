@@ -4,6 +4,7 @@ import igentuman.bfr.common.config.BetterFusionReactorConfig;
 import igentuman.bfr.common.content.fusion.BFReactorCache;
 import igentuman.bfr.common.content.fusion.BFReactorMultiblockData;
 import igentuman.bfr.common.content.fusion.BFReactorValidator;
+import igentuman.bfr.common.events.GameEvents;
 import igentuman.bfr.common.network.BfrPacketHandler;
 import igentuman.bfr.common.registries.*;
 import igentuman.bfr.common.registries.BfrBuilders.FusionReactorBuilder;
@@ -53,6 +54,7 @@ public class BetterFusionReactor implements IModModule {
         BfrChemicals.CHEMICALS.register(modEventBus);
         packetHandler = new BfrPacketHandler(modEventBus, versionNumber);
         BfrRecipes.init();
+        GameEvents.init(modEventBus);
     }
 
     public static BfrPacketHandler packetHandler() {

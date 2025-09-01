@@ -64,6 +64,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
+import static igentuman.bfr.common.events.GameEvents.REACTOR_HI_CR_VIBRATION;
+import static igentuman.bfr.common.events.GameEvents.REACTOR_LOW_CR_VIBRATION;
 public class BFReactorMultiblockData extends MultiblockData {
 
     public static final String HEAT_TAB = "heat";
@@ -481,6 +483,16 @@ public class BFReactorMultiblockData extends MultiblockData {
             errorLevel = getErrorLevel();
             needsPacket = true;
         }
+        if(getLevel().getGameTime() % 20 == 0) {
+            int reactivityDelta = (int) (currentReactivity - targetReactivity);
+            if (reactivityDelta > 4.9) {
+                getLevel().gameEvent(null, REACTOR_HI_CR_VIBRATION.getDelegate(), getMaxPos().offset(-3, -3, -3));
+            }
+            if (reactivityDelta < -4.9) {
+                getLevel().gameEvent(null, REACTOR_LOW_CR_VIBRATION.getDelegate(), getMaxPos().below());
+            }
+        }
+
         return needsPacket;
     }
 
