@@ -1,7 +1,7 @@
 {
   "type": "mekanism:irradiating",
   "input": {
-    "tag": "c:sand",
+    "tag": "c:sands",
     "count": 1
   },
   "output": {
