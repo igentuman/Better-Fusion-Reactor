@@ -101,7 +101,6 @@ public abstract class TileEntityMachine extends TileEntityProgressMachine<ItemSt
               .setErrorsChanged(this::onErrorsChanged)
               .setCanHolderFunction(this::canFunction)
               .setActive(this::setActive)
-              .setEnergyRequirements(energyContainer::getEnergyPerTick, energyContainer)
               .setRequiredTicks(this::getTicksRequired)
               .setOnFinish(this::markForSave)
               .setOperatingTicksChanged(this::setOperatingTicks);
@@ -126,7 +125,7 @@ public abstract class TileEntityMachine extends TileEntityProgressMachine<ItemSt
     //Methods relating to IComputerTile
     @ComputerMethod
     public long getEnergyUsage() {
-        return getActive() ? energyContainer.getEnergyPerTick() : 0L;
+        return 0L;
     }
     //End methods IComputerTile
 }

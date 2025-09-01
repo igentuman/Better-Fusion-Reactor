@@ -1,0 +1,10 @@
+{
+  "values": {
+    "bfr:reactor_low_cr_vibration": {
+      "frequency": 6
+    },
+    "bfr:reactor_high_cr_vibration": {
+      "frequency": 15
+    }
+  }
+}

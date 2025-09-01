@@ -39,7 +39,6 @@ public class BetterFusionReactor implements IModModule {
 
     public BetterFusionReactor(ModContainer modContainer, IEventBus modEventBus) {
         Mekanism.addModule(instance = this);
-        //Set our version number to match the neoforge.mods.toml file, which matches the one in our build.gradle
         versionNumber = new Version(modContainer);
         BetterFusionReactorConfig.registerConfigs(modContainer);
         modEventBus.addListener(this::commonSetup);
@@ -53,8 +52,9 @@ public class BetterFusionReactor implements IModModule {
         BfrTileEntityTypes.TILE_ENTITY_TYPES.register(modEventBus);
         BfrChemicals.CHEMICALS.register(modEventBus);
         packetHandler = new BfrPacketHandler(modEventBus, versionNumber);
+        GameEvents.GAME_EVENTS.register(modEventBus);
+
         BfrRecipes.init();
-        GameEvents.init(modEventBus);
     }
 
     public static BfrPacketHandler packetHandler() {
@@ -67,12 +67,11 @@ public class BetterFusionReactor implements IModModule {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            //Register extended build commands (in enqueue as it is not thread safe)
-            BuildCommand.register("fusion", BfrLang.FUSION_REACTOR, new FusionReactorBuilder());
+            BuildCommand.register("better_fusion", BfrLang.FUSION_REACTOR, new FusionReactorBuilder());
         });
 
         //Finalization
-        Mekanism.logger.info("Loaded 'Mekanism: Generators' module.");
+        Mekanism.logger.info("Loaded 'Mekanism: BFR' module.");
     }
 
     @Override
@@ -82,6 +81,6 @@ public class BetterFusionReactor implements IModModule {
 
     @Override
     public String getName() {
-        return "Generators";
+        return "BFR";
     }
 }

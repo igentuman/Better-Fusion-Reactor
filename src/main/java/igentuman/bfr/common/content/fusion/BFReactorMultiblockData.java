@@ -72,7 +72,7 @@ public class BFReactorMultiblockData extends MultiblockData {
     public static final String FUEL_TAB = "fuel";
     public static final String STATS_TAB = "stats";
 
-    public static final int MAX_INJECTION = 98;//this is the effective cap in the GUI, as text field is limited to 2 chars
+    public static final int MAX_INJECTION = 500;//this is the effective cap in the GUI, as text field is limited to 2 chars
     //Reaction characteristics
     private static final double burnTemperature = 100_000_000;
     private static final double burnRatio = 1;
@@ -157,6 +157,7 @@ public class BFReactorMultiblockData extends MultiblockData {
     protected int adjustmentTicks = 80;
     protected float difficulty = 10;
     public boolean explodeFlag = false;
+    private int hadCoolant = 0;
 
     public BFReactorMultiblockData(TileEntityFusionReactorBlock tile) {
         super(tile);
@@ -204,7 +205,9 @@ public class BFReactorMultiblockData extends MultiblockData {
 
     protected boolean isActiveCooled()
     {
-        return !fluidTanks.get(0).isEmpty();
+        boolean hasCoolant = !liquidCoolantTank.isEmpty() || !gasCoolantTank.isEmpty() || hadCoolant > 0;
+        hadCoolant = (!liquidCoolantTank.isEmpty() || !gasCoolantTank.isEmpty()) ? 20 : Math.max(0, hadCoolant - 1);
+        return hasCoolant;
     }
 
     /** value in range 0..100 **/
@@ -486,10 +489,10 @@ public class BFReactorMultiblockData extends MultiblockData {
         if(getLevel().getGameTime() % 20 == 0) {
             int reactivityDelta = (int) (currentReactivity - targetReactivity);
             if (reactivityDelta > 4.9) {
-                getLevel().gameEvent(null, REACTOR_HI_CR_VIBRATION.getDelegate(), getMaxPos().offset(-3, -3, -3));
+                getLevel().gameEvent(null, REACTOR_HI_CR_VIBRATION, getMaxPos().offset(-3, -3, -3));
             }
             if (reactivityDelta < -4.9) {
-                getLevel().gameEvent(null, REACTOR_LOW_CR_VIBRATION.getDelegate(), getMaxPos().below());
+                getLevel().gameEvent(null, REACTOR_LOW_CR_VIBRATION, getMaxPos().offset(-3, -3, -3));
             }
         }
 

@@ -16,7 +16,7 @@ public abstract class ItemStackToItemStackWithTimeModRecipe extends BasicItemSta
      */
     public ItemStackToItemStackWithTimeModRecipe(ItemStackIngredient input, ItemStack output, RecipeType<ItemStackToItemStackRecipe> recipeType) {
         super(input, output, recipeType);
-        ticks = 200;
+        ticks = 0;
     }
 
     public ItemStackToItemStackWithTimeModRecipe(ItemStackIngredient input, ItemStack output, RecipeType<ItemStackToItemStackRecipe> recipeType, int ticks) {

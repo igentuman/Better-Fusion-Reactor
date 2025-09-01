@@ -1,6 +1,5 @@
 package igentuman.bfr.common.registries;
 
-import igentuman.bfr.common.BetterFusionReactor;
 import mekanism.common.block.attribute.Attribute;
 import mekanism.common.block.attribute.Attributes.AttributeComparator;
 import mekanism.common.registration.impl.CreativeTabDeferredRegister;
@@ -24,6 +23,9 @@ public class BfrCreativeTabs {
 
     private static void addToExistingTabs(BuildCreativeModeTabContentsEvent event) {
         ResourceKey<CreativeModeTab> tabKey = event.getTabKey();
+        if (tabKey == CreativeModeTabs.BUILDING_BLOCKS) {
+            CreativeTabDeferredRegister.addToDisplay(event, BfrBlocks.ORE_BLOCKS.get("tin"), BfrBlocks.ORE_BLOCKS.get("osmium"), BfrBlocks.ORE_BLOCKS.get("uranium"), BfrBlocks.ORE_BLOCKS.get("iron"), BfrBlocks.ORE_BLOCKS.get("lead"), BfrBlocks.ORE_BLOCKS.get("gold"), BfrBlocks.ORE_BLOCKS.get("copper"));
+        }
         if (tabKey == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             CreativeTabDeferredRegister.addToDisplay(event, BfrBlocks.FUSION_REACTOR_CONTROLLER,  BfrBlocks.FUSION_REACTOR_PORT, BfrBlocks.FUSION_REACTOR_FRAME, BfrBlocks.FUSION_REACTOR_LOGIC_ADAPTER, BfrBlocks.LASER_FOCUS_MATRIX, IRRADIATOR);
         } else if (tabKey == CreativeModeTabs.REDSTONE_BLOCKS) {

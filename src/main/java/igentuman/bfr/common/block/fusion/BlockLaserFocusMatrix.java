@@ -2,9 +2,9 @@ package igentuman.bfr.common.block.fusion;
 
 import mekanism.common.block.prefab.BlockBasicMultiblock;
 import mekanism.common.block.states.BlockStateHelper;
-import igentuman.bfr.common.block.BlockReactorGlass;
 import igentuman.bfr.common.registries.BfrBlockTypes;
 import igentuman.bfr.common.tile.fusion.TileEntityLaserFocusMatrix;
+import mekanism.generators.common.block.BlockReactorGlass;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;

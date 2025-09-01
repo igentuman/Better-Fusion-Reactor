@@ -20,7 +20,12 @@ public class BfrTileEntityTypes {
 
     public static final TileEntityTypeDeferredRegister TILE_ENTITY_TYPES = new TileEntityTypeDeferredRegister(BetterFusionReactor.MODID);
     //Misc
-    public static final TileEntityTypeRegistryObject<TileEntityIrradiator> IRRADIATOR = TILE_ENTITY_TYPES.mekBuilder(BfrBlocks.IRRADIATOR, TileEntityIrradiator::new).build();
+    public static final TileEntityTypeRegistryObject<TileEntityIrradiator> IRRADIATOR = TILE_ENTITY_TYPES
+            .mekBuilder(BfrBlocks.IRRADIATOR, TileEntityIrradiator::new)
+            .clientTicker(TileEntityMekanism::tickClient)
+            .serverTicker(TileEntityMekanism::tickServer)
+            .withSimple(Capabilities.CONFIG_CARD)
+            .build();
 
     //Fusion Reactor
     public static final TileEntityTypeRegistryObject<TileEntityFusionReactorController> FUSION_REACTOR_CONTROLLER = TILE_ENTITY_TYPES.mekBuilder(BfrBlocks.FUSION_REACTOR_CONTROLLER, TileEntityFusionReactorController::new)

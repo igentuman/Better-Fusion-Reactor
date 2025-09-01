@@ -3,7 +3,6 @@ package igentuman.bfr.common.tile;
 import igentuman.bfr.common.config.BetterFusionReactorConfig;
 import igentuman.bfr.common.content.fusion.BFReactorMultiblockData;
 import igentuman.bfr.common.recipe.impl.IrradiatorRecipe;
-import igentuman.bfr.common.registries.BfrBlocks;
 import igentuman.bfr.common.registries.BfrRecipes;
 import igentuman.bfr.common.tile.fusion.TileEntityFusionReactorPort;
 import mekanism.api.RelativeSide;
@@ -12,11 +11,11 @@ import mekanism.api.recipes.cache.CachedRecipe;
 import mekanism.api.recipes.cache.OneInputCachedRecipe;
 import mekanism.common.recipe.IMekanismRecipeTypeProvider;
 import mekanism.common.recipe.lookup.cache.InputRecipeCache;
-import mekanism.common.util.MekanismUtils;
 import mekanism.generators.common.config.MekanismGeneratorsConfig;
 import mekanism.generators.common.content.fission.FissionReactorMultiblockData;
 import mekanism.generators.common.tile.fission.TileEntityFissionReactorPort;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -102,22 +101,21 @@ public class TileEntityIrradiator extends TileEntityMachine {
             }
         }
     }
-/*
 
     @Override
-    protected void addGeneralPersistentData(CompoundTag data) {
-        super.addGeneralPersistentData(data);
-        data.putDouble("radiativeFlux", radiativeFlux);
-        data.putBoolean("hasRadiationSource", hasRadiationSource);
+    public void saveAdditional(@NotNull CompoundTag nbtTags, @NotNull HolderLookup.Provider provider) {
+        super.saveAdditional(nbtTags, provider);
+        nbtTags.putDouble("radiativeFlux", radiativeFlux);
+        nbtTags.putBoolean("hasRadiationSource", hasRadiationSource);
     }
 
     @Override
-    protected void loadGeneralPersistentData(CompoundTag data) {
-        super.loadGeneralPersistentData(data);
-        radiativeFlux = data.getDouble("radiativeFlux");
-        hasRadiationSource = data.getBoolean("hasRadiationSource");
+    public void loadAdditional(@NotNull CompoundTag nbt, @NotNull HolderLookup.Provider provider) {
+        super.loadAdditional(nbt, provider);
+        radiativeFlux = nbt.getDouble("radiativeFlux");
+        hasRadiationSource = nbt.getBoolean("hasRadiationSource");
     }
-*/
+
 
     @Override
     public @NotNull IMekanismRecipeTypeProvider<SingleRecipeInput, ItemStackToItemStackRecipe, InputRecipeCache.SingleItem<ItemStackToItemStackRecipe>> getRecipeType() {
@@ -203,25 +201,25 @@ public class TileEntityIrradiator extends TileEntityMachine {
     {
         radiativeFlux = value;
     }
-/*
+
 
     @Override
-    public void handleUpdateTag(@NotNull CompoundTag tag) {
-        super.handleUpdateTag(tag);
+    public void handleUpdateTag(@NotNull CompoundTag tag, @NotNull HolderLookup.Provider provider) {
+        super.handleUpdateTag(tag, provider);
         radiativeFlux = tag.getDouble("radiativeFlux");
         hasRadiationSource = tag.getBoolean("hasRadiationSource");
     }
 
     @NotNull
     @Override
-    public CompoundTag getReducedUpdateTag() {
-        CompoundTag updateTag = super.getReducedUpdateTag();
+    public CompoundTag getReducedUpdateTag(@NotNull HolderLookup.Provider provider) {
+        CompoundTag updateTag = super.getReducedUpdateTag(provider);
 
         updateTag.putDouble("radiativeFlux", radiativeFlux);
         updateTag.putBoolean("hasRadiationSource", hasRadiationSource);
         return updateTag;
     }
-*/
+
 
     protected CachedRecipe<ItemStackToItemStackRecipe> currentRecipe;
     @NotNull
@@ -232,7 +230,6 @@ public class TileEntityIrradiator extends TileEntityMachine {
                 .setErrorsChanged(this::onErrorsChanged)
                 .setCanHolderFunction(this::canFunction)
                 .setActive(this::setActive)
-                .setEnergyRequirements(() -> 0, getEnergyContainer())
                 .setRequiredTicks(this::getTicksRequired)
                 .setOnFinish(this::markForSave)
                 .setOperatingTicksChanged(this::setOperatingTicks);

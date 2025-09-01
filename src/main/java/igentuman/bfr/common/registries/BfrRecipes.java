@@ -22,7 +22,7 @@ import static mekanism.common.registries.MekanismRecipeSerializersInternal.RECIP
 public class BfrRecipes {
 
     public static RecipeTypeRegistryObject<SingleRecipeInput, ItemStackToItemStackRecipe, InputRecipeCache.SingleItem<ItemStackToItemStackRecipe>> IRRADIATING;
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ItemStackToItemStackWithTimeModRecipe>> IRRADIATING_SERIALIZER = RECIPE_SERIALIZERS.register("irradiating", () -> ItemToItemWithTimeModRecipeSerializer.itemToItem(IrradiatorRecipe::new));
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ItemStackToItemStackWithTimeModRecipe>> IRRADIATING_SERIALIZER = RECIPE_SERIALIZERS.register("irradiating", () -> ItemToItemWithTimeModRecipeSerializer.itemToItemWithTicks((input, output, ticks) -> new IrradiatorRecipe(input, output, ticks)));
 
     public static void init() {
         Function<MekanismRecipeType<SingleRecipeInput, ItemStackToItemStackRecipe, InputRecipeCache.SingleItem<ItemStackToItemStackRecipe>>, InputRecipeCache.SingleItem<ItemStackToItemStackRecipe>> cacheFactory = 

@@ -55,7 +55,7 @@ public class BfrJEI implements IModPlugin {
         }
         IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
         registry.addRecipeCategories(new FusionReactorRecipeCategory(guiHelper, BfrRVRecipeType.FUSION));
-        registry.addRecipeCategories(new ItemStackToItemStackRecipeCategory(guiHelper, BfrRecipeViewerType.IRRADIATING));
+        registry.addRecipeCategories(new IrradiatorRecipeCategory(guiHelper, BfrRecipeViewerType.IRRADIATING));
     }
 
     @Override

@@ -1,15 +1,18 @@
 package igentuman.bfr.common.recipe.impl;
 
+import igentuman.bfr.common.config.BetterFusionReactorConfig;
 import igentuman.bfr.common.recipe.ItemStackToItemStackWithTimeModRecipe;
 import igentuman.bfr.common.registries.BfrRecipes;
 import mekanism.api.annotations.NothingNullByDefault;
 import mekanism.api.recipes.ingredients.ItemStackIngredient;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import org.jetbrains.annotations.Nullable;
 
 import static igentuman.bfr.common.BetterFusionReactor.rl;
 
@@ -20,6 +23,10 @@ public class IrradiatorRecipe extends ItemStackToItemStackWithTimeModRecipe {
 
     public IrradiatorRecipe(ItemStackIngredient input, ItemStack output) {
         super(input, output, BfrRecipes.IRRADIATING.value());
+    }
+
+    public IrradiatorRecipe(ItemStackIngredient input, ItemStack output, int ticks) {
+        super(input, output, BfrRecipes.IRRADIATING.value(), ticks);
     }
 
     @Override
@@ -38,6 +45,13 @@ public class IrradiatorRecipe extends ItemStackToItemStackWithTimeModRecipe {
     }
 
     public int getTicks() {
-        return 200; // Default processing time for the recipe
+        if(ticks == 0)
+            return BetterFusionReactorConfig.bfr.irradiatorBaseProcessTicks.get();
+        else
+            return ticks;
+    }
+
+    public @Nullable ResourceLocation getId() {
+        return rl("irradiator/"+input.ingredient().ingredient().toString().replace(":", "_"));
     }
 }
