@@ -146,7 +146,7 @@ public class BFReactorMultiblockData extends MultiblockData {
     protected float heatMult = 0;
     protected int reactivityUpdateTicks = 10000;
     protected int currentReactivityTick = 0;
-    protected int adjustmentTicks = 80;
+    protected int adjustmentTicks = 100;
     protected float difficulty = 10;
     public boolean explodeFlag = false;
 
@@ -247,7 +247,7 @@ public class BFReactorMultiblockData extends MultiblockData {
     protected void updateErrorLevel()
     {
         if(isBurning()) {
-            float shift = ((80 - getEfficiency()) * ((getHeatMult() + 1) / 2)) * 0.0005f;
+            float shift = ((50 - getEfficiency()) * ((getHeatMult() + 1) / 2)) * 0.0005f;
             if(shift > 0) {
                 shift = shift*(difficulty/10);
             }
@@ -286,7 +286,7 @@ public class BFReactorMultiblockData extends MultiblockData {
         currentReactivity = Math.min(100, Math.max(0, currentReactivity));
         adjustmentTicks--;
         if(adjustmentTicks < 1) {
-            adjustmentTicks = 80;
+            adjustmentTicks = 100;
             adjustment = 0;
         }
         return true;
@@ -695,7 +695,7 @@ public class BFReactorMultiblockData extends MultiblockData {
         double temperature = current ? getLastCaseTemp() : getMaxCasingTemperature(active);
         return FloatingLong.create(MekanismGeneratorsConfig.generators.fusionThermocoupleEfficiency.get() *
                 MekanismGeneratorsConfig.generators.fusionCasingThermalConductivity.get() * temperature *
-                ((getEfficiency()/80+2)/3));
+                ((getEfficiency()/50+2)/3));
     }
 
     public long getSteamPerTick(boolean current) {
@@ -703,7 +703,7 @@ public class BFReactorMultiblockData extends MultiblockData {
         return MathUtils.clampToLong(HeatUtils.getSteamEnergyEfficiency() *
                 MekanismGeneratorsConfig.generators.fusionWaterHeatingRatio.get() *
                 (temperature / HeatUtils.getWaterThermalEnthalpy()) *
-                (((getEfficiency())/80+2)/3)
+                (((getEfficiency())/50+2)/3)
         );
     }
 

@@ -62,7 +62,7 @@ public class BfrLangProvider extends BaseLanguageProvider {
         add(BfrLang.EFFICIENCY_TAB, "Efficiency");
         add(BfrLang.REACTOR_LASER_MIN_ENERGY, "Laser Impulse min energy: %1$s");
         add(BfrLang.REACTOR_LASER_MIN_ENERGY_DESCR, "Avoid negative effects of Hm (1 minute)");
-        add(BfrLang.REACTOR_HELP1, "Keep EF higher than 80% by adjusting");
+        add(BfrLang.REACTOR_HELP1, "Keep EF higher than 50% by adjusting");
         add(BfrLang.REACTOR_HELP2, "CR as close as possible to TR.");
         add(BfrLang.REACTOR_HELP3, "Automate this process with Logic Adapters");
         add(BfrLang.REACTOR_HELP_HEAT_MULTIPLIER1, "Hm affects how often TR changes");

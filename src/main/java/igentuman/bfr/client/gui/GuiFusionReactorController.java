@@ -49,7 +49,7 @@ public class GuiFusionReactorController extends GuiMekanismTile<TileEntityFusion
         drawTitleText(matrix, GeneratorsLang.FUSION_REACTOR.translate(), titleLabelY);
         drawString(matrix, MekanismLang.MULTIBLOCK_FORMED.translate(), 8, 16, titleTextColor());
         if(tile.getMultiblock().isBurning()) {
-            if(tile.getMultiblock().getEfficiency() >= 80) {
+            if(tile.getMultiblock().getEfficiency() >= 50) {
                 drawString(matrix, BfrLang.EFFICIENCY_GOOD.translate(), 8, 70, 0x097969);
             } else {
                 drawString(matrix, BfrLang.EFFICIENCY_BAD.translate(), 8, 60, 0xC70039);
