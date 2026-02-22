@@ -27,6 +27,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -40,7 +41,7 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
     private HeatMultiplierButton heatMultiplierButton;
 
     public GuiFusionReactorEfficiency(EmptyTileContainer<TileEntityFusionReactorController> container, Inventory inv, Component title) {
-        super(container, inv, title);
+        super(container, inv, Component.translatable(BfrLang.EFFICIENCY_TAB.getTranslationKey()));
     }
 
     @Override
@@ -131,7 +132,7 @@ public class GuiFusionReactorEfficiency extends GuiFusionReactorInfo {
 
     @Override
     protected void drawForegroundText(@Nonnull GuiGraphics matrix, int mouseX, int mouseY) {
-        drawTitleText(matrix, GeneratorsLang.FUSION_REACTOR.translate(), titleLabelY);
+        //drawTitleText(matrix, BfrLang.EFFICIENCY_TAB.translate(), titleLabelY);
         BFReactorMultiblockData multiblock = tile.getMultiblock();
         Font font = Minecraft.getInstance().font;
         matrix.drawString(font, BfrLang.REACTOR_CR.translate(), 30, 35, titleTextColor(), false);

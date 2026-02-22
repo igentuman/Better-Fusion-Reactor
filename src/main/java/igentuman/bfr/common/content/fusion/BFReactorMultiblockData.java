@@ -154,7 +154,7 @@ public class BFReactorMultiblockData extends MultiblockData {
     protected float adjustment = 0;
     protected int reactivityUpdateTicks = 10000;
     protected int currentReactivityTick = 0;
-    protected int adjustmentTicks = 80;
+    protected int adjustmentTicks = 100;
     protected float difficulty = 10;
     public boolean explodeFlag = false;
     private int hadCoolant = 0;
@@ -281,7 +281,7 @@ public class BFReactorMultiblockData extends MultiblockData {
     protected void updateErrorLevel()
     {
         if(isBurning()) {
-            float shift = ((80 - getEfficiency()) * ((getKt() + 1) / 2)) * 0.0005f;
+            float shift = ((50 - getEfficiency()) * ((getKt() + 1) / 2)) * 0.0005f;
             if(shift > 0) {
                 shift = shift*(difficulty/10);
             }
@@ -319,7 +319,7 @@ public class BFReactorMultiblockData extends MultiblockData {
         currentReactivity = Math.min(100, Math.max(0, currentReactivity));
         adjustmentTicks--;
         if(adjustmentTicks < 1) {
-            adjustmentTicks = 80;
+            adjustmentTicks = 100;
             adjustment = 0;
         }
         markDirty();
